@@ -1,0 +1,35 @@
+services:
+
+  db:
+    container_name: katsurao-db
+    image: mysql:8.0
+    volumes:
+      - db-store:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: katsurao_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      TZ: 'Asia/Tokyo'
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    healthcheck:
+      test: mysqladmin ping
+      interval: 15s
+      retries: 5
+
+  web:
+    container_name: katsurao-web
+    build: .
+    command: tail -f /dev/null
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    tty: true
+    stdin_open: true
+
+volumes:
+  db-store:
