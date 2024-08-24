@@ -20,7 +20,7 @@ services:
   web:
     container_name: katsurao-web
     build: .
-    command: tail -f /dev/null
+    command: bash -c "source ~/.bashrc && tail -f /dev/null"
     volumes:
       - .:/code
     ports:

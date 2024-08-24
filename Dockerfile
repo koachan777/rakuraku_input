@@ -8,3 +8,6 @@ RUN apt-get update && apt-get install -y default-mysql-client
 
 RUN pip install --upgrade pip && pip install -r requirements.txt
 COPY . /code/
+
+RUN echo 'alias pmrun="python3 manage.py runserver 0.0.0.0:8000"' >> ~/.bashrc
+RUN echo 'alias pmdb="python manage.py dbshell"' >> ~/.bashrc
