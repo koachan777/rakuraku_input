@@ -10,5 +10,5 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 COPY . /code/
 
 RUN echo 'alias pmrun="python3 manage.py runserver 0.0.0.0:8000"' >> ~/.bashrc
-RUN echo 'alias pmdb="python manage.py dbshell"' >> ~/.bashrc
-RUN echo 'alias pm="python manage.py"' >> ~/.bashrc
+RUN echo 'alias pmdb="python3 manage.py dbshell"' >> ~/.bashrc
+RUN echo 'alias pm="python3 manage.py"' >> ~/.bashrc
