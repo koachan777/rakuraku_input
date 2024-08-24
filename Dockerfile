@@ -11,3 +11,4 @@ COPY . /code/
 
 RUN echo 'alias pmrun="python3 manage.py runserver 0.0.0.0:8000"' >> ~/.bashrc
 RUN echo 'alias pmdb="python manage.py dbshell"' >> ~/.bashrc
+RUN echo 'alias pm="python manage.py"' >> ~/.bashrc
