@@ -1,9 +1,11 @@
 from django.urls import path, include
 
 from rakuraku_apps.views.common import (
+    CustomLoginView,
     HomeView, 
-    LoginView, 
-    RegistrationView
+    CustomLoginView,
+    LogoutView, 
+    SignupView
 )
 from rakuraku_apps.views.everyday_input import (
     EverydayCommentInputView, 
@@ -39,10 +41,12 @@ app_name = "rakuraku_apps"
 
 urlpatterns = [
     # ログイン画面
-    path('', LoginView.as_view(), name='login'),
+    path('', CustomLoginView.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name="logout"),
+
 
     # ユーザー新規登録画面
-    path('registration/', RegistrationView.as_view(), name='registration'),
+    path('signup/', SignupView.as_view(), name='signup'),
 
     # ホーム画面　機能選択
     path('home/', HomeView.as_view(), name='home'),
