@@ -1,1 +1,33 @@
-これは日常、定期入力選択ボタンです。
+{% extends 'base.html' %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+
+<div class="container"> 
+    <div class="row justify-content-center"> 
+        <div class="col-md-6"> 
+            <div class="card mt-5"> 
+                <div class="card-body"> 
+                    <h1 class="card-title text-center mb-4">データ入力</h1> 
+                    <div class="d-grid gap-2"> 
+                        <a href="{% url 'rakuraku_apps:everyday_first_input' %}" class="btn btn-primary btn-lg">日常測定</a> 
+                        <a href="{% url 'rakuraku_apps:interval_first_input' %}" class="btn btn-primary btn-lg">定期測定</a> 
+                    </div> 
+                </div> 
+            </div> 
+            <div class="text-center mt-3"> 
+                <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-link">HOMEに戻る</a> 
+            </div> 
+        </div> 
+    </div> 
+</div> 
+{% else %} 
+<div class="text-center mt-5"> 
+    <p>データ入力機能を使用するにはログインが必要です。</p> 
+    <a href="{% url 'rakuraku_apps:login' %}" class="btn btn-primary">ログイン</a> 
+</div> 
+{% endif %} 
+{% endblock %}
