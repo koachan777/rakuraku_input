@@ -73,7 +73,7 @@ urlpatterns = [
     path('interval/first_input/', IntervalFirstInputView.as_view(), name='interval_first_input'),
 
     # # データ入力　定期測定２　NH4・NO2・NO3
-    path('interval/second_input/', IntervalSecondInputView.as_view(), name='interval_second_input/'),
+    path('interval/second_input/', IntervalSecondInputView.as_view(), name='interval_second_input'),
 
     # # データ入力　定期測定３　Ca・Al・Mg
     path('interval/third_input/', IntervalThirdInputView.as_view(), name='interval_third_input'),

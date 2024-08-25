@@ -1,1 +1,30 @@
-これは表かグラフかを選択する画面です
+{% extends 'base.html' %}
+
+{% block title %}過去のデータ{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+
+<div class="container"> 
+    <div class="row justify-content-center"> 
+        <div class="col-md-6"> 
+            <div class="card mt-5"> 
+                <div class="card-body"> 
+                    <h1 class="card-title text-center mb-4">過去のデータ</h1> 
+                    <div class="d-grid gap-2"> 
+                        <a href="{% url 'rakuraku_apps:table' %}" class="btn btn-primary btn-lg">表</a> 
+                        <a href="{% url 'rakuraku_apps:graph' %}" class="btn btn-secondary btn-lg">グラフ</a> 
+                    </div> 
+                </div> 
+            </div> 
+            <div class="text-center mt-3"> 
+                <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-link">HOMEに戻る</a> 
+            </div> 
+        </div> 
+    </div> 
+</div> 
+{% else %} 
+<div class="text-center mt-5"> 
+    <p>過去のデータを閲覧するにはログインが必要です。</p> 
+    <a href="{% url 'rakuraku_apps:login' %}" class="btn btn-primary">ログイン</a> 
+</div> {% endif %} {% endblock %}
