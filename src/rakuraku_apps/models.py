@@ -69,3 +69,44 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.account_id
+
+class BaseModel(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
+        app_label = "rakuraku_apps"
+
+class TankModel(BaseModel):
+    name = models.CharField("名前", max_length=64)
+    
+    class Meta:
+        verbose_name = "水槽"
+        db_table = "tank"
+
+class WaterQualityModel(BaseModel):
+    date = models.DateField("計測日")
+    room_temperature = models.IntegerField("室温", null=True)
+    water_temperature = models.IntegerField("水温", null=True)
+    pH = models.IntegerField("ph", null=True)
+    DO = models.IntegerField("DO", null=True)
+    salinity = models.IntegerField("塩分濃度", null=True)
+    NH4 = models.IntegerField("NH4", null=True)
+    NO2 = models.IntegerField("NO2", null=True)
+    NO3 = models.IntegerField("NO3", null=True)
+    Ca = models.IntegerField("Ca", null=True)
+    Al = models.IntegerField("Al", null=True)
+    Mg = models.IntegerField("Mg", null=True)
+    notes = models.TextField("備考", max_length=512, null=True, blank=True)
+    tank = models.ForeignKey(
+        "TankModel",
+        verbose_name="水槽",
+        blank=False,
+        null=False,
+        related_name="water_quality",
+        on_delete=models.PROTECT,
+    )
+    class Meta:
+        verbose_name = "水質"
+        db_table = "water_quality"

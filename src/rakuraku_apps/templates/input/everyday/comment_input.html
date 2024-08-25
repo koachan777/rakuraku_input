@@ -1,11 +1,17 @@
-日常測定備考入力
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:everyday_confirm' %}" class="btn btn-link">次へ</a> 
-</div> 
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:everyday_second_input' %}" class="btn btn-link">戻る</a> 
-</div> 
-
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-link">HOMEに戻る</a> 
-</div> 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>水質データ入力 - ステップ3</title>
+</head>
+<body>
+    <h1>水質データ入力 - ステップ3</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="notes">備考</label>
+            <textarea name="notes" rows="4"></textarea>
+        </div>
+        <button type="submit">次へ</button>
+    </form>
+</body>
+</html>

@@ -44,7 +44,6 @@ urlpatterns = [
     path('', CustomLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name="logout"),
 
-
     # ユーザー新規登録画面
     path('signup/', SignupView.as_view(), name='signup'),
 

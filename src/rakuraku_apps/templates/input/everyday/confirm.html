@@ -1,14 +1,24 @@
-日常測定確認
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:everyday_or_interval' %}" class="btn btn-link">登録</a> 
-</div> 
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:everyday_comment' %}" class="btn btn-link">戻る</a> 
-</div> 
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:everyday_edit' %}" class="btn btn-link">編集</a> 
-</div> 
-
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-link">HOMEに戻る</a> 
-</div> 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>水質データ入力 - 確認</title>
+</head>
+<body>
+    <h1>水質データ入力 - 確認</h1>
+    <div>
+        <p>計測日: {{ request.session.date }}</p>
+        <p>水槽: {{ request.session.tank }}</p>
+        <p>室温: {{ request.session.room_temperature }}</p>
+        <p>水温: {{ request.session.water_temperature }}</p>
+        <p>pH: {{ request.session.pH }}</p>
+        <p>DO: {{ request.session.DO }}</p>
+        <p>塩分濃度: {{ request.session.salinity }}</p>
+        <p>備考: {{ request.session.notes }}</p>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">保存</button>
+    </form>
+    <a href="{% url 'rakuraku_apps:everyday_edit' %}">編集</a>
+</body>
+</html>
