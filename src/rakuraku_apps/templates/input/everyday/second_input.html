@@ -1,12 +1,29 @@
-日常測定入力２
-
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:everyday_comment' %}" class="btn btn-link">次へ</a> 
-</div> 
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:everyday_first_input' %}" class="btn btn-link">戻る</a> 
-</div> 
-
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-link">HOMEに戻る</a> 
-</div> 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>水質データ入力 - ステップ2</title>
+</head>
+<body>
+    <h1>水質データ入力 - ステップ2</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="water_temperature">水温</label>
+            <input type="number" name="water_temperature" min="0" max="100" required>
+        </div>
+        <div>
+            <label for="pH">pH</label>
+            <input type="number" name="pH" min="0" max="14" required>
+        </div>
+        <div>
+            <label for="DO">DO</label>
+            <input type="number" name="DO" min="0" max="100" required>
+        </div>
+        <div>
+            <label for="salinity">塩分濃度</label>
+            <input type="number" name="salinity" min="0" max="100" required>
+        </div>
+        <button type="submit">次へ</button>
+    </form>
+</body>
+</html>

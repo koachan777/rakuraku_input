@@ -1,2 +1,3 @@
 __pycache__/
 *.pyc
+src/rakuraku_apps/migrations/0001_initial.py

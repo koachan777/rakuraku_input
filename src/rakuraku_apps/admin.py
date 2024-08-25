@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User
+from .models import TankModel, User, WaterQualityModel
 
 class UserAdmin(admin.ModelAdmin):
     list_display = ("account_id", "is_superuser")
@@ -12,3 +12,5 @@ class UserAdmin(admin.ModelAdmin):
     )
 
 admin.site.register(User, UserAdmin)  # Userモデルを登録
+admin.site.register(TankModel)  # Userモデルを登録
+admin.site.register(WaterQualityModel)
