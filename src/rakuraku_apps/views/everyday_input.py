@@ -6,6 +6,8 @@ from rakuraku_apps.models import TankModel, WaterQualityModel
 from rakuraku_apps.forms.input import WaterQualityForm
 from rakuraku_apps.forms.input import WaterQualityForm
 from rakuraku_apps.models import TankModel, WaterQualityModel
+from datetime import date
+
 
 class EverydayOrIntervalView(TemplateView):
     template_name = 'input/evryday_or_interval.html'
@@ -16,6 +18,8 @@ class EverydayFirstInputView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['tanks'] = TankModel.objects.all()
+        context['today'] = date.today().strftime('%Y-%m-%d')
+
         return context
 
     def post(self, request, *args, **kwargs):
