@@ -9,7 +9,7 @@
         {% csrf_token %}
         <div>
             <label for="notes">備考</label>
-            <textarea name="notes" rows="4"></textarea>
+            <textarea name="notes" rows="4">{{ form_data.notes }}</textarea>
         </div>
         <button type="submit">次へ</button>
     </form>

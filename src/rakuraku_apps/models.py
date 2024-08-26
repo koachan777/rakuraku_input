@@ -110,6 +110,9 @@ class WaterQualityModel(BaseModel):
     class Meta:
         verbose_name = "水質"
         db_table = "water_quality"
+        unique_together = ('date', 'tank')
+
+
 
 class StandardValueModel(BaseModel):
     water_temperature = models.FloatField("水温基準値", null=True)

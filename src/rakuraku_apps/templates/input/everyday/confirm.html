@@ -2,18 +2,27 @@
 <html>
 <head>
     <title>水質データ入力 - 確認</title>
+    <style>
+        .alert {
+            color: red;
+        }
+    </style>
 </head>
 <body>
     <h1>水質データ入力 - 確認</h1>
     <div>
-        <p>計測日: {{ request.session.date }}</p>
-        <p>水槽: {{ request.session.tank }}</p>
-        <p>室温: {{ request.session.room_temperature }}</p>
-        <p>水温: {{ request.session.water_temperature }}</p>
-        <p>pH: {{ request.session.pH }}</p>
-        <p>DO: {{ request.session.DO }}</p>
-        <p>塩分濃度: {{ request.session.salinity }}</p>
-        <p>備考: {{ request.session.notes }}</p>
+        <p>計測日: {{ form_data.date }}</p>
+        <p>水槽: {{ form_data.tank }}</p>
+        <p>室温: {{ form_data.room_temperature }}</p>
+        <p>水温: {{ form_data.water_temperature }}</p>
+        {% if 'water_temperature' in alerts %}<p class="alert">{{ alerts.water_temperature }}</p>{% endif %}
+        <p>pH: {{ form_data.pH }}</p>
+        {% if 'pH' in alerts %}<p class="alert">{{ alerts.pH }}</p>{% endif %}
+        <p>DO: {{ form_data.DO }}</p>
+        {% if 'DO' in alerts %}<p class="alert">{{ alerts.DO }}</p>{% endif %}
+        <p>塩分濃度: {{ form_data.salinity }}</p>
+        {% if 'salinity' in alerts %}<p class="alert">{{ alerts.salinity }}</p>{% endif %}
+        <p>備考: {{ form_data.notes }}</p>
     </div>
     <form method="post">
         {% csrf_token %}
