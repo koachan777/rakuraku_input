@@ -1,7 +1,16 @@
-ユーザー画面
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-link">HOMEに戻る</a> 
-</div> 
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:manage' %}" class="btn btn-link">戻る</a> 
-</div> 
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>管理者画面</h1>
+
+<h2>ユーザー</h2>
+
+<ul>
+    {% for user in users %}
+    <li>{{ user.account_id }}</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'rakuraku_apps:manage' %}">HOME</a>
+
+{% endblock %}
