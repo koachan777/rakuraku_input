@@ -29,9 +29,8 @@ from rakuraku_apps.views.log import (
     TableView
 )
 from rakuraku_apps.views.manage import (
-    ManagValueView, 
-    ManageFirstAlertView, 
-    ManageSecondAlertView, 
+    ManageAlertView,
+    ManageValueView, 
     ManageTankView, 
     ManageUserView, 
     ManageView
@@ -105,11 +104,8 @@ urlpatterns = [
     path('manage/tank/', ManageTankView.as_view(), name='manage_tank'),
 
     # # 管理者画面　水質基準値
-    path('manage/value/', ManagValueView.as_view(), name='manage_value'),
+    path('manage/value/', ManageValueView.as_view(), name='manage_value'),
 
-    # # 管理者画面　警告範囲１
-    path('manage/first_alert/', ManageFirstAlertView.as_view(), name='manage_first_alert'),
-
-    # # 管理者画面　警告範囲２
-    path('manage/second_alert/', ManageSecondAlertView.as_view(), name='manage_second_alert'),
-    ]
+    # # 管理者画面　警告範囲
+    path('manage/alert/',  ManageAlertView.as_view(), name='manage_alert'),
+]
