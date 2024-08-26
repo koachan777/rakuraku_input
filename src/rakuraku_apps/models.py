@@ -111,16 +111,18 @@ class WaterQualityModel(BaseModel):
         verbose_name = "水質"
         db_table = "water_quality"
 
-class AlertModel(BaseModel):
+class WarningRangeModel(BaseModel):
+    standard_value = models.IntegerField("水質基準値", null=True)
     alert_range = models.IntegerField("警告範囲", null=True)
-    water_quality= models.ForeignKey(
-        "WaterQualityModel",
+    water_quality = models.ForeignKey(
+        WaterQualityModel,
         verbose_name="水質",
         blank=False,
         null=False,
-        related_name="alert_range",
+        related_name="warning_ranges",
         on_delete=models.PROTECT,
     )
+
     class Meta:
         verbose_name = "警告範囲"
-        db_table = "alert_range"
+        db_table = "warning_ranges"
