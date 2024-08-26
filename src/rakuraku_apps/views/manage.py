@@ -1,8 +1,19 @@
+from urllib import request
 from django.views.generic import TemplateView
 from django.views.generic import ListView
-from rakuraku_apps.models import TankModel, User
-from rakuraku_apps.forms.manage import UserForm
+from rakuraku_apps.models import TankModel, User, WaterQualityThresholdModel
+from rakuraku_apps.forms.manage import UserForm, WaterQualityThresholdForm
 from rakuraku_apps.forms.manage import TankForm
+from django.views.generic import FormView
+from rakuraku_apps.forms.manage import WarningRangeForm
+from django.views.generic import UpdateView
+from rakuraku_apps.models import StandardValueModel
+from rakuraku_apps.forms.manage import WarningRangeForm
+from django.shortcuts import render, redirect
+from django.views import View
+from django.db import IntegrityError
+
+
 
 
 class ManageView(TemplateView):
@@ -28,11 +39,42 @@ class ManageTankView(ListView):
         context['form'] = TankForm()
         return context
 
-class ManagValueView(TemplateView):
+class ManageValueView(UpdateView):
+    model = StandardValueModel
+    form_class = WarningRangeForm
     template_name = 'manage/value.html'
+    success_url = '/manage/'
 
-class ManageFirstAlertView(TemplateView):
-    template_name = 'manage/first_alert.html'
+    def get_object(self, queryset=None):
+        return StandardValueModel.get_or_create()
+    
 
-class ManageSecondAlertView(TemplateView):
-    template_name = 'manage/second_alert.html'
+class ManageAlertView(View):
+    def get(self, request):
+        form = WaterQualityThresholdForm()
+        context = {
+            'form': form,
+        }
+        return render(request, 'manage/alert.html', context)
+
+    def post(self, request):
+        form = WaterQualityThresholdForm(request.POST)
+        if form.is_valid():
+            parameter = form.cleaned_data['parameter']
+            reference_value_threshold = form.cleaned_data['reference_value_threshold']
+            previous_day_threshold = form.cleaned_data['previous_day_threshold']
+
+            threshold, created = WaterQualityThresholdModel.objects.update_or_create(
+                parameter=parameter,
+                defaults={
+                    'reference_value_threshold': reference_value_threshold,
+                    'previous_day_threshold': previous_day_threshold,
+                }
+            )
+
+            return redirect('/manage/')
+
+        context = {
+            'form': form,
+        }
+        return render(request, 'manage/alert.html', context)

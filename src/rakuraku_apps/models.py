@@ -111,18 +111,61 @@ class WaterQualityModel(BaseModel):
         verbose_name = "水質"
         db_table = "water_quality"
 
-class WarningRangeModel(BaseModel):
-    standard_value = models.IntegerField("水質基準値", null=True)
-    alert_range = models.IntegerField("警告範囲", null=True)
-    water_quality = models.ForeignKey(
-        WaterQualityModel,
-        verbose_name="水質",
-        blank=False,
-        null=False,
-        related_name="warning_ranges",
-        on_delete=models.PROTECT,
-    )
+class StandardValueModel(BaseModel):
+    water_temperature = models.IntegerField("水温基準値", null=True)
+    pH = models.IntegerField("pH基準値", null=True)
+    DO = models.IntegerField("DO基準値", null=True)
+    salinity = models.IntegerField("塩分濃度基準値", null=True)
+    NH4 = models.IntegerField("NH4基準値", null=True)
+    NO2 = models.IntegerField("NO2基準値", null=True)
+    NO3 = models.IntegerField("NO3基準値", null=True)
+    Ca = models.IntegerField("Ca基準値", null=True)
+    Al = models.IntegerField("Al基準値", null=True)
+    Mg = models.IntegerField("Mg基準値", null=True)
 
     class Meta:
-        verbose_name = "警告範囲"
-        db_table = "warning_ranges"
+        verbose_name = "基準値"
+        db_table = "standard_value"
+
+    @classmethod
+    def get_or_create(cls):
+        if cls.objects.count() == 0:
+            return cls.objects.create()
+        return cls.objects.first()
+    
+
+class WaterQualityThresholdModel(BaseModel):
+    PARAMETER_CHOICES = [
+        ('water_temperature', '水温'),
+        ('pH', 'pH'),
+        ('DO', 'DO'),
+        ('salinity', '塩分濃度'),
+        ('NH4', 'NH4'),
+        ('NO2', 'NO2'),
+        ('NO3', 'NO3'),
+        ('Ca', 'Ca'),
+        ('Al', 'Al'),
+        ('Mg', 'Mg'),
+    ]
+
+    parameter = models.CharField("パラメーター", max_length=20, choices=PARAMETER_CHOICES)
+    reference_value_threshold = models.FloatField("基準値との差異閾値", null=True, blank=True)
+    previous_day_threshold = models.FloatField("前日との差異閾値", null=True, blank=True)
+
+    class Meta:
+        verbose_name = "水質アラート設定"
+        db_table = "water_quality_threshold"
+
+    def __str__(self):
+        return self.get_parameter_display()
+
+    @classmethod
+    def update_or_create(cls, parameter, reference_value_threshold=None, previous_day_threshold=None):
+        threshold, created = cls.objects.update_or_create(
+            parameter=parameter,
+            defaults={
+                'reference_value_threshold': reference_value_threshold,
+                'previous_day_threshold': previous_day_threshold,
+            }
+        )
+        return threshold
