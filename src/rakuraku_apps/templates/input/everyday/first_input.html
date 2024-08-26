@@ -9,7 +9,7 @@
         {% csrf_token %}
         <div>
             <label for="date">計測日</label>
-            <input type="date" name="date" required>
+            <input type="date" name="date" value="{{ today }}" required>
         </div>
         <div>
             <label for="tank">水槽</label>
