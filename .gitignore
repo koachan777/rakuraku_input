@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 src/rakuraku_apps/migrations/0001_initial.py
 src/rakuraku_apps/migrations/0002_tankmodel_waterqualitymodel.py
+src/rakuraku_apps/migrations/0003_warningrangemodel.py
