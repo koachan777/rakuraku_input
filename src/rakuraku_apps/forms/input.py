@@ -12,7 +12,30 @@ class WaterQualityForm(forms.ModelForm):
     DO = forms.FloatField(label='DO', min_value=0, max_value=100, required=False, widget=forms.NumberInput(attrs={'step': '0.1'}))
     salinity = forms.FloatField(label='塩分濃度', min_value=0, max_value=100, required=False, widget=forms.NumberInput(attrs={'step': '0.1'}))
     notes = forms.CharField(label='備考', widget=forms.Textarea(attrs={'rows': 4}), required=False)
+    tank = forms.ModelChoiceField(
+        queryset=TankModel.objects.all(),
+        label='水槽',
+        widget=forms.Select(),
+    )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['tank'].label_from_instance = lambda obj: obj.name
+        
     class Meta:
         model = WaterQualityModel
         fields = ['date', 'room_temperature', 'water_temperature', 'pH', 'DO', 'salinity', 'notes', 'tank']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        date = cleaned_data.get('date')
+        tank = cleaned_data.get('tank')
+
+        if date and tank:
+            try:
+                water_quality = WaterQualityModel.objects.get(date=date, tank=tank)
+                self.instance = water_quality
+            except WaterQualityModel.DoesNotExist:
+                pass
+
+        return cleaned_data
