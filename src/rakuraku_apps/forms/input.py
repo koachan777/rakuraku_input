@@ -1,8 +1,6 @@
-from django.forms import ChoiceField, DateField, DateInput, Select
-
 from django import forms
-
 from rakuraku_apps.models import TankModel, WaterQualityModel
+
 
 class WaterQualityForm(forms.ModelForm):
     date = forms.DateField(label='計測日', widget=forms.DateInput(attrs={'type': 'date'}))

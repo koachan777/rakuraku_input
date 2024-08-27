@@ -70,6 +70,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.account_id
 
+
+
 class BaseModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
@@ -78,12 +80,16 @@ class BaseModel(models.Model):
         abstract = True
         app_label = "rakuraku_apps"
 
+
+
 class TankModel(BaseModel):
     name = models.CharField("名前", max_length=64)
     
     class Meta:
         verbose_name = "水槽"
         db_table = "tank"
+
+
 
 class WaterQualityModel(BaseModel):
     date = models.DateField("計測日")
@@ -136,6 +142,7 @@ class StandardValueModel(BaseModel):
             return cls.objects.create()
         return cls.objects.first()
     
+
 
 class WaterQualityThresholdModel(BaseModel):
     PARAMETER_CHOICES = [

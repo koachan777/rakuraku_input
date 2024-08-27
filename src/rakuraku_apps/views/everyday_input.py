@@ -1,16 +1,16 @@
+from datetime import date
+
 from django.views.generic import TemplateView
-from django.views.generic import CreateView
-from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, CreateView, UpdateView
+from django.shortcuts import redirect
+from django.views.generic import TemplateView
 from rakuraku_apps.models import StandardValueModel, TankModel, WaterQualityModel, WaterQualityThresholdModel
 from rakuraku_apps.forms.input import WaterQualityForm
-from rakuraku_apps.forms.input import WaterQualityForm
-from rakuraku_apps.models import TankModel, WaterQualityModel
-from datetime import date
 
 
 class EverydayOrIntervalView(TemplateView):
     template_name = 'input/evryday_or_interval.html'
+
+
 
 class EverydayFirstInputView(TemplateView):
     template_name = 'input/everyday/first_input.html'
@@ -37,8 +37,6 @@ class EverydayFirstInputView(TemplateView):
                 })
 
         return context
-
-
 
     def post(self, request, *args, **kwargs):
         date_str = request.POST['date']
@@ -84,6 +82,8 @@ class EverydaySecondInputView(TemplateView):
         request.session['salinity'] = request.POST['salinity']
         return redirect('/everyday/comment/')
 
+
+
 class EverydayCommentInputView(TemplateView):
     template_name = 'input/everyday/comment_input.html'
 
@@ -98,6 +98,8 @@ class EverydayCommentInputView(TemplateView):
         request.session['notes'] = request.POST['notes']
         return redirect('/everyday/confirm/')
 
+
+
 class EverydayConfirmInputView(TemplateView):
     template_name = 'input/everyday/confirm.html'
 
@@ -107,7 +109,7 @@ class EverydayConfirmInputView(TemplateView):
         tank = TankModel.objects.get(pk=tank_id)
         context['form_data'] = {
             'date': self.request.session.get('date', ''),
-            'tank': tank.name,  # 変更
+            'tank': tank.name,
             'room_temperature': self.request.session.get('room_temperature', ''),
             'water_temperature': self.request.session.get('water_temperature', ''),
             'pH': self.request.session.get('pH', ''),
@@ -171,7 +173,9 @@ class EverydayConfirmInputView(TemplateView):
             return redirect('/home/')
         else:
             return redirect('/everyday/edit/')
-        
+
+
+
 class EverydayEditView(TemplateView):
     template_name = 'input/everyday/edit.html'
 

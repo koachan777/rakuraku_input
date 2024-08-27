@@ -1,7 +1,5 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-
 from rakuraku_apps.models import User
-
 
 
 class SignUpForm(UserCreationForm):
