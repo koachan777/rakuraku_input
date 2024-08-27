@@ -1,23 +1,17 @@
 from urllib import request
-from django.views.generic import TemplateView
-from django.views.generic import ListView
+from django.views.generic import TemplateView, ListView
 from rakuraku_apps.models import TankModel, User, WaterQualityThresholdModel
-from rakuraku_apps.forms.manage import UserForm, WaterQualityThresholdForm
-from rakuraku_apps.forms.manage import TankForm
-from django.views.generic import FormView
-from rakuraku_apps.forms.manage import WarningRangeForm
+from rakuraku_apps.forms.manage import UserForm, WaterQualityThresholdForm, TankForm, WarningRangeForm
 from django.views.generic import UpdateView
 from rakuraku_apps.models import StandardValueModel
-from rakuraku_apps.forms.manage import WarningRangeForm
 from django.shortcuts import render, redirect
 from django.views import View
-from django.db import IntegrityError
-
-
 
 
 class ManageView(TemplateView):
     template_name = 'manage/manage.html'
+
+
 
 class ManageUserView(ListView):
     model = User
@@ -29,6 +23,8 @@ class ManageUserView(ListView):
         context['form'] = UserForm()
         return context
 
+
+
 class ManageTankView(ListView):
     model = TankModel
     template_name = 'manage/tank.html'
@@ -39,6 +35,8 @@ class ManageTankView(ListView):
         context['form'] = TankForm()
         return context
 
+
+
 class ManageValueView(UpdateView):
     model = StandardValueModel
     form_class = WarningRangeForm
@@ -48,6 +46,8 @@ class ManageValueView(UpdateView):
     def get_object(self, queryset=None):
         return StandardValueModel.get_or_create()
     
+
+
 
 class ManageAlertView(View):
     def get(self, request):

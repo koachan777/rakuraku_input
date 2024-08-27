@@ -2,23 +2,23 @@
 
 {% block title %}
 
-<div class="h1">ログイン画面</div> {% endblock %}
+<div class="h1">ログイン画面</div> 
+{% endblock %}
 {% block content %}
-
-<form method="post"> 
+    <form method="post"> 
     {% csrf_token %} 
     {{ form.non_field_errors }} 
-    <div class="mb-3"> 
-        <label for="id_username" class="form-label">ユーザーID:</label> 
-        <input type="text" name="username" class="form-control" required id="id_username"> 
-    </div> 
+        <div class="mb-3"> 
+            <label for="id_username" class="form-label">ユーザーID:</label> 
+            <input type="text" name="username" class="form-control" required id="id_username"> 
+        </div> 
         <div class="mb-3"> 
             <label for="id_password" class="form-label">pass:</label> 
-            <input type="password" name="password" class="form-control" required id="id_password"> </div> 
-            <div class="d-grid gap-2"> 
-                <button type="submit" class="btn btn-primary">ログイン</button> 
-                <a href="{% url 'rakuraku_apps:signup' %}" class="btn btn-secondary">新規登録</a> 
-            </div> 
-        </form> 
-        
-        {% endblock %}
+            <input type="password" name="password" class="form-control" required id="id_password"> 
+        </div> 
+        <div class="d-grid gap-2"> 
+            <button type="submit" class="btn btn-primary">ログイン</button> 
+            <a href="{% url 'rakuraku_apps:signup' %}" class="btn btn-secondary">新規登録</a> 
+        </div> 
+    </form> 
+{% endblock %}

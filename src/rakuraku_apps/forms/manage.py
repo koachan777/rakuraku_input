@@ -2,7 +2,6 @@ from django import forms
 from rakuraku_apps.models import StandardValueModel, User
 from rakuraku_apps.models import TankModel
 from rakuraku_apps.models import StandardValueModel, WaterQualityThresholdModel
-from django.core.exceptions import ValidationError
 
 class UserForm(forms.ModelForm):
     class Meta:
@@ -30,6 +29,7 @@ class WarningRangeForm(forms.ModelForm):
             'Al',
             'Mg',
         ]
+
 
 class WaterQualityThresholdForm(forms.ModelForm):
     class Meta:
