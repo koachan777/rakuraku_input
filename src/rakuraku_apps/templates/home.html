@@ -10,7 +10,6 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-
     <div class="h2">ようこそ {{ user.account_id }} さん</div> 
     <div class="list-group"> 
         <a href="{% url 'rakuraku_apps:everyday_or_interval' %}" class="list-group-item list-group-item-action">データ入力</a> 
