@@ -1,8 +1,43 @@
-グラフ
-js?
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-link">HOMEに戻る</a> 
-</div> 
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="btn btn-link">戻る</a> 
-</div> 
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>水質データグラフ</h2>
+    <form method="GET">
+        <div class="form-group">
+            <label for="start_date">開始日:</label>
+            <input type="date" class="form-control" id="start_date" name="start_date" value="{{ request.GET.start_date }}">
+        </div>
+        <div class="form-group">
+            <label for="end_date">終了日:</label>
+            <input type="date" class="form-control" id="end_date" name="end_date" value="{{ request.GET.end_date }}">
+        </div>
+        <div class="form-group">
+            <label for="shrimp">系統:</label>
+            <select class="form-control" id="shrimp" name="shrimp">
+                <option value="">全て</option>
+                {% for shrimp in shrimps %}
+                <option value="{{ shrimp.id }}" {% if shrimp.id|stringformat:"i" == request.GET.shrimp %}selected{% endif %}>{{ shrimp.family }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="item">項目:</label>
+            <select class="form-control" id="item" name="item">
+                <option value="pH" {% if selected_item == "pH" %}selected{% endif %}>pH</option>
+                <option value="DO" {% if selected_item == "DO" %}selected{% endif %}>DO</option>
+                <option value="salinity" {% if selected_item == "salinity" %}selected{% endif %}>塩分濃度</option>
+                <option value="NH4" {% if selected_item == "NH4" %}selected{% endif %}>NH4</option>
+                <option value="NO2" {% if selected_item == "NO2" %}selected{% endif %}>NO2</option>
+                <option value="NO3" {% if selected_item == "NO3" %}selected{% endif %}>NO3</option>
+                <option value="Ca" {% if selected_item == "Ca" %}selected{% endif %}>Ca</option>
+                <option value="Al" {% if selected_item == "Al" %}selected{% endif %}>Al</option>
+                <option value="Mg" {% if selected_item == "Mg" %}selected{% endif %}>Mg</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">表示</button>
+    </form>
+    <hr>
+    <img src="data:image/png;base64,{{ graph }}" alt="Water Quality Graph">
+</div>
+{% endblock %}
