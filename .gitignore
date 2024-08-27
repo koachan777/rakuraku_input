@@ -5,3 +5,4 @@ src/rakuraku_apps/migrations/0002_tankmodel_waterqualitymodel.py
 src/rakuraku_apps/migrations/0003_warningrangemodel.py
 src/rakuraku_apps/migrations/0002_alter_standardvaluemodel_al_and_more.py
 src/rakuraku_apps/migrations/0003_alter_waterqualitymodel_unique_together.py
+src/rakuraku_apps/migrations/0004_shrimpmodel_tankmodel_shrimp.py
