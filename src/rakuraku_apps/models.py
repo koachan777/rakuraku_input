@@ -80,11 +80,24 @@ class BaseModel(models.Model):
         abstract = True
         app_label = "rakuraku_apps"
 
+class ShrimpModel(BaseModel):
+    family = models.CharField("系統", max_length=64)
+
+    class Meta:
+        verbose_name = "系統"
+        db_table = "shrimp"
 
 
 class TankModel(BaseModel):
     name = models.CharField("名前", max_length=64)
-    
+    shrimp = models.ForeignKey(
+        "ShrimpModel",
+        verbose_name="系統",
+        blank=False,
+        null=False,
+        related_name="tank",
+        on_delete=models.PROTECT,
+    )
     class Meta:
         verbose_name = "水槽"
         db_table = "tank"
