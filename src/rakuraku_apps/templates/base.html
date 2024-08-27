@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -15,12 +16,24 @@
 </head>
 
 <body>
+  <header>
+    <h1 class="headline">
+      <img src="{% static 'img/header-logo.png' %}" alt="Header Logo">
+    </h1>
+  </header>
+
   <div class="container mx-auto text-center">
     {% block title %}
     {% endblock %}
     {% block content %}
     {% endblock %}
   </div>
+
+  <footer>
+    <h1 class="footline">
+      <img src="{% static 'img/footer-button.png' %}" alt="ホームに戻る">
+    </h1>
+  </footer>
 </body>
 
 </html>
