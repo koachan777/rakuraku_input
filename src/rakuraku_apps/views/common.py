@@ -24,7 +24,7 @@ class CustomLoginView(BaseLoginView):
 class SignupView(CreateView):
     form_class = SignUpForm
     template_name = "signup.html" 
-    success_url = reverse_lazy("rakuraku_apps:login") # ユーザー作成後のリダイレクト先ページ
+    success_url = reverse_lazy("rakuraku_apps:manage_user") # ユーザー作成後のリダイレクト先ページ
 
     def form_valid(self, form):
         # ユーザー作成後にそのままログイン状態にする設定
