@@ -42,7 +42,6 @@ class EverydayFirstInputView(TemplateView):
         date_str = request.POST['date']
         tank_id = request.POST['tank']
         room_temperature = request.POST['room_temperature']
-
         water_qualities = WaterQualityModel.objects.filter(date=date_str, tank_id=tank_id)
         if water_qualities.exists():
             water_quality = water_qualities.first()
@@ -56,10 +55,15 @@ class EverydayFirstInputView(TemplateView):
             request.session['salinity'] = water_quality.salinity or ''
             request.session['notes'] = water_quality.notes or ''
         else:
+            request.session['water_quality_id'] = None
             request.session['date'] = date_str
             request.session['tank'] = tank_id
             request.session['room_temperature'] = room_temperature
-
+            request.session['water_temperature'] = ''
+            request.session['pH'] = ''
+            request.session['DO'] = ''
+            request.session['salinity'] = ''
+            request.session['notes'] = ''
         return redirect('/everyday/second_input/')
 
 class EverydaySecondInputView(TemplateView):
