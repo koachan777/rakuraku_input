@@ -1,7 +1,7 @@
 import json
 from urllib import request
 from django.views.generic import TemplateView, ListView
-from rakuraku_apps.models import TankModel, User, WaterQualityThresholdModel
+from rakuraku_apps.models import ShrimpModel, TankModel, User, WaterQualityThresholdModel
 from rakuraku_apps.forms.manage import UserForm, WaterQualityThresholdForm, TankForm, WarningRangeForm
 from django.views.generic import UpdateView
 from rakuraku_apps.models import StandardValueModel
@@ -13,6 +13,10 @@ from django.shortcuts import render, redirect
 from django.views import View
 from rakuraku_apps.forms.manage import WaterQualityThresholdForm
 from rakuraku_apps.models import WaterQualityThresholdModel
+from django.urls import reverse_lazy
+from django.views.generic import CreateView
+from rakuraku_apps.forms.manage import TankForm, ShrimpForm
+
 
 
 class ManageView(TemplateView):
@@ -42,6 +46,25 @@ class ManageTankView(ListView):
         context['form'] = TankForm()
         return context
 
+class CreateTankView(CreateView):
+    model = TankModel
+    form_class = TankForm
+    template_name = 'manage/create_tank.html'
+    success_url = reverse_lazy('rakuraku_apps:manage_tank')
+
+    def form_valid(self, form):
+        tank = form.save(commit=False)
+        if not tank.shrimp:
+            # shrimp が選択されていない場合はエラーメッセージを表示するなどの処理を行う
+            form.add_error('shrimp', '系統を選択してください')
+            return self.form_invalid(form)
+        return super().form_valid(form)
+
+class CreateShrimpView(CreateView):
+    model = ShrimpModel
+    form_class = ShrimpForm
+    template_name = 'manage/create_shrimp.html'
+    success_url = reverse_lazy('rakuraku_apps:manage_tank')
 
 
 class ManageValueView(UpdateView):

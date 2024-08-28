@@ -29,6 +29,8 @@ from rakuraku_apps.views.log import (
     TableView
 )
 from rakuraku_apps.views.manage import (
+    CreateShrimpView,
+    CreateTankView,
     ManageAlertView,
     ManageValueView, 
     ManageTankView, 
@@ -102,6 +104,9 @@ urlpatterns = [
 
     # 管理者画面　水槽
     path('manage/tank/', ManageTankView.as_view(), name='manage_tank'),
+
+    path('manage/tank/create/', CreateTankView.as_view(), name='create_tank'),
+    path('manage/shrimp/create/', CreateShrimpView.as_view(), name='create_shrimp'),
 
     # 管理者画面　水質基準値
     path('manage/value/', ManageValueView.as_view(), name='manage_value'),

@@ -1,0 +1,18 @@
+<!-- create_shrimp.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>系統を追加する</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">保存</button>
+</form>
+
+<div class="text-center mt-3"> 
+    <a href="{% url 'rakuraku_apps:manage_tank' %}" class="btn btn-link">戻る</a> 
+</div> 
+
+{% endblock %}
+
