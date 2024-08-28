@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+/*header*/
+.header {
+width: 320px;
+height: 60px;
+flex-shrink: 0;
+}
+
+/*footer*/
+.footline {
+    position: absolute;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    z-index: 1000;
+    padding: 5px 10px; /* パディングを減らしてみる */
+    width: auto;
+  }
