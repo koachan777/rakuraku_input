@@ -194,9 +194,11 @@
 .header {
   display: flex;  /* Flexboxを使用 */
   height: 60px;
+  width: 100%;
   justify-content: space-between;
   align-items: center; 
   margin: 8px;
+  background-color: rgba(86, 178, 200, 0.8);
 }
 
 .title {
