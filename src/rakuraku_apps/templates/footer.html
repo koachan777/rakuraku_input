@@ -1,5 +1,3 @@
-
-
 <!-- footer.html -->
 <!DOCTYPE html>
 <html lang="ja">
@@ -9,8 +7,10 @@
 </head>
 
 <body>
-    <footer class="footer text-center">
-        <img src="{% static 'img/footer-button.png' %}" alt="ホームに戻る">
-    </footer>
+    <div class="footer"> 
+        <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-link"> 
+            <img src="{% static 'img/footer-button.png' %}" alt="ホームに戻る">
+        </a>
+    </div>
 </body>
 </html>
