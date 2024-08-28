@@ -43,6 +43,43 @@
         <button type="submit" class="btn btn-primary">表示</button>
     </form>
     <hr>
+    {% if request.GET.item %}
+    <h3 class="mt-5 mb-4">
+        {% if request.GET.item == "water_temperature" %}水温
+        {% elif request.GET.item == "pH" %}pH
+        {% elif request.GET.item == "DO" %}DO
+        {% elif request.GET.item == "salinity" %}塩分濃度
+        {% elif request.GET.item == "NH4" %}NH4
+        {% elif request.GET.item == "NO2" %}NO2
+        {% elif request.GET.item == "NO3" %}NO3
+        {% elif request.GET.item == "Ca" %}Ca
+        {% elif request.GET.item == "Al" %}Al
+        {% elif request.GET.item == "Mg" %}Mg
+        {% endif %}
+    </h3>
+    <div class="table-responsive mb-5">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><nobr>測定日</nobr></th>
+                    {% for tank in tanks %}
+                    <th><nobr>{{ tank.name }}</nobr></th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for date, data_by_date in water_quality_data_by_date.items %}
+                <tr>
+                    <td><nobr>{{ date }}</nobr></td>
+                    {% for tank in tanks %}
+                    <td><nobr>{{ data_by_date|get_item:tank.name|default_if_none:"-" }}</nobr></td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
     {% regroup water_quality_data by tank__name as tank_list %}
     {% for tank in tank_list %}
     <h3 class="mt-5">{{ tank.grouper }}</h3>
@@ -51,7 +88,6 @@
             <thead>
                 <tr>
                     <th><nobr>日付</nobr></th>
-                    {% if not request.GET.item %}
                     <th><nobr>水温</nobr></th>
                     <th><nobr>pH</nobr></th>
                     <th><nobr>DO</nobr></th>
@@ -62,28 +98,12 @@
                     <th><nobr>Ca</nobr></th>
                     <th><nobr>Al</nobr></th>
                     <th><nobr>Mg</nobr></th>
-                    {% else %}
-                    <th><nobr>
-                        {% if request.GET.item == "water_temperature" %}水温
-                        {% elif request.GET.item == "pH" %}pH
-                        {% elif request.GET.item == "DO" %}DO
-                        {% elif request.GET.item == "salinity" %}塩分濃度
-                        {% elif request.GET.item == "NH4" %}NH4
-                        {% elif request.GET.item == "NO2" %}NO2
-                        {% elif request.GET.item == "NO3" %}NO3
-                        {% elif request.GET.item == "Ca" %}Ca
-                        {% elif request.GET.item == "Al" %}Al
-                        {% elif request.GET.item == "Mg" %}Mg
-                        {% endif %}
-                    </nobr></th>
-                    {% endif %}
                 </tr>
             </thead>
             <tbody>
                 {% for data in tank.list %}
                 <tr>
                     <td><nobr>{{ data.date }}</nobr></td>
-                    {% if not request.GET.item %}
                     <td><nobr>{{ data.water_temperature|default:"-" }}</nobr></td>
                     <td><nobr>{{ data.pH|default:"-" }}</nobr></td>
                     <td><nobr>{{ data.DO|default:"-" }}</nobr></td>
@@ -94,17 +114,15 @@
                     <td><nobr>{{ data.Ca|default:"-" }}</nobr></td>
                     <td><nobr>{{ data.Al|default:"-" }}</nobr></td>
                     <td><nobr>{{ data.Mg|default:"-" }}</nobr></td>
-                    {% else %}
-                    <td><nobr>{{ data|get_item:request.GET.item|default:"-" }}</nobr></td>
-                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
     {% endfor %}
+    {% endif %}
 </div>
 
-<a href="{% url 'rakuraku_apps:table_or_graph' %}" class="btn btn-link">戻る</a> 
+<a href="{% url 'rakuraku_apps:table_or_graph' %}" class="btn btn-link">戻る</a>
 
 {% endblock %}

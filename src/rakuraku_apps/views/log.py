@@ -42,6 +42,20 @@ class TableView(TemplateView):
 
         if item:
             water_quality_data = water_quality_data.values('date', 'tank__name', item)
+            water_quality_data_by_date = {}
+            for data in water_quality_data:
+                date = data['date']
+                tank_name = data['tank__name']
+                value = data[item]
+                if date not in water_quality_data_by_date:
+                    water_quality_data_by_date[date] = {}
+                water_quality_data_by_date[date][tank_name] = value
+            context['water_quality_data_by_date'] = water_quality_data_by_date
+            
+            if shrimp_id:
+                context['tanks'] = TankModel.objects.filter(shrimp__id=shrimp_id, water_quality__date__range=[start_date, end_date]).distinct()
+            else:
+                context['tanks'] = TankModel.objects.filter(water_quality__date__range=[start_date, end_date]).distinct()
         else:
             water_quality_data = water_quality_data.values('date', 'tank__name', 'pH', 'DO', 'salinity', 'NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg', 'water_temperature')
 
