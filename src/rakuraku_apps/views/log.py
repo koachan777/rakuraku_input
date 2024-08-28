@@ -1,3 +1,4 @@
+import datetime
 from django.views.generic import TemplateView
 from django.db.models import Q
 
@@ -14,9 +15,8 @@ from matplotlib.dates import DateFormatter
 class TableOrGraphView(TemplateView):
     template_name = 'log/table_or_graph.html'
 
-from django.views.generic import TemplateView
-from django.db.models import Q
-from rakuraku_apps.models import WaterQualityModel, TankModel, ShrimpModel
+
+from datetime import datetime, timedelta
 
 class TableView(TemplateView):
     template_name = 'log/table.html'
@@ -28,9 +28,13 @@ class TableView(TemplateView):
         shrimp_id = self.request.GET.get('shrimp')
         item = self.request.GET.get('item')
 
-        query = Q()
-        if start_date and end_date:
-            query &= Q(date__range=[start_date, end_date])
+        if not start_date:
+            start_date = (datetime.today() - timedelta(days=7)).strftime('%Y-%m-%d')
+        if not end_date:
+            end_date = datetime.today().strftime('%Y-%m-%d')
+
+        query = Q(date__range=[start_date, end_date])
+
         if shrimp_id:
             query &= Q(tank__shrimp__id=shrimp_id)
 
@@ -41,11 +45,14 @@ class TableView(TemplateView):
         else:
             water_quality_data = water_quality_data.values('date', 'tank__name', 'pH', 'DO', 'salinity', 'NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg', 'water_temperature')
 
-        # 日付の昇順と水槽IDの昇順で並び替え
-        water_quality_data = water_quality_data.order_by('date', 'tank__id')
+        # 水槽名の昇順と日付の昇順で並び替え
+        water_quality_data = water_quality_data.order_by('tank__name', 'date')
 
         context['water_quality_data'] = water_quality_data
         context['shrimps'] = ShrimpModel.objects.all()
+        context['start_date'] = start_date
+        context['end_date'] = end_date
+
         return context
 
 class GraphView(TemplateView):

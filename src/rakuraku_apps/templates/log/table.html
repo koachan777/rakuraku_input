@@ -6,12 +6,14 @@
     <h2>水質データ表示</h2>
     <form method="GET">
         <div class="form-group">
-            <label for="start_date">開始日:</label>
-            <input type="date" class="form-control" id="start_date" name="start_date" value="{{ request.GET.start_date }}">
-        </div>
-        <div class="form-group">
-            <label for="end_date">終了日:</label>
-            <input type="date" class="form-control" id="end_date" name="end_date" value="{{ request.GET.end_date }}">
+            <label for="date_range">期間:</label>
+            <div class="input-group">
+                <input type="date" class="form-control" id="start_date" name="start_date" value="{{ start_date }}">
+                <div class="input-group-append input-group-prepend d-flex align-items-center">
+                    <span class="mx-2">〜</span>
+                </div>
+                <input type="date" class="form-control" id="end_date" name="end_date" value="{{ end_date }}">
+            </div>
         </div>
         <div class="form-group">
             <label for="shrimp">系統:</label>
@@ -41,50 +43,66 @@
         <button type="submit" class="btn btn-primary">表示</button>
     </form>
     <hr>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>日付</th>
-                <th>水槽</th>
-                {% if not request.GET.item %}
-                <th>水温</th>
-                <th>pH</th>
-                <th>DO</th>
-                <th>塩分濃度</th>
-                <th>NH4</th>
-                <th>NO2</th>
-                <th>NO3</th>
-                <th>Ca</th>
-                <th>Al</th>
-                <th>Mg</th>
-                {% else %}
-                <th>{{ request.GET.item }}</th>
-                {% endif %}
-            </tr>
-        </thead>
-        <tbody>
-            {% for data in water_quality_data %}
-            <tr>
-                <td>{{ data.date }}</td>
-                <td>{{ data.tank__name }}</td>
-                {% if not request.GET.item %}
-                <td>{{ data.water_temperature }}</td>
-                <td>{{ data.pH }}</td>
-                <td>{{ data.DO }}</td>
-                <td>{{ data.salinity }}</td>
-                <td>{{ data.NH4 }}</td>
-                <td>{{ data.NO2 }}</td>
-                <td>{{ data.NO3 }}</td>
-                <td>{{ data.Ca }}</td>
-                <td>{{ data.Al }}</td>
-                <td>{{ data.Mg }}</td>
-                {% else %}
-                <td>{{ data|get_item:request.GET.item }}</td>
-                {% endif %}
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    {% regroup water_quality_data by tank__name as tank_list %}
+    {% for tank in tank_list %}
+    <h3 class="mt-5">{{ tank.grouper }}</h3>
+    <div class="table-responsive mb-5">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><nobr>日付</nobr></th>
+                    {% if not request.GET.item %}
+                    <th><nobr>水温</nobr></th>
+                    <th><nobr>pH</nobr></th>
+                    <th><nobr>DO</nobr></th>
+                    <th><nobr>塩分濃度</nobr></th>
+                    <th><nobr>NH4</nobr></th>
+                    <th><nobr>NO2</nobr></th>
+                    <th><nobr>NO3</nobr></th>
+                    <th><nobr>Ca</nobr></th>
+                    <th><nobr>Al</nobr></th>
+                    <th><nobr>Mg</nobr></th>
+                    {% else %}
+                    <th><nobr>
+                        {% if request.GET.item == "water_temperature" %}水温
+                        {% elif request.GET.item == "pH" %}pH
+                        {% elif request.GET.item == "DO" %}DO
+                        {% elif request.GET.item == "salinity" %}塩分濃度
+                        {% elif request.GET.item == "NH4" %}NH4
+                        {% elif request.GET.item == "NO2" %}NO2
+                        {% elif request.GET.item == "NO3" %}NO3
+                        {% elif request.GET.item == "Ca" %}Ca
+                        {% elif request.GET.item == "Al" %}Al
+                        {% elif request.GET.item == "Mg" %}Mg
+                        {% endif %}
+                    </nobr></th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in tank.list %}
+                <tr>
+                    <td><nobr>{{ data.date }}</nobr></td>
+                    {% if not request.GET.item %}
+                    <td><nobr>{{ data.water_temperature|default:"-" }}</nobr></td>
+                    <td><nobr>{{ data.pH|default:"-" }}</nobr></td>
+                    <td><nobr>{{ data.DO|default:"-" }}</nobr></td>
+                    <td><nobr>{{ data.salinity|default:"-" }}</nobr></td>
+                    <td><nobr>{{ data.NH4|default:"-" }}</nobr></td>
+                    <td><nobr>{{ data.NO2|default:"-" }}</nobr></td>
+                    <td><nobr>{{ data.NO3|default:"-" }}</nobr></td>
+                    <td><nobr>{{ data.Ca|default:"-" }}</nobr></td>
+                    <td><nobr>{{ data.Al|default:"-" }}</nobr></td>
+                    <td><nobr>{{ data.Mg|default:"-" }}</nobr></td>
+                    {% else %}
+                    <td><nobr>{{ data|get_item:request.GET.item|default:"-" }}</nobr></td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endfor %}
 </div>
 
 <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="btn btn-link">戻る</a> 
