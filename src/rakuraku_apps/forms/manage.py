@@ -1,5 +1,5 @@
 from django import forms
-from rakuraku_apps.models import StandardValueModel, User
+from rakuraku_apps.models import ShrimpModel, StandardValueModel, User
 from rakuraku_apps.models import TankModel
 from rakuraku_apps.models import StandardValueModel, WaterQualityThresholdModel
 
@@ -9,10 +9,20 @@ class UserForm(forms.ModelForm):
         fields = ['account_id']
 
 class TankForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['shrimp'].queryset = ShrimpModel.objects.all()
+        self.fields['shrimp'].label_from_instance = lambda obj: obj.family
+
     class Meta:
         model = TankModel
-        fields = ['name']
+        fields = ['name', 'shrimp']
 
+
+class ShrimpForm(forms.ModelForm):
+    class Meta:
+        model = ShrimpModel
+        fields = ['family']
 
 class WarningRangeForm(forms.ModelForm):
     class Meta:
