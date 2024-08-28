@@ -20,3 +20,14 @@ flex-shrink: 0;
     padding: 5px 10px; /* パディングを減らしてみる */
     width: auto;
   }
+
+
+/* 管理者画面のタイトルスタイル */
+.card-title {
+  font-size: 2.5rem;
+}
+
+/* 管理者画面のボタンスタイル */
+.btn i {
+  vertical-align: middle;
+}
