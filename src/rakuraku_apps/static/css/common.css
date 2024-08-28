@@ -25,6 +25,15 @@ html, body {
   }
 
 
+/* 管理者画面のタイトルスタイル */
+.card-title {
+  font-size: 2.5rem;
+}
+
+/* 管理者画面のボタンスタイル */
+.btn i {
+  vertical-align: middle;
+}
   /*自作ヘッダー*/
 .header {
   display: flex;  /* Flexboxを使用 */
