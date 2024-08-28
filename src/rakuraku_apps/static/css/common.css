@@ -2,10 +2,9 @@
 
 /*header*/
 .header {
-width: 320px;
-height: 60px;
 flex-shrink: 0;
 }
+
 
 /*footer*/
 .footline {

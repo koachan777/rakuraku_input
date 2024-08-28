@@ -190,6 +190,51 @@
   }
 }
 
+/*自作ヘッダー*/
+.header {
+  display: flex;  /* Flexboxを使用 */
+  height: 60px;
+  justify-content: space-between;
+  align-items: center; 
+  margin: 8px;
+}
+
+.title {
+  text-align: left;
+}
+
+.logout {
+  text-align: right;
+  white-space: nowrap; /* テキストが折り返されないようにする */
+  overflow: hidden; /* オーバーフローしたテキストを隠す */
+}
+
+.logout h3 {
+  margin: 0; /* マージンをリセット */
+  padding: 0; /* パディングをリセット */
+}
+.logout a {
+  font-size: 1rem;
+}
+
+/*自作フッター*/
+.footer {
+  position: fixed;  /* 画面に固定 */
+  bottom: 0;        /* 画面の下端に配置 */
+  left: 50%;        /* 画面の左右中央に配置 */
+  transform: translateX(-50%);  /* 要素の中央を基準に位置を調整 */
+  text-align: center;  /* 中央に配置 */
+  width: 100%;     /* フッター全体をカバーする幅を設定（必要に応じて調整） */
+  z-index: 1000;   /* 他の要素の上に表示されるように */
+  padding: 10px 46px;
+}
+
+.footer img {
+  display: block;
+  margin: 0 auto;  /* 画像自体も中央に配置 */
+}
+
+/*以降公式*/
 body {
   margin: 0;
   font-family: var(--bs-body-font-family);

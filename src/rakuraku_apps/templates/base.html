@@ -16,9 +16,7 @@
 </head>
 
 <body>
-  <header class="headline">
-    <img src="{% static 'img/header-logo.png' %}" alt="Header Logo">
-  </header>
+  {% include 'header.html' %}
 
   <div class="container mx-auto text-center">
     {% block title %}
@@ -27,7 +25,7 @@
     {% endblock %}
   </div>
 
-  {% include 'footer.html' %}
+
 
   
 </body>
