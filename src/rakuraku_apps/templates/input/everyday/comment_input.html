@@ -1,21 +1,40 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>水質データ入力 - ステップ3</title>
-</head>
-<body>
-    <h1>水質データ入力 - ステップ3</h1>
-    <form method="post">
-        {% csrf_token %}
-        <div>
-            <label for="notes">備考</label>
-            <textarea name="notes" rows="4">{{ form_data.notes }}</textarea>
-        </div>
-        <button type="submit">次へ</button>
-        <a href="{% url 'rakuraku_apps:everyday_second_input' %}" class="btn btn-secondary">戻る</a>
+{% extends 'base.html' %}
 
-    </form>
-    <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-secondary">HOME戻る</a>
+{% block title %}
+<h1 class="card-title text-center mt-3">水質データ入力 - Step3</h1>
+{% endblock %}
 
-</body>
-</html>
+{% block content %}
+{% if user.is_authenticated %}
+
+<div class="container"> 
+    <div class="row justify-content-center"> 
+        <div class="col-md-6"> 
+                <div class="card-body"> 
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">備考</label>
+                            <textarea name="notes" class="form-control" rows="4">{{ form_data.notes }}</textarea>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">次へ</button>
+                            <!-- ステップ2に戻るボタン -->
+                            <a href="{% url 'rakuraku_apps:everyday_second_input' %}" class="btn btn-secondary btn-lg">戻る</a>
+                        </div>
+                    </form>
+                </div>  
+        </div> 
+    </div> 
+</div> 
+
+{% include 'footer.html' %}
+
+{% else %} 
+<div class="text-center mt-5"> 
+    <p>データ入力機能を使用するにはログインが必要です。</p> 
+    <a href="{% url 'rakuraku_apps:login' %}" class="btn btn-primary">ログイン</a> 
+</div> 
+{% endif %} 
+{% endblock %}
