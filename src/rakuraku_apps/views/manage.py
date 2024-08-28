@@ -1,3 +1,4 @@
+import json
 from urllib import request
 from django.views.generic import TemplateView, ListView
 from rakuraku_apps.models import TankModel, User, WaterQualityThresholdModel
@@ -6,6 +7,12 @@ from django.views.generic import UpdateView
 from rakuraku_apps.models import StandardValueModel
 from django.shortcuts import render, redirect
 from django.views import View
+import json
+from django.core.serializers.json import DjangoJSONEncoder
+from django.shortcuts import render, redirect
+from django.views import View
+from rakuraku_apps.forms.manage import WaterQualityThresholdForm
+from rakuraku_apps.models import WaterQualityThresholdModel
 
 
 class ManageView(TemplateView):
@@ -52,10 +59,19 @@ class ManageValueView(UpdateView):
 class ManageAlertView(View):
     def get(self, request):
         form = WaterQualityThresholdForm()
+        thresholds = {
+            threshold.parameter: {
+                'reference_value_threshold': threshold.reference_value_threshold,
+                'previous_day_threshold': threshold.previous_day_threshold,
+            }
+            for threshold in WaterQualityThresholdModel.objects.all()
+        }
         context = {
             'form': form,
+            'thresholds': json.dumps(thresholds),
         }
         return render(request, 'manage/alert.html', context)
+
 
     def post(self, request):
         form = WaterQualityThresholdForm(request.POST)
