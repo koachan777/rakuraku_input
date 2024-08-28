@@ -12,6 +12,10 @@
             <textarea name="notes" rows="4">{{ form_data.notes }}</textarea>
         </div>
         <button type="submit">次へ</button>
+        <a href="{% url 'rakuraku_apps:everyday_second_input' %}" class="btn btn-secondary">戻る</a>
+
     </form>
+    <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-secondary">HOME戻る</a>
+
 </body>
 </html>

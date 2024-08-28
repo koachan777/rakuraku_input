@@ -39,7 +39,7 @@ class TableView(TemplateView):
         if item:
             water_quality_data = water_quality_data.values('date', 'tank__name', item)
         else:
-            water_quality_data = water_quality_data.values('date', 'tank__name', 'pH', 'DO', 'salinity', 'NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg')
+            water_quality_data = water_quality_data.values('date', 'tank__name', 'pH', 'DO', 'salinity', 'NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg', 'water_temperature')
 
         # 日付の昇順と水槽IDの昇順で並び替え
         water_quality_data = water_quality_data.order_by('date', 'tank__id')
@@ -69,7 +69,7 @@ class GraphView(TemplateView):
         if item:
             water_quality_data = water_quality_data.values('date', 'tank__name', item)
         else:
-            item = 'pH'  # デフォルトの項目をpHに設定
+            item = 'water_temperature'  # デフォルトの項目をwater_temperatureに設定
             water_quality_data = water_quality_data.values('date', 'tank__name', item)
 
         water_quality_data = water_quality_data.order_by('date', 'tank__id')

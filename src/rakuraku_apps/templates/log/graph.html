@@ -24,6 +24,7 @@
         <div class="form-group">
             <label for="item">項目:</label>
             <select class="form-control" id="item" name="item">
+                <option value="water_temperature" {% if selected_item == "water_temperature" %}selected{% endif %}>水温</option>
                 <option value="pH" {% if selected_item == "pH" %}selected{% endif %}>pH</option>
                 <option value="DO" {% if selected_item == "DO" %}selected{% endif %}>DO</option>
                 <option value="salinity" {% if selected_item == "salinity" %}selected{% endif %}>塩分濃度</option>
@@ -38,6 +39,27 @@
         <button type="submit" class="btn btn-primary">表示</button>
     </form>
     <hr>
-    <img src="data:image/png;base64,{{ graph }}" alt="Water Quality Graph">
+    <div class="text-center">
+        <img src="data:image/png;base64,{{ graph }}" alt="Water Quality Graph" id="graph-image">
+        <br>
+        <a href="#" class="btn btn-primary" id="save-graph">グラフを保存</a>
+    </div>
 </div>
+<a href="{% url 'rakuraku_apps:table_or_graph' %}" class="btn btn-secondary">戻る</a>
+
+<script>
+    document.getElementById('save-graph').addEventListener('click', function() {
+        var imgElement = document.getElementById('graph-image');
+        var imgSrc = imgElement.src;
+
+        // 画像をダウンロードするためのリンクを作成
+        var link = document.createElement('a');
+        link.download = 'water_quality_graph.png';
+        link.href = imgSrc;
+
+        // クリックイベントを発生させてダウンロードを開始
+        link.click();
+    });
+</script>
+
 {% endblock %}

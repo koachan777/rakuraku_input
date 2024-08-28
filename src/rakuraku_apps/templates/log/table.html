@@ -26,6 +26,7 @@
             <label for="item">項目:</label>
             <select class="form-control" id="item" name="item">
                 <option value="">全て</option>
+                <option value="water_temperature" {% if request.GET.item == "water_temperature" %}selected{% endif %}>水温</option>
                 <option value="pH" {% if request.GET.item == "pH" %}selected{% endif %}>pH</option>
                 <option value="DO" {% if request.GET.item == "DO" %}selected{% endif %}>DO</option>
                 <option value="salinity" {% if request.GET.item == "salinity" %}selected{% endif %}>塩分濃度</option>
@@ -46,6 +47,7 @@
                 <th>日付</th>
                 <th>水槽</th>
                 {% if not request.GET.item %}
+                <th>水温</th>
                 <th>pH</th>
                 <th>DO</th>
                 <th>塩分濃度</th>
@@ -66,6 +68,7 @@
                 <td>{{ data.date }}</td>
                 <td>{{ data.tank__name }}</td>
                 {% if not request.GET.item %}
+                <td>{{ data.water_temperature }}</td>
                 <td>{{ data.pH }}</td>
                 <td>{{ data.DO }}</td>
                 <td>{{ data.salinity }}</td>
