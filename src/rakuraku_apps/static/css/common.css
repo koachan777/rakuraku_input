@@ -1,12 +1,19 @@
 @charset "UTF-8";
 
-html, body {
+/* html, body {
   font-family: 'Noto Sans JP', sans-serif;
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;  /* ページ全体がスクロール可能に */
+  overflow: auto;
+} */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%; /* ビューポート全体をカバー */
+  font-family: 'Noto Sans JP', sans-serif;
 }
 
 body {
@@ -15,19 +22,26 @@ body {
   min-height: 100vh; /* 画面全体を埋める */
 }
 
+.container {
+  flex: 1; /* コンテンツ部分が残りのスペースを取る */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* コンテンツを中央に配置（縦方向） */
+}
+
 /*footer*/
 .footline {
-    position: absolute;
-    bottom: 0px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    z-index: 1000;
-    padding: 5px 10px;
-    width: auto;
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 1000;
+  padding: 5px 10px;
+  width: auto;
 }
 
 /* 管理者画面のタイトルスタイル */
@@ -80,17 +94,26 @@ body {
 }
 
 
-.footer {
+/* .footer {
   margin-top: auto;
   text-align: center;
   width: 100%;
   height: 60px;
   z-index: 1000;
   display: flex;
-  justify-content: center; /* フッター内のコンテンツを中央揃え */
-  align-items: center; /* フッター内のコンテンツを上下中央揃え */
-}
+  justify-content: center;
+  align-items: center;
+} */
 
+.footer {
+  width: 100%;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: auto; /* フッターをページの下部に押し出す */
+}
 
 .footer img {
   display: block;
@@ -98,9 +121,9 @@ body {
 }
 
 .original-btn {
-  display: flex; /* アイコンとテキストを横並びにする */
-  align-items: center; /* アイコンとテキストを上下中央揃え */
-  justify-content: center; /* ボタン内でコンテンツを中央揃え */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   text-decoration: none;
   width: 120px;
@@ -109,24 +132,24 @@ body {
   padding: 10px;
   font-weight: bold;
   border-radius: 0.3rem;
-  border-bottom: 7px solid #1B3C6F;
+  /* border-bottom: 7px solid #1B3C6F; */
   background-color: rgba(47, 93, 163, 0.8);
   color: #fff;
   position: relative;
 }
 
 .original-btn i {
-  margin-right: 8px; /* アイコンとテキストの間にスペースを追加 */
+  margin-right: 8px;
 }
 
-.original-btn:hover {
+/* .original-btn:hover {
   margin-top: 6px;
   border-bottom: 1px solid #1B3C6F;
   color: #fff;
-}
+} */
 
 .original-btn i {
-  margin-right: 8px; /* アイコンとテキストの間にスペースを追加 */
+  margin-right: 8px;
 }
 
 .footer-btn-txt {
@@ -142,16 +165,16 @@ body {
   padding: 16px 8px;
   font-weight: bold;
   border-radius: 0.3rem;
-  border-bottom: 7px solid #1B3C6F;
+  /* border-bottom: 7px solid #1B3C6F; */
   background-color: rgba(47, 93, 163, 0.8);
   color: #fff;
 }
 
-.original-long-btn:hover {
+/* .original-long-btn:hover {
   margin-top: 6px;
   border-bottom: 1px solid #1B3C6F;
   color: #fff;
-}
+} */
 
 /*アラート*/
 .alert-small {
@@ -169,3 +192,5 @@ body {
 .botton {
   background-color: red;
 }
+
+

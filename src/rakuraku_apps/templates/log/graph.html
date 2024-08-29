@@ -47,6 +47,8 @@
 </div>
 <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="btn btn-secondary">戻る</a>
 
+{% include 'footer.html' %} 
+
 <script>
     document.getElementById('save-graph').addEventListener('click', function() {
         var imgElement = document.getElementById('graph-image');
