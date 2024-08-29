@@ -1,40 +1,48 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>水質データ入力 - ステップ3</title>
-</head>
-<body>
-    <h1>水質データ入力 - ステップ3</h1>
-    <form method="post">
-        {% csrf_token %}
+{% extends 'base.html' %}
 
-        <div>
-            <label for="Ca">Ca</label>
-            <input type="number" name="Ca" min="0" max="14" step="0.1" value="{{ form_data.Ca }}" required>
-        </div>
-        <div>
-            <label for="Al">Al</label>
-            <input type="number" name="Al" min="0" max="100" step="0.1" value="{{ form_data.Al }}" required>
-        </div>
-        <div>
-            <label for="Mg">Mg</label>
-            <input type="number" name="Mg" min="0" max="100" step="0.1" value="{{ form_data.Mg }}" required>
-        </div>
-        <button type="submit">次へ</button>
-    </form>
-    <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-secondary">HOME戻る</a>
+{% block title %}
+<h1 class="card-title text-center mt-3">水質データ入力 - Step3</h1> 
+{% endblock %}
 
-</body>
-</html>
+{% block content %}
+{% if user.is_authenticated %}
 
-{% comment %} 定期測定入力３
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:interval_comment' %}" class="btn btn-link">次へ</a> 
+<div class="container"> 
+    <div class="row justify-content-center"> 
+        <div class="col-md-6"> 
+                <div class="card-body"> 
+                    
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label for="Ca" class="form-label">Ca</label>
+                            <input type="number" name="Ca" class="form-control" min="0" max="14" step="0.1" value="{{ form_data.Ca }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Al" class="form-label">Al</label>
+                            <input type="number" name="Al" class="form-control" min="0" max="100" step="0.1" value="{{ form_data.Al }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="Mg" class="form-label">Mg</label>
+                            <input type="number" name="Mg" class="form-control" min="0" max="100" step="0.1" value="{{ form_data.Mg }}" required>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">次へ</button>
+                        </div>
+                    </form>
+                </div> 
+        </div> 
+    </div> 
 </div> 
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:interval_second_input' %}" class="btn btn-link">戻る</a> 
-</div> 
 
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-link">HOMEに戻る</a> 
-</div>  {% endcomment %}
+{% include 'footer.html' %}
+
+{% else %} 
+<div class="text-center mt-5"> 
+    <p>データ入力機能を使用するにはログインが必要です。</p> 
+    <a href="{% url 'rakuraku_apps:login' %}" class="btn btn-primary">ログイン</a> 
+</div> 
+{% endif %} 
+{% endblock %}
+

@@ -1,3 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}
+<h1 class="card-title text-center mt-3">水質データ入力 - Step4</h1>
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+
+<div class="container"> 
+    <div class="row justify-content-center"> 
+        <div class="col-md-6"> 
+                <div class="card-body"> 
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="notes" class="form-label">備考</label>
+                            <textarea name="notes" class="form-control" rows="4">{{ form_data.notes }}</textarea>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">次へ</button>
+                        </div>
+                    </form>
+                </div>  
+        </div> 
+    </div> 
+</div> 
+
+{% include 'footer.html' %}
+
+{% else %} 
+<div class="text-center mt-5"> 
+    <p>データ入力機能を使用するにはログインが必要です。</p> 
+    <a href="{% url 'rakuraku_apps:login' %}" class="btn btn-primary">ログイン</a> 
+</div> 
+{% endif %} 
+{% endblock %}
+
+{% comment %} 
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,7 +60,7 @@
     <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-secondary">HOME戻る</a>
 
 </body>
-</html>
+</html> {% endcomment %}
 
 
 {% comment %} 定期測定備考入力
