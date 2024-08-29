@@ -112,7 +112,7 @@ body {
   justify-content: center;
   align-items: center;
   text-align: center;
-  margin-top: auto; /* フッターをページの下部に押し出す */
+  margin-top: auto;
 }
 
 .footer img {
