@@ -3,48 +3,58 @@
 
 {% block content %}
 <div class="container">
-    <h2>水質データ表示</h2>
-    <form method="GET">
-        <div class="form-group">
-            <label for="date_range">期間:</label>
-            <div class="input-group">
-                <input type="date" class="form-control" id="start_date" name="start_date" value="{{ start_date }}">
-                <div class="input-group-append input-group-prepend d-flex align-items-center">
-                    <span class="mx-2">〜</span>
+    <h2 class="text-start ps-3 mb-4">水質データ表示（表）</h2>
+    <form method="GET" class="mb-4">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="form-group">
+                    <label for="date_range">期間:</label>
+                    <div class="input-group">
+                        <input type="date" class="form-control" id="start_date" name="start_date" value="{{ start_date }}">
+                        <div class="input-group-append input-group-prepend d-flex align-items-center">
+                            <span class="mx-2">〜</span>
+                        </div>
+                        <input type="date" class="form-control" id="end_date" name="end_date" value="{{ end_date }}">
+                    </div>
                 </div>
-                <input type="date" class="form-control" id="end_date" name="end_date" value="{{ end_date }}">
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="form-group">
+                    <label for="shrimp">系統:</label>
+                    <select class="form-control" id="shrimp" name="shrimp">
+                        <option value="">全て</option>
+                        {% for shrimp in shrimps %}
+                        <option value="{{ shrimp.id }}" {% if shrimp.id|stringformat:"i" == request.GET.shrimp %}selected{% endif %}>{{ shrimp.family }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="form-group">
+                    <label for="item">項目:</label>
+                    <select class="form-control" id="item" name="item">
+                        <option value="">全て</option>
+                        <option value="water_temperature" {% if request.GET.item == "water_temperature" %}selected{% endif %}>水温</option>
+                        <option value="pH" {% if request.GET.item == "pH" %}selected{% endif %}>pH</option>
+                        <option value="DO" {% if request.GET.item == "DO" %}selected{% endif %}>DO</option>
+                        <option value="salinity" {% if request.GET.item == "salinity" %}selected{% endif %}>塩分濃度</option>
+                        <option value="NH4" {% if request.GET.item == "NH4" %}selected{% endif %}>NH4</option>
+                        <option value="NO2" {% if request.GET.item == "NO2" %}selected{% endif %}>NO2</option>
+                        <option value="NO3" {% if request.GET.item == "NO3" %}selected{% endif %}>NO3</option>
+                        <option value="Ca" {% if request.GET.item == "Ca" %}selected{% endif %}>Ca</option>
+                        <option value="Al" {% if request.GET.item == "Al" %}selected{% endif %}>Al</option>
+                        <option value="Mg" {% if request.GET.item == "Mg" %}selected{% endif %}>Mg</option>
+                    </select>
+                </div>
             </div>
         </div>
-        <div class="form-group">
-            <label for="shrimp">系統:</label>
-            <select class="form-control" id="shrimp" name="shrimp">
-                <option value="">全て</option>
-                {% for shrimp in shrimps %}
-                <option value="{{ shrimp.id }}" {% if shrimp.id|stringformat:"i" == request.GET.shrimp %}selected{% endif %}>{{ shrimp.family }}</option>
-                {% endfor %}
-            </select>
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary btn-lg">表示</button>
         </div>
-        <div class="form-group">
-            <label for="item">項目:</label>
-            <select class="form-control" id="item" name="item">
-                <option value="">全て</option>
-                <option value="water_temperature" {% if request.GET.item == "water_temperature" %}selected{% endif %}>水温</option>
-                <option value="pH" {% if request.GET.item == "pH" %}selected{% endif %}>pH</option>
-                <option value="DO" {% if request.GET.item == "DO" %}selected{% endif %}>DO</option>
-                <option value="salinity" {% if request.GET.item == "salinity" %}selected{% endif %}>塩分濃度</option>
-                <option value="NH4" {% if request.GET.item == "NH4" %}selected{% endif %}>NH4</option>
-                <option value="NO2" {% if request.GET.item == "NO2" %}selected{% endif %}>NO2</option>
-                <option value="NO3" {% if request.GET.item == "NO3" %}selected{% endif %}>NO3</option>
-                <option value="Ca" {% if request.GET.item == "Ca" %}selected{% endif %}>Ca</option>
-                <option value="Al" {% if request.GET.item == "Al" %}selected{% endif %}>Al</option>
-                <option value="Mg" {% if request.GET.item == "Mg" %}selected{% endif %}>Mg</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">表示</button>
     </form>
     <hr>
     {% if request.GET.item %}
-    <h3 class="mt-5 mb-4">
+    <h3 class="text-start ps-3 mt-5 mb-4">
         {% if request.GET.item == "water_temperature" %}水温
         {% elif request.GET.item == "pH" %}pH
         {% elif request.GET.item == "DO" %}DO
@@ -58,8 +68,8 @@
         {% endif %}
     </h3>
     <div class="table-responsive mb-5">
-        <table class="table">
-            <thead>
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
                 <tr>
                     <th><nobr>測定日</nobr></th>
                     {% for tank in tanks %}
@@ -82,12 +92,13 @@
     {% else %}
     {% regroup water_quality_data by tank__name as tank_list %}
     {% for tank in tank_list %}
-    <h3 class="mt-5">{{ tank.grouper }}</h3>
+    <h3 class="text-start ps-3 mt-5">{{ tank.grouper }}</h3>
     <div class="table-responsive mb-5">
-        <table class="table">
-            <thead>
+        <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
                 <tr>
                     <th><nobr>日付</nobr></th>
+                    <th><nobr>室温</nobr></th>
                     <th><nobr>水温</nobr></th>
                     <th><nobr>pH</nobr></th>
                     <th><nobr>DO</nobr></th>
@@ -98,12 +109,14 @@
                     <th><nobr>Ca</nobr></th>
                     <th><nobr>Al</nobr></th>
                     <th><nobr>Mg</nobr></th>
+                    <th><nobr>備考</nobr></th>
                 </tr>
             </thead>
             <tbody>
                 {% for data in tank.list %}
                 <tr>
                     <td><nobr>{{ data.date }}</nobr></td>
+                    <td><nobr>{{ data.room_temperature|default:"-" }}</nobr></td>
                     <td><nobr>{{ data.water_temperature|default:"-" }}</nobr></td>
                     <td><nobr>{{ data.pH|default:"-" }}</nobr></td>
                     <td><nobr>{{ data.DO|default:"-" }}</nobr></td>
@@ -114,6 +127,7 @@
                     <td><nobr>{{ data.Ca|default:"-" }}</nobr></td>
                     <td><nobr>{{ data.Al|default:"-" }}</nobr></td>
                     <td><nobr>{{ data.Mg|default:"-" }}</nobr></td>
+                    <td><nobr>{{ data.notes|default:"-" }}</nobr></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -123,6 +137,10 @@
     {% endif %}
 </div>
 
-<a href="{% url 'rakuraku_apps:table_or_graph' %}" class="btn btn-link">戻る</a>
+<div class="text-center mb-4">
+    <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="btn btn-secondary btn-lg">戻る</a>
+</div>
+
+{% include 'footer.html' %}
 
 {% endblock %}

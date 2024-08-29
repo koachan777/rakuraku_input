@@ -41,7 +41,7 @@ class TableView(TemplateView):
         water_quality_data = WaterQualityModel.objects.filter(query).select_related('tank', 'tank__shrimp')
 
         if item:
-            water_quality_data = water_quality_data.values('date', 'tank__name', item)
+            water_quality_data = water_quality_data.values('date', 'tank__name', item).order_by('date', 'tank__name')
             water_quality_data_by_date = {}
             for data in water_quality_data:
                 date = data['date']
@@ -50,14 +50,14 @@ class TableView(TemplateView):
                 if date not in water_quality_data_by_date:
                     water_quality_data_by_date[date] = {}
                 water_quality_data_by_date[date][tank_name] = value
-            context['water_quality_data_by_date'] = water_quality_data_by_date
+            context['water_quality_data_by_date'] = dict(sorted(water_quality_data_by_date.items()))
             
             if shrimp_id:
                 context['tanks'] = TankModel.objects.filter(shrimp__id=shrimp_id, water_quality__date__range=[start_date, end_date]).distinct()
             else:
                 context['tanks'] = TankModel.objects.filter(water_quality__date__range=[start_date, end_date]).distinct()
         else:
-            water_quality_data = water_quality_data.values('date', 'tank__name', 'pH', 'DO', 'salinity', 'NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg', 'water_temperature')
+            water_quality_data = water_quality_data.values('date', 'tank__name', 'pH', 'DO', 'salinity', 'NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg', 'water_temperature', 'room_temperature', 'notes')
 
         # 水槽名の昇順と日付の昇順で並び替え
         water_quality_data = water_quality_data.order_by('tank__name', 'date')
