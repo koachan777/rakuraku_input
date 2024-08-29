@@ -55,3 +55,16 @@ class WaterQualityThresholdForm(forms.ModelForm):
             'reference_value_threshold': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1', 'required': True}),
             'previous_day_threshold': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1', 'required': True}),
         }
+        
+        
+from django import forms
+
+class PopulateDBForm(forms.Form):
+    # users = forms.IntegerField(required=False, label='ユーザー数')
+    tanks = forms.IntegerField(required=False, label='水槽数')
+    water_quality = forms.IntegerField(required=False, label='水質データ数')
+
+class ClearDBForm(forms.Form):
+    # users = forms.BooleanField(required=False, label='ユーザーを削除')
+    tanks = forms.BooleanField(required=False, label='水槽を削除')
+    water_quality = forms.BooleanField(required=False, label='水質データを削除')

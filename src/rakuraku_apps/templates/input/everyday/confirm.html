@@ -7,6 +7,20 @@
 {% block content %}
 {% if user.is_authenticated %}
 
+<style>
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table {
+    min-width: 600px; /* 必要に応じて調整 */
+}
+
+.table th, .table td {
+    white-space: nowrap;
+}
+</style>
+
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
@@ -15,61 +29,56 @@
                 <div class="d-inline-block text-start">
                     <p><strong>計測日:</strong> {{ form_data.date }}</p>
                     <p><strong>水槽:</strong> {{ form_data.tank }}</p>
-                    <span><strong>室温:</strong> {{ form_data.room_temperature }} ℃</span>
-                    <span>昨日</span>
-                    <span>一昨日</span>
-                    
-                    <p><strong>水温:</strong> 
-                        <span class="{% if 'water_temperature' in alerts %}highlight-background{% endif %}">
-                            {{ form_data.water_temperature }} ℃
-                        </span>
-                        <span>値</span>
-                        <span>値</span>
-                    </p>
-                    <p>
-                        {% if 'water_temperature' in alerts %}
-                        <span class="alert">{{ alerts.water_temperature }}</span>
-                        {% endif %}
-                    </p>
-
-                    <p><strong>pH:</strong> 
-                        <span class="{% if 'pH' in alerts %}highlight-background{% endif %}">
-                            {{ form_data.pH }}
-                        </span>
-                        <span>値</span>
-                        <span>値</span>
-                    </p>
-                    <p>
-                        {% if 'pH' in alerts %}
-                        <span class="alert">{{ alerts.pH }}</span>
-                        {% endif %}
-                    </p>
-
-                    <p><strong>DO:</strong> 
-                        <span class="{% if 'DO' in alerts %}highlight-background{% endif %}">
-                            {{ form_data.DO }} mg/L
-                        </span>
-                        <span>値</span>
-                        <span>値</span>
-                    </p>
-                    <p>
-                        {% if 'DO' in alerts %}
-                        <span class="alert">{{ alerts.DO }}</span>
-                        {% endif %}
-                    </p>
-
-                    <p><strong>塩分濃度:</strong> 
-                        <span class="{% if 'salinity' in alerts %}highlight-background{% endif %}">
-                            {{ form_data.salinity }} %
-                        </span>
-                        <span>値</span>
-                        <span>値</span>
-                    </p>
-                        {% if 'salinity' in alerts %}
-                        <span class="alert">{{ alerts.salinity }}</span>
-                        {% endif %}
-                    </p>
-
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>現在</th>
+                                    <th>昨日</th>
+                                    <th>一昨日</th>
+                                    <!-- 他の日付を追加 -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>室温:</strong></td>
+                                    <td>{{ form_data.room_temperature }} ℃</td>
+                                    <td>29.5℃</td>
+                                    <td>29.5℃</td>
+                                    <!-- 他の日付のデータを追加 -->
+                                </tr>
+                                <tr>
+                                    <td><strong>水温:</strong></td>
+                                    <td>{{ form_data.water_temperature }} ℃</td>
+                                    <td>28℃</td>
+                                    <td>28℃</td>
+                                    <!-- 他の日付のデータを追加 -->
+                                </tr>
+                                <tr>
+                                    <td><strong>pH:</strong></td>
+                                    <td>{{ form_data.pH }}</td>
+                                    <td>7.9</td>
+                                    <td>7.9</td>
+                                    <!-- 他の日付のデータを追加 -->
+                                </tr>
+                                <tr>
+                                    <td><strong>DO:</strong></td>
+                                    <td>{{ form_data.DO }} mg/L</td>
+                                    <td>7.0</td>
+                                    <td>7.0</td>
+                                    <!-- 他の日付のデータを追加 -->
+                                </tr>
+                                <tr>
+                                    <td><strong>塩分濃度:</strong></td>
+                                    <td>{{ form_data.salinity }} %</td>
+                                    <td>2.00</td>
+                                    <td>2.00</td>
+                                    <!-- 他の日付のデータを追加 -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <p><strong>備考:</strong> {{ form_data.notes }}</p>
                 </div>
             </div>

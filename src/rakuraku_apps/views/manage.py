@@ -117,3 +117,49 @@ class ManageAlertView(View):
             'form': form,
         }
         return render(request, 'manage/alert.html', context)
+    
+    
+    
+from django.core.management import call_command
+from django.http import HttpResponse
+from django.views.generic.edit import FormView
+from rakuraku_apps.forms.manage import PopulateDBForm, ClearDBForm
+
+class PopulateDBView(FormView):
+    template_name = 'manage/populate_db.html'
+    form_class = PopulateDBForm
+    success_url = reverse_lazy('rakuraku_apps:manage_tank')
+
+    def form_valid(self, form):
+        # users = form.cleaned_data.get('users')
+        tanks = form.cleaned_data.get('tanks')
+        water_quality = form.cleaned_data.get('water_quality')
+
+        # if users:
+        #     call_command('populate_db', users=users)
+        if tanks:
+            call_command('populate_db', tanks=tanks)
+        if water_quality:
+            call_command('populate_db', wq=water_quality)
+
+        return super().form_valid(form)
+
+class ClearDBView(FormView):
+    template_name = 'manage/clear_db.html'
+    form_class = ClearDBForm
+    success_url = reverse_lazy('rakuraku_apps:manage_tank')
+
+    def form_valid(self, form):
+        # users = form.cleaned_data.get('users')
+        tanks = form.cleaned_data.get('tanks')
+        water_quality = form.cleaned_data.get('water_quality')
+
+        # if users:
+        #     call_command('clear_db', users=True)
+        if tanks:
+            call_command('clear_db', tanks=True)
+        if water_quality:
+            call_command('clear_db', wq=True)
+
+        return super().form_valid(form)
+    

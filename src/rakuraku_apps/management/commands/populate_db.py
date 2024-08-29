@@ -1,8 +1,7 @@
 import random
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from rakuraku_apps.models import User, TankModel, WaterQualityModel
-from rakuraku_apps.models import ShrimpModel
+from rakuraku_apps.models import User, TankModel, WaterQualityModel, ShrimpModel
 
 class Command(BaseCommand):
     help = 'Populate the database with test data'
