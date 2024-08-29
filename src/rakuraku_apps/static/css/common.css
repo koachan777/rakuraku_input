@@ -93,27 +93,67 @@ body {
   /* text-decoration: none; */
 }
 
-/*自作フッター*/
+
 .footer {
-  margin-top: auto; /* フッターを画面下部に配置 */
+  margin-top: auto;
   text-align: center;
   width: 100%;
+  height: 60px;
   z-index: 1000;
-  padding: 10px 46px;
+  display: flex;
+  justify-content: center; /* フッター内のコンテンツを中央揃え */
+  align-items: center; /* フッター内のコンテンツを上下中央揃え */
 }
+
 
 .footer img {
   display: block;
   margin: 0 auto;
 }
 
-.original_btn {
+.original-btn {
+  display: flex; /* アイコンとテキストを横並びにする */
+  align-items: center; /* アイコンとテキストを上下中央揃え */
+  justify-content: center; /* ボタン内でコンテンツを中央揃え */
+  text-align: center;
+  text-decoration: none;
+  width: 120px;
+  height: 44px;
+  margin: auto;
+  padding: 10px;
+  font-weight: bold;
+  border-radius: 0.3rem;
+  border-bottom: 7px solid #1B3C6F;
+  background-color: rgba(47, 93, 163, 0.8);
+  color: #fff;
+  position: relative;
+}
+
+.original-btn i {
+  margin-right: 8px; /* アイコンとテキストの間にスペースを追加 */
+}
+
+.original-btn:hover {
+  margin-top: 6px;
+  border-bottom: 1px solid #1B3C6F;
+  color: #fff;
+}
+
+.original-btn i {
+  margin-right: 8px; /* アイコンとテキストの間にスペースを追加 */
+}
+
+.footer-btn-txt {
+  font-size: 16px;
+}
+
+.original-long-btn {
   display: block;
   text-align: center;
   text-decoration: none;
-  width: 200px;
+  width: 100%;
   margin: auto;
-  padding: 1rem 4rem;
+  padding: 16px 8px;
   font-weight: bold;
   border-radius: 0.3rem;
   border-bottom: 7px solid #1B3C6F;
@@ -121,7 +161,7 @@ body {
   color: #fff;
 }
 
-.original_btn:hover {
+.original-long-btn:hover {
   margin-top: 6px;
   border-bottom: 1px solid #1B3C6F;
   color: #fff;
@@ -145,6 +185,11 @@ body {
   background-color: #ffcccc; /* アラートがある場合の背景色 */
   padding: 3px;
   border-radius: 3px;
+}
+
+
+.botton {
+  background-color: red;
 }
 
 .left-aligned-container {
