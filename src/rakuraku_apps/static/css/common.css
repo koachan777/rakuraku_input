@@ -71,6 +71,14 @@ body {
   font-size: 1rem;
 }
 
+.logout_btn {
+  color: #2F5DA3;
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  /* text-decoration: none; */
+}
+
 /*自作フッター*/
 .footer {
   margin-top: auto; /* フッターを画面下部に配置 */
@@ -104,3 +112,17 @@ body {
   border-bottom: 1px solid #1B3C6F;
   color: #fff;
 }
+
+/*アラート*/
+.alert-small {
+  font-size: 0.8rem;
+  color: red;
+  margin-top: 5px;
+}
+
+.alert-highlight {
+  background-color: #ffcccc; /* 背景色を赤系に設定 */
+  padding: 3px;
+  border-radius: 3px;
+}
+
