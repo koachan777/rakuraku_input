@@ -1,51 +1,71 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>水質データ入力 - 確認</title>
-    <style>
-        .alert {
-            color: red;
-        }
-    </style>
-</head>
-<body>
-    <h1>水質データ入力 - 確認</h1>
-    <div>
-        <p>計測日: {{ form_data.date }}</p>
+{% extends 'base.html' %}
 
-        <p>水槽: {{ form_data.tank }}</p>
+{% block title %}
+<h1 class="card-title text-center mt-3">水質データ入力 - 確認</h1>
+{% endblock %}
 
-        <p>室温: {{ form_data.room_temperature }}</p>
+{% block content %}
+{% if user.is_authenticated %}
 
-        <p>水温: {{ form_data.water_temperature }}</p>
-        {% if 'water_temperature' in alerts %}
-        <p class="alert">{{ alerts.water_temperature }}</p>
-        {% endif %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">入力内容の確認</h2>
+                <div class="text-center">
+                    <div class="d-inline-block text-start">
+                        <p><strong>計測日:</strong> {{ form_data.date }}</p>
+                        <p><strong>水槽:</strong> {{ form_data.tank }}</p>
+                        <p><strong>室温:</strong> {{ form_data.room_temperature }} ℃</p>
+                        {% if 'water_temperature' in alerts %}
+                        <p><strong>水温:</strong> <span class="alert-highlight">{{ form_data.water_temperature }} ℃</span></p>
+                        <p class="alert-small">{{ alerts.water_temperature }}</p>
+                        {% else %}
+                        <p><strong>水温:</strong> {{ form_data.water_temperature }} ℃</p>
+                        {% endif %}
 
-        <p>pH: {{ form_data.pH }}</p>
-        {% if 'pH' in alerts %}
-        <p class="alert">{{ alerts.pH }}</p>
-        {% endif %}
+                        {% if 'pH' in alerts %}
+                        <p><strong>pH:</strong> <span class="alert-highlight">{{ form_data.pH }}</span></p>
+                        <p class="alert-small">{{ alerts.pH }}</p>
+                        {% else %}
+                        <p><strong>pH:</strong> {{ form_data.pH }}</p>
+                        {% endif %}
 
-        <p>DO: {{ form_data.DO }}</p>
-        {% if 'DO' in alerts %}
-        <p class="alert">{{ alerts.DO }}</p>
-        {% endif %}
+                        {% if 'DO' in alerts %}
+                        <p><strong>DO:</strong> <span class="alert-highlight">{{ form_data.DO }} mg/L</span></p>
+                        <p class="alert-small">{{ alerts.DO }}</p>
+                        {% else %}
+                        <p><strong>DO:</strong> {{ form_data.DO }} mg/L</p>
+                        {% endif %}
 
-        <p>塩分濃度: {{ form_data.salinity }}</p>
-        {% if 'salinity' in alerts %}
-        <p class="alert">{{ alerts.salinity }}</p>
-        {% endif %}
-
-        <p>備考: {{ form_data.notes }}</p>
-        
+                        {% if 'salinity' in alerts %}
+                        <p><strong>塩分濃度:</strong> <span class="alert-highlight">{{ form_data.salinity }} %</span></p>
+                        <p class="alert-small">{{ alerts.salinity }}</p>
+                        {% else %}
+                        <p><strong>塩分濃度:</strong> {{ form_data.salinity }} %</p>
+                        {% endif %}
+                        <p><strong>備考:</strong> {{ form_data.notes }}</p>
+                    </div>
+                </div>
+                <form method="post" class="mt-4">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">保存</button>
+                        <a href="{% url 'rakuraku_apps:everyday_edit' %}" class="btn btn-warning btn-lg">編集</a>
+                        <a href="{% url 'rakuraku_apps:everyday_comment' %}" class="btn btn-secondary btn-lg">戻る</a>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">保存</button>
-    </form>
-    <a href="{% url 'rakuraku_apps:everyday_edit' %}">編集</a>
-    <a href="{% url 'rakuraku_apps:everyday_comment' %}" class="btn btn-secondary">戻る</a>
-    <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-secondary">HOME戻る</a>
-</body>
-</html>
+</div>
+
+{% include 'footer.html' %}
+
+{% else %}
+<div class="text-center mt-5">
+    <p>確認ページにアクセスするにはログインが必要です。</p>
+    <a href="{% url 'rakuraku_apps:login' %}" class="btn btn-primary">ログイン</a>
+</div>
+{% endif %}
+{% endblock %}

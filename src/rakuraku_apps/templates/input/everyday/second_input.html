@@ -1,31 +1,50 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>水質データ入力 - ステップ2</title>
-</head>
-<body>
-    <h1>水質データ入力 - ステップ2</h1>
-    <form method="post">
-        {% csrf_token %}
-        <div>
-            <label for="water_temperature">水温</label>
-            <input type="number" name="water_temperature" min="0" max="100" step="0.1" value="{{ form_data.water_temperature }}" required>
-        </div>
-        <div>
-            <label for="pH">pH</label>
-            <input type="number" name="pH" min="0" max="14" step="0.1" value="{{ form_data.pH }}" required>
-        </div>
-        <div>
-            <label for="DO">DO</label>
-            <input type="number" name="DO" min="0" max="100" step="0.1" value="{{ form_data.DO }}" required>
-        </div>
-        <div>
-            <label for="salinity">塩分濃度</label>
-            <input type="number" name="salinity" min="0" max="100" step="0.1" value="{{ form_data.salinity }}" required>
-        </div>
-        <button type="submit">次へ</button>
-    </form>
-    <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-secondary">HOME戻る</a>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block title %}
+<h1 class="card-title text-center mt-3">水質データ入力 - Step2</h1> 
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+
+<div class="container"> 
+    <div class="row justify-content-center"> 
+        <div class="col-md-6"> 
+                <div class="card-body"> 
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="water_temperature" class="form-label">水温</label>
+                            <input type="number" name="water_temperature" class="form-control" min="0" max="100" step="0.1" value="{{ form_data.water_temperature }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="pH" class="form-label">pH</label>
+                            <input type="number" name="pH" class="form-control" min="0" max="14" step="0.1" value="{{ form_data.pH }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="DO" class="form-label">DO</label>
+                            <input type="number" name="DO" class="form-control" min="0" max="100" step="0.1" value="{{ form_data.DO }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="salinity" class="form-label">塩分濃度</label>
+                            <input type="number" name="salinity" class="form-control" min="0" max="100" step="0.1" value="{{ form_data.salinity }}" required>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">次へ</button>
+                        </div>
+                    </form>
+                </div> 
+        </div> 
+    </div> 
+</div> 
+
+{% include 'footer.html' %}
+
+{% else %} 
+<div class="text-center mt-5"> 
+    <p>データ入力機能を使用するにはログインが必要です。</p> 
+    <a href="{% url 'rakuraku_apps:login' %}" class="btn btn-primary">ログイン</a> 
+</div> 
+{% endif %} 
+{% endblock %}

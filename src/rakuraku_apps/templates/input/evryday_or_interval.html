@@ -18,12 +18,13 @@
                     </div> 
                 </div> 
             </div> 
-            <div class="text-center mt-3"> 
-                <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-link">HOMEに戻る</a> 
-            </div> 
+
         </div> 
     </div> 
 </div> 
+
+{% include 'footer.html' %}
+
 {% else %} 
 <div class="text-center mt-5"> 
     <p>データ入力機能を使用するにはログインが必要です。</p> 

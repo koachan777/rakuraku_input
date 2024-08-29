@@ -1,0 +1,29 @@
+<!-- header.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    {% load static %}
+    <link href="{% static 'css/common.css' %}" rel="stylesheet">
+</head>
+
+<body>
+    <div class="header">
+        <div class="title"> 
+            <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-link"> 
+                <img src="{% static 'img/header-logo(1).png' %}" alt="ホームに戻る">
+            </a>
+        </div>
+        <div class="logout">
+            <h3>
+                {{ user.account_id }} 
+                <a>
+                    さん
+                </a>
+            </h3>
+            <a href="{% url 'rakuraku_apps:logout' %}" class="lbtn">
+                ログアウト
+            </a>
+        </div> 
+    </div>
+</body>
+</html>
