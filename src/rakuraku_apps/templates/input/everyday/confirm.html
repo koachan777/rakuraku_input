@@ -17,21 +17,32 @@
                         <p><strong>計測日:</strong> {{ form_data.date }}</p>
                         <p><strong>水槽:</strong> {{ form_data.tank }}</p>
                         <p><strong>室温:</strong> {{ form_data.room_temperature }} ℃</p>
-                        <p><strong>水温:</strong> {{ form_data.water_temperature }} ℃</p>
                         {% if 'water_temperature' in alerts %}
-                        <p class="alert alert-danger">{{ alerts.water_temperature }}</p>
+                        <p><strong>水温:</strong> <span class="alert-highlight">{{ form_data.water_temperature }} ℃</span></p>
+                        <p class="alert-small">{{ alerts.water_temperature }}</p>
+                        {% else %}
+                        <p><strong>水温:</strong> {{ form_data.water_temperature }} ℃</p>
                         {% endif %}
-                        <p><strong>pH:</strong> {{ form_data.pH }}</p>
+
                         {% if 'pH' in alerts %}
-                        <p class="alert alert-danger">{{ alerts.pH }}</p>
+                        <p><strong>pH:</strong> <span class="alert-highlight">{{ form_data.pH }}</span></p>
+                        <p class="alert-small">{{ alerts.pH }}</p>
+                        {% else %}
+                        <p><strong>pH:</strong> {{ form_data.pH }}</p>
                         {% endif %}
-                        <p><strong>DO:</strong> {{ form_data.DO }} mg/L</p>
+
                         {% if 'DO' in alerts %}
-                        <p class="alert alert-danger">{{ alerts.DO }}</p>
+                        <p><strong>DO:</strong> <span class="alert-highlight">{{ form_data.DO }} mg/L</span></p>
+                        <p class="alert-small">{{ alerts.DO }}</p>
+                        {% else %}
+                        <p><strong>DO:</strong> {{ form_data.DO }} mg/L</p>
                         {% endif %}
-                        <p><strong>塩分濃度:</strong> {{ form_data.salinity }} %</p>
+
                         {% if 'salinity' in alerts %}
-                        <p class="alert alert-danger">{{ alerts.salinity }}</p>
+                        <p><strong>塩分濃度:</strong> <span class="alert-highlight">{{ form_data.salinity }} %</span></p>
+                        <p class="alert-small">{{ alerts.salinity }}</p>
+                        {% else %}
+                        <p><strong>塩分濃度:</strong> {{ form_data.salinity }} %</p>
                         {% endif %}
                         <p><strong>備考:</strong> {{ form_data.notes }}</p>
                     </div>
@@ -41,6 +52,7 @@
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-primary btn-lg">保存</button>
                         <a href="{% url 'rakuraku_apps:everyday_edit' %}" class="btn btn-warning btn-lg">編集</a>
+                        <a href="{% url 'rakuraku_apps:everyday_comment' %}" class="btn btn-secondary btn-lg">戻る</a>
                     </div>
                 </form>
             </div>
