@@ -11,7 +11,7 @@
     <li>{{ user.account_id }}</li>
     {% endfor %}
 </ul>
-
-<a href="{% url 'rakuraku_apps:manage' %}">HOME</a>
+<a href="{% url 'rakuraku_apps:manage' %}" class="btn btn-secondary btn-lg">戻る</a>
+{% include 'footer.html' %}
 
 {% endblock %}

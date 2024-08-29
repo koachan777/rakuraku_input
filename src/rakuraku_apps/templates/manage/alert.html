@@ -7,7 +7,8 @@
         {{ form.as_p }}
         <button type="submit">保存</button>
     </form>
-    <a href="{% url 'rakuraku_apps:manage' %}">HOME</a>
+    <a href="{% url 'rakuraku_apps:manage' %}" class="btn btn-secondary btn-lg">戻る</a>
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -28,4 +29,5 @@
             });
         });
     </script>
+        {% include 'footer.html' %}
 {% endblock %}
