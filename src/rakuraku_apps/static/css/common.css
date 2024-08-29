@@ -71,6 +71,11 @@ body {
   font-size: 1rem;
 }
 
+.logout a.lbtn {
+  color: black; /* リンクのテキストカラーを黒に変更 */
+  text-decoration: none; /* 下線を消す場合 */
+}
+
 /*自作フッター*/
 .footer {
   margin-top: auto; /* フッターを画面下部に配置 */
