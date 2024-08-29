@@ -10,6 +10,8 @@ from django.db.models import Q
 from rakuraku_apps.models import WaterQualityModel, TankModel, ShrimpModel
 import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter
+import japanize_matplotlib
+from matplotlib.dates import DateFormatter, DayLocator
 
 
 class TableOrGraphView(TemplateView):
@@ -79,6 +81,24 @@ class GraphView(TemplateView):
         shrimp_id = self.request.GET.get('shrimp')
         item = self.request.GET.get('item')
 
+        if not start_date:
+            start_date = (datetime.today() - timedelta(days=7)).strftime('%Y-%m-%d')
+        if not end_date:
+            end_date = datetime.today().strftime('%Y-%m-%d')
+
+        item_labels = {
+            'water_temperature': '水温',
+            'pH': 'pH',
+            'DO': 'DO',
+            'salinity': '塩分濃度',
+            'NH4': 'NH4',
+            'NO2': 'NO2',
+            'NO3': 'NO3',
+            'Ca': 'Ca',
+            'Al': 'Al',
+            'Mg': 'Mg'
+        }
+
         query = Q()
         if start_date and end_date:
             query &= Q(date__range=[start_date, end_date])
@@ -96,19 +116,31 @@ class GraphView(TemplateView):
         water_quality_data = water_quality_data.order_by('date', 'tank__id')
 
         # グラフの描画
-        fig, ax = plt.subplots()
+        fig, ax = plt.subplots(figsize=(10, 6), tight_layout=True)
+        fig.subplots_adjust(top=0.9)
+        fig.suptitle(item_labels.get(item, ''), fontsize=24, fontweight='bold')  # タイトルの文字サイズを24に変更し、太字に設定
         tanks = water_quality_data.values_list('tank__name', flat=True).distinct()
+        tank_labels = []
         for tank in tanks:
             tank_data = water_quality_data.filter(tank__name=tank)
             dates = [data['date'] for data in tank_data]
             values = [data[item] for data in tank_data]
-            ax.plot(dates, values, marker='o', label=tank)
+            label = tank.split()[0]
+            if label not in tank_labels:
+                ax.plot(dates, values, marker='o', label=label)
+                tank_labels.append(label)
+            else:
+                ax.plot(dates, values, marker='o')
 
-        ax.set_xlabel('Date')
-        ax.set_ylabel(item)
-        ax.legend()
-        ax.xaxis.set_major_formatter(DateFormatter('%Y-%m-%d'))
+        ax.set_xlabel('')  # x軸のラベルを削除
+        ax.legend(loc='upper right')  # 凡例の位置を右上に変更
+        ax.xaxis.set_major_formatter(DateFormatter('%m/%d'))  # 日付のフォーマットを変更
+        ax.xaxis.set_major_locator(DayLocator(interval=1))  # x軸の目盛りを1日ごとに設定
         fig.autofmt_xdate()
+
+        # y軸の値の横に線を追加
+        ax.grid(axis='y', linestyle='-', linewidth=0.5, color='gray', alpha=0.7)
+
 
         # グラフをbase64エンコードされた文字列に変換
         buffer = io.BytesIO()
@@ -120,5 +152,7 @@ class GraphView(TemplateView):
 
         context['graph'] = graph
         context['shrimps'] = ShrimpModel.objects.all()
-        context['selected_item'] = item
+        context['selected_item'] = item_labels.get(item, '')  # 選択された項目名を日本語に変換
+        context['start_date'] = start_date
+        context['end_date'] = end_date
         return context
