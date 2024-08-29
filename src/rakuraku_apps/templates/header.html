@@ -16,11 +16,9 @@
         <div class="logout">
             <h3>
                 {{ user.account_id }} 
-                <a>
-                    さん
-                </a>
+                さん
             </h3>
-            <a href="{% url 'rakuraku_apps:logout' %}" class="lbtn">
+            <a href="{% url 'rakuraku_apps:logout' %}" class="logout_btn">
                 ログアウト
             </a>
         </div> 
