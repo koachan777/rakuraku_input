@@ -12,50 +12,75 @@
         <div class="col-md-8">
             <div class="card-body">
                 <h2 class="card-title text-center mb-4">入力内容の確認</h2>
-                <div class="text-center">
-                    <div class="d-inline-block text-start">
-                        <p><strong>計測日:</strong> {{ form_data.date }}</p>
-                        <p><strong>水槽:</strong> {{ form_data.tank }}</p>
-                        <p><strong>室温:</strong> {{ form_data.room_temperature }} ℃</p>
+                <div class="d-inline-block text-start">
+                    <p><strong>計測日:</strong> {{ form_data.date }}</p>
+                    <p><strong>水槽:</strong> {{ form_data.tank }}</p>
+                    <span><strong>室温:</strong> {{ form_data.room_temperature }} ℃</span>
+                    <span>昨日</span>
+                    <span>一昨日</span>
+                    
+                    <p><strong>水温:</strong> 
+                        <span class="{% if 'water_temperature' in alerts %}highlight-background{% endif %}">
+                            {{ form_data.water_temperature }} ℃
+                        </span>
+                        <span>値</span>
+                        <span>値</span>
+                    </p>
+                    <p>
                         {% if 'water_temperature' in alerts %}
-                        <p><strong>水温:</strong> <span class="alert-highlight">{{ form_data.water_temperature }} ℃</span></p>
-                        <p class="alert-small">{{ alerts.water_temperature }}</p>
-                        {% else %}
-                        <p><strong>水温:</strong> {{ form_data.water_temperature }} ℃</p>
+                        <span class="alert">{{ alerts.water_temperature }}</span>
                         {% endif %}
+                    </p>
 
+                    <p><strong>pH:</strong> 
+                        <span class="{% if 'pH' in alerts %}highlight-background{% endif %}">
+                            {{ form_data.pH }}
+                        </span>
+                        <span>値</span>
+                        <span>値</span>
+                    </p>
+                    <p>
                         {% if 'pH' in alerts %}
-                        <p><strong>pH:</strong> <span class="alert-highlight">{{ form_data.pH }}</span></p>
-                        <p class="alert-small">{{ alerts.pH }}</p>
-                        {% else %}
-                        <p><strong>pH:</strong> {{ form_data.pH }}</p>
+                        <span class="alert">{{ alerts.pH }}</span>
                         {% endif %}
+                    </p>
 
+                    <p><strong>DO:</strong> 
+                        <span class="{% if 'DO' in alerts %}highlight-background{% endif %}">
+                            {{ form_data.DO }} mg/L
+                        </span>
+                        <span>値</span>
+                        <span>値</span>
+                    </p>
+                    <p>
                         {% if 'DO' in alerts %}
-                        <p><strong>DO:</strong> <span class="alert-highlight">{{ form_data.DO }} mg/L</span></p>
-                        <p class="alert-small">{{ alerts.DO }}</p>
-                        {% else %}
-                        <p><strong>DO:</strong> {{ form_data.DO }} mg/L</p>
+                        <span class="alert">{{ alerts.DO }}</span>
                         {% endif %}
+                    </p>
 
+                    <p><strong>塩分濃度:</strong> 
+                        <span class="{% if 'salinity' in alerts %}highlight-background{% endif %}">
+                            {{ form_data.salinity }} %
+                        </span>
+                        <span>値</span>
+                        <span>値</span>
+                    </p>
                         {% if 'salinity' in alerts %}
-                        <p><strong>塩分濃度:</strong> <span class="alert-highlight">{{ form_data.salinity }} %</span></p>
-                        <p class="alert-small">{{ alerts.salinity }}</p>
-                        {% else %}
-                        <p><strong>塩分濃度:</strong> {{ form_data.salinity }} %</p>
+                        <span class="alert">{{ alerts.salinity }}</span>
                         {% endif %}
-                        <p><strong>備考:</strong> {{ form_data.notes }}</p>
-                    </div>
+                    </p>
+
+                    <p><strong>備考:</strong> {{ form_data.notes }}</p>
                 </div>
-                <form method="post" class="mt-4">
-                    {% csrf_token %}
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg">保存</button>
-                        <a href="{% url 'rakuraku_apps:everyday_edit' %}" class="btn btn-warning btn-lg">編集</a>
-                        <a href="{% url 'rakuraku_apps:everyday_comment' %}" class="btn btn-secondary btn-lg">戻る</a>
-                    </div>
-                </form>
             </div>
+            <form method="post" class="mt-4">
+                {% csrf_token %}
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg">保存</button>
+                    <a href="{% url 'rakuraku_apps:everyday_edit' %}" class="btn btn-warning btn-lg">編集</a>
+                    <a href="{% url 'rakuraku_apps:everyday_comment' %}" class="btn btn-secondary btn-lg">戻る</a>
+                </div>
+            </form>
         </div>
     </div>
 </div>
