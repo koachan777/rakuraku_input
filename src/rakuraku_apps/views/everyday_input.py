@@ -2,7 +2,6 @@ from datetime import date
 
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
-from django.views.generic import TemplateView
 from rakuraku_apps.models import StandardValueModel, TankModel, WaterQualityModel, WaterQualityThresholdModel
 from rakuraku_apps.forms.input import WaterQualityForm
 
@@ -17,9 +16,13 @@ class EverydayFirstInputView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        
+        print("context",context)
+        
         context['tanks'] = TankModel.objects.all()
         today = date.today()
         context['today'] = today.strftime('%Y-%m-%d')
+        # context['amedama'] = 'amedamaとは？'
 
         # その日の日付のデータがすでに存在する場合は、そのデータを初期値として設定
         water_qualities = WaterQualityModel.objects.filter(date=today)
@@ -46,23 +49,29 @@ class EverydayFirstInputView(TemplateView):
         if water_qualities.exists():
             water_quality = water_qualities.first()
             request.session['water_quality_id'] = water_quality.id
+            
             request.session['date'] = water_quality.date.strftime('%Y-%m-%d')
             request.session['tank'] = water_quality.tank_id
-            request.session['room_temperature'] = water_quality.room_temperature or room_temperature
+            request.session['room_temperature'] = room_temperature
+            
             request.session['water_temperature'] = water_quality.water_temperature or ''
             request.session['pH'] = water_quality.pH or ''
             request.session['DO'] = water_quality.DO or ''
             request.session['salinity'] = water_quality.salinity or ''
+            
             request.session['notes'] = water_quality.notes or ''
         else:
             request.session['water_quality_id'] = None
+            
             request.session['date'] = date_str
             request.session['tank'] = tank_id
             request.session['room_temperature'] = room_temperature
+            
             request.session['water_temperature'] = ''
             request.session['pH'] = ''
             request.session['DO'] = ''
             request.session['salinity'] = ''
+            
             request.session['notes'] = ''
         return redirect('/everyday/second_input/')
 

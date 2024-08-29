@@ -1,3 +1,17 @@
+/* <span>で区切られた部分を等間隔に配置 */
+span-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px; /* スパン間の間隔を調整 */
+}
+
+span-container span {
+  flex: 1; /* 各スパンのサイズを均等にする */
+  text-align: center; /* テキストを中央揃え */
+}
+
+/* その他のスタイル */
 @charset "UTF-8";
 
 html, body {
@@ -153,19 +167,33 @@ body {
   color: #fff;
 }
 
-/*アラート*/
-.alert-small {
-  font-size: 0.8rem;
-  color: red;
-  margin-top: 5px;
+/* 基準値のスタイル */
+.info {
+  font-size: 0.3rem; /* 基準値のフォントサイズ */
+  color: #555; /* 基準値の文字色 */
+  margin-top: 0;
+  margin-left: 10px; /* アラートメッセージと基準値の間隔 */
 }
 
-.alert-highlight {
-  background-color: #ffcccc; /* 背景色を赤系に設定 */
+/* アラートメッセージのスタイル */
+.alert {
+  font-size: 0.8rem; /* アラートメッセージのフォントサイズ */
+  color: red; /* アラートメッセージの文字色 */
+}
+
+.highlight-background {
+  background-color: #ffcccc; /* アラートがある場合の背景色 */
   padding: 3px;
   border-radius: 3px;
 }
 
+
 .botton {
   background-color: red;
+}
+
+.left-aligned-container {
+  text-align: left; /* テキストの左寄せ */
+  float: left; /* 要素全体を左寄せ */
+  width: 100%; /* 要素の幅を100%にする場合は追加 */
 }
