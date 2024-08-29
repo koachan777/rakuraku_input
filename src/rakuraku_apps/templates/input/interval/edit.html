@@ -1,4 +1,20 @@
-定期測定　編集
+<!DOCTYPE html>
+<html>
+<head>
+    <title>水質データ入力 - 編集</title>
+</head>
+<body>
+    <h1>水質データ入力 - 編集</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">確認画面へ</button>
+    </form>
+    <a href="{% url 'rakuraku_apps:interval_confirm' %}" class="btn btn-secondary">戻る</a>
+</body>
+</html>
+
+{% comment %} 定期測定　編集
 <div class="text-center mt-3"> 
     <a href="{% url 'rakuraku_apps:interval_confirm' %}" class="btn btn-link">確認画面へ</a> 
-</div> 
+</div>  {% endcomment %}

@@ -1,4 +1,33 @@
-定期測定入力３
+<!DOCTYPE html>
+<html>
+<head>
+    <title>水質データ入力 - ステップ3</title>
+</head>
+<body>
+    <h1>水質データ入力 - ステップ3</h1>
+    <form method="post">
+        {% csrf_token %}
+
+        <div>
+            <label for="Ca">Ca</label>
+            <input type="number" name="Ca" min="0" max="14" step="0.1" value="{{ form_data.Ca }}" required>
+        </div>
+        <div>
+            <label for="Al">Al</label>
+            <input type="number" name="Al" min="0" max="100" step="0.1" value="{{ form_data.Al }}" required>
+        </div>
+        <div>
+            <label for="Mg">Mg</label>
+            <input type="number" name="Mg" min="0" max="100" step="0.1" value="{{ form_data.Mg }}" required>
+        </div>
+        <button type="submit">次へ</button>
+    </form>
+    <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-secondary">HOME戻る</a>
+
+</body>
+</html>
+
+{% comment %} 定期測定入力３
 <div class="text-center mt-3"> 
     <a href="{% url 'rakuraku_apps:interval_comment' %}" class="btn btn-link">次へ</a> 
 </div> 
@@ -8,4 +37,4 @@
 
 <div class="text-center mt-3"> 
     <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-link">HOMEに戻る</a> 
-</div> 
+</div>  {% endcomment %}

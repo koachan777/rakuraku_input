@@ -1,3 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>水質データ入力 - ステップ1</title>
+</head>
+<body>
+    <h1>水質データ入力 - ステップ1</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="date">計測日</label>
+            <input type="date" name="date" value="{{ today }}" required>
+        </div>
+        <div>
+            <label for="tank">水槽</label>
+            <select name="tank" required>
+                {% for tank in tanks %}
+                    <option value="{{ tank.id }}">{{ tank.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="room_temperature">室温</label>
+            <input type="number" name="room_temperature" min="0" max="100" required>
+        </div>
+        <button type="submit">次へ</button>
+        <a href="{% url 'rakuraku_apps:everyday_or_interval' %}" class="btn btn-secondary">戻る</a>
+
+    </form>
+</body>
+</html>
+
+<!-- 
 定期測定入力１
 <div class="text-center mt-3"> 
     <a href="{% url 'rakuraku_apps:interval_second_input' %}" class="btn btn-link">次へ</a> 
@@ -8,4 +41,4 @@
 
 <div class="text-center mt-3"> 
     <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-link">HOMEに戻る</a> 
-</div> 
+</div>  -->
