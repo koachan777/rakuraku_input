@@ -1,14 +1,86 @@
-定期測定確認
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:everyday_or_interval' %}" class="btn btn-link">登録</a> 
-</div> 
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:interval_comment' %}" class="btn btn-link">戻る</a> 
-</div> 
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:interval_edit' %}" class="btn btn-link">編集</a> 
-</div> 
+{% extends 'base.html' %}
 
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-link">HOMEに戻る</a> 
-</div> 
+{% block title %}
+<h1 class="card-title text-center mt-3">水質データ入力 - 確認</h1>
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">入力内容の確認</h2>
+                <div class="text-center">
+                    <div class="d-inline-block text-start">
+                        <p><strong>計測日:</strong> {{ form_data.date }}</p>
+                        <p><strong>水槽:</strong> {{ form_data.tank }}</p>
+                        <p><strong>室温:</strong> {{ form_data.room_temperature }}</p>
+                        {% if 'NH4' in alerts %}
+                        <p><strong>NH4:</strong> <span class="alert-highlight">{{ form_data.NH4 }}</span></p>
+                        <p class="alert-small">{{ alerts.NH4 }}</p>
+                        {% else %}
+                        <p><strong>NH4:</strong> {{ form_data.NH4 }}</p>
+                        {% endif %}
+
+                        {% if 'NO2' in alerts %}
+                        <p><strong>NO2:</strong> <span class="alert-highlight">{{ form_data.NO2 }}</span></p>
+                        <p class="alert-small">{{ alerts.NO2 }}</p>
+                        {% else %}
+                        <p><strong>NO2:</strong> {{ form_data.NO2 }}</p>
+                        {% endif %}
+
+                        {% if 'NO3' in alerts %}
+                        <p><strong>NO3:</strong> <span class="alert-highlight">{{ form_data.NO3 }}</span></p>
+                        <p class="alert-small">{{ alerts.NO3 }}</p>
+                        {% else %}
+                        <p><strong>NO3:</strong> {{ form_data.NO3 }}</p>
+                        {% endif %}
+
+                        {% if 'Ca' in alerts %}
+                        <p><strong>Ca:</strong> <span class="alert-highlight">{{ form_data.Ca }}</span></p>
+                        <p class="alert-small">{{ alerts.Ca }}</p>
+                        {% else %}
+                        <p><strong>Ca:</strong> {{ form_data.Ca }}</p>
+                        {% endif %}
+
+                        {% if 'Al' in alerts %}
+                        <p><strong>Al:</strong> <span class="alert-highlight">{{ form_data.Al }}</span></p>
+                        <p class="alert-small">{{ alerts.Al }}</p>
+                        {% else %}
+                        <p><strong>Al:</strong> {{ form_data.Al }}</p>
+                        {% endif %}
+
+                        {% if 'Mg' in alerts %}
+                        <p><strong>Mg:</strong> <span class="alert-highlight">{{ form_data.Mg }}</span></p>
+                        <p class="alert-small">{{ alerts.Mg }}</p>
+                        {% else %}
+                        <p><strong>Mg:</strong> {{ form_data.Mg }}</p>
+                        {% endif %}
+
+                        <p><strong>備考:</strong> {{ form_data.notes }}</p>
+                    </div>
+                </div>
+                <form method="post" class="mt-4">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">保存</button>
+                        <a href="{% url 'rakuraku_apps:interval_edit' %}" class="btn btn-warning btn-lg">編集</a>
+                        <a href="{% url 'rakuraku_apps:interval_comment' %}" class="btn btn-secondary btn-lg">戻る</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'footer.html' %}
+
+{% else %}
+<div class="text-center mt-5">
+    <p>確認ページにアクセスするにはログインが必要です。</p>
+    <a href="{% url 'rakuraku_apps:login' %}" class="btn btn-primary">ログイン</a>
+</div>
+{% endif %}
+{% endblock %}

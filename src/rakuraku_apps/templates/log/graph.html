@@ -2,64 +2,103 @@
 
 {% block content %}
 <div class="container">
-    <h2>水質データグラフ</h2>
-    <form method="GET">
-        <div class="form-group">
-            <label for="start_date">開始日:</label>
-            <input type="date" class="form-control" id="start_date" name="start_date" value="{{ request.GET.start_date }}">
+    <h2 class="text-start ps-3 mb-4">水質データ（グラフ）</h2>
+    <form method="GET" class="mb-4">
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="form-group">
+                    <label for="date_range">期間:</label>
+                    <div class="input-group">
+                        <input type="date" class="form-control" id="start_date" name="start_date" value="{{ start_date }}">
+                        <div class="input-group-append input-group-prepend d-flex align-items-center">
+                            <span class="mx-2">〜</span>
+                        </div>
+                        <input type="date" class="form-control" id="end_date" name="end_date" value="{{ end_date }}">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="form-group">
+                    <label for="shrimp">系統:</label>
+                    <select class="form-control" id="shrimp" name="shrimp">
+                        <option value="">全て</option>
+                        {% for shrimp in shrimps %}
+                        <option value="{{ shrimp.id }}" {% if shrimp.id|stringformat:"i" == request.GET.shrimp %}selected{% endif %}>{{ shrimp.family }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="form-group">
+                    <label for="item">項目:</label>
+                    <select class="form-control" id="item" name="item">
+                        <option value="water_temperature" {% if selected_item == "water_temperature" %}selected{% endif %}>水温</option>
+                        <option value="pH" {% if selected_item == "pH" %}selected{% endif %}>pH</option>
+                        <option value="DO" {% if selected_item == "DO" %}selected{% endif %}>DO</option>
+                        <option value="salinity" {% if selected_item == "salinity" %}selected{% endif %}>塩分濃度</option>
+                        <option value="NH4" {% if selected_item == "NH4" %}selected{% endif %}>NH4</option>
+                        <option value="NO2" {% if selected_item == "NO2" %}selected{% endif %}>NO2</option>
+                        <option value="NO3" {% if selected_item == "NO3" %}selected{% endif %}>NO3</option>
+                        <option value="Ca" {% if selected_item == "Ca" %}selected{% endif %}>Ca</option>
+                        <option value="Al" {% if selected_item == "Al" %}selected{% endif %}>Al</option>
+                        <option value="Mg" {% if selected_item == "Mg" %}selected{% endif %}>Mg</option>
+                    </select>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="end_date">終了日:</label>
-            <input type="date" class="form-control" id="end_date" name="end_date" value="{{ request.GET.end_date }}">
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary btn-lg">表示</button>
         </div>
-        <div class="form-group">
-            <label for="shrimp">系統:</label>
-            <select class="form-control" id="shrimp" name="shrimp">
-                <option value="">全て</option>
-                {% for shrimp in shrimps %}
-                <option value="{{ shrimp.id }}" {% if shrimp.id|stringformat:"i" == request.GET.shrimp %}selected{% endif %}>{{ shrimp.family }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="item">項目:</label>
-            <select class="form-control" id="item" name="item">
-                <option value="water_temperature" {% if selected_item == "water_temperature" %}selected{% endif %}>水温</option>
-                <option value="pH" {% if selected_item == "pH" %}selected{% endif %}>pH</option>
-                <option value="DO" {% if selected_item == "DO" %}selected{% endif %}>DO</option>
-                <option value="salinity" {% if selected_item == "salinity" %}selected{% endif %}>塩分濃度</option>
-                <option value="NH4" {% if selected_item == "NH4" %}selected{% endif %}>NH4</option>
-                <option value="NO2" {% if selected_item == "NO2" %}selected{% endif %}>NO2</option>
-                <option value="NO3" {% if selected_item == "NO3" %}selected{% endif %}>NO3</option>
-                <option value="Ca" {% if selected_item == "Ca" %}selected{% endif %}>Ca</option>
-                <option value="Al" {% if selected_item == "Al" %}selected{% endif %}>Al</option>
-                <option value="Mg" {% if selected_item == "Mg" %}selected{% endif %}>Mg</option>
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">表示</button>
     </form>
     <hr>
-    <div class="text-center">
-        <img src="data:image/png;base64,{{ graph }}" alt="Water Quality Graph" id="graph-image">
-        <br>
-        <a href="#" class="btn btn-primary" id="save-graph">保存</a>
+    <div class="position-relative">
+        <div class="text-center">
+            <img src="data:image/png;base64,{{ graph }}" alt="Water Quality Graph" id="graph-image" class="img-fluid">
+        </div>
+        <div class="position-absolute top-0 end-0 mt-3 me-3 d-none d-lg-block">
+            <a href="#" class="btn btn-primary" id="save-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">保存</a>
+        </div>
+    </div>
+    <div class="text-center mt-3 d-lg-none">
+        <a href="#" class="btn btn-primary" id="save-graph-mobile" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">保存</a>
     </div>
 </div>
-<a href="{% url 'rakuraku_apps:table_or_graph' %}" class="btn btn-secondary">戻る</a>
+
+<div class="text-center my-4">
+    <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="btn btn-secondary btn-lg">戻る</a>
+</div>
+
 
 {% include 'footer.html' %} 
 
 <script>
-    document.getElementById('save-graph').addEventListener('click', function() {
+    document.getElementById('save-graph').addEventListener('click', function(event) {
         var imgElement = document.getElementById('graph-image');
         var imgSrc = imgElement.src;
+        var item = event.target.getAttribute('data-item');
+        var startDate = event.target.getAttribute('data-start-date');
+        var endDate = event.target.getAttribute('data-end-date');
+        var fileName = item + '_' + startDate + '-' + endDate + '.png';
 
-        // 画像をダウンロードするためのリンクを作成
         var link = document.createElement('a');
-        link.download = 'water_quality_graph.png';
+        link.download = fileName;
         link.href = imgSrc;
 
-        // クリックイベントを発生させてダウンロードを開始
+        link.click();
+    });
+
+    document.getElementById('save-graph-mobile').addEventListener('click', function(event) {
+        var imgElement = document.getElementById('graph-image');
+        var imgSrc = imgElement.src;
+        var item = event.target.getAttribute('data-item');
+        var startDate = event.target.getAttribute('data-start-date');
+        var endDate = event.target.getAttribute('data-end-date');
+        var fileName = item + '_' + startDate + '-' + endDate + '.png';
+
+        var link = document.createElement('a');
+        link.download = fileName;
+        link.href = imgSrc;
+
         link.click();
     });
 </script>
