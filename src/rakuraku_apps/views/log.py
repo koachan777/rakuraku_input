@@ -80,7 +80,6 @@ class GraphView(TemplateView):
         end_date = self.request.GET.get('end_date')
         shrimp_id = self.request.GET.get('shrimp')
         item = self.request.GET.get('item')
-
         if not start_date:
             start_date = (datetime.today() - timedelta(days=7)).strftime('%Y-%m-%d')
         if not end_date:
@@ -108,39 +107,54 @@ class GraphView(TemplateView):
         water_quality_data = WaterQualityModel.objects.filter(query).select_related('tank', 'tank__shrimp')
 
         if item:
-            water_quality_data = water_quality_data.values('date', 'tank__name', item)
+            water_quality_data = water_quality_data.values('date', 'tank__name', 'tank__shrimp__id', item)
         else:
             item = 'water_temperature'  # デフォルトの項目をwater_temperatureに設定
-            water_quality_data = water_quality_data.values('date', 'tank__name', item)
+            water_quality_data = water_quality_data.values('date', 'tank__name', 'tank__shrimp__id', item)
 
         water_quality_data = water_quality_data.order_by('date', 'tank__id')
 
         # グラフの描画
         fig, ax = plt.subplots(figsize=(10, 6), tight_layout=True)
         fig.subplots_adjust(top=0.9)
-        fig.suptitle(item_labels.get(item, ''), fontsize=24, fontweight='bold')  # タイトルの文字サイズを24に変更し、太字に設定
-        tanks = water_quality_data.values_list('tank__name', flat=True).distinct()
-        tank_labels = []
-        for tank in tanks:
-            tank_data = water_quality_data.filter(tank__name=tank)
-            dates = [data['date'] for data in tank_data]
-            values = [data[item] for data in tank_data]
-            label = tank.split()[0]
-            if label not in tank_labels:
-                ax.plot(dates, values, marker='o', label=label)
-                tank_labels.append(label)
-            else:
-                ax.plot(dates, values, marker='o')
+        fig.suptitle(item_labels.get(item, ''), fontsize=24, fontweight='bold')
 
-        ax.set_xlabel('')  # x軸のラベルを削除
-        ax.legend(loc='upper right')  # 凡例の位置を右上に変更
-        ax.xaxis.set_major_formatter(DateFormatter('%m/%d'))  # 日付のフォーマットを変更
-        ax.xaxis.set_major_locator(DayLocator(interval=1))  # x軸の目盛りを1日ごとに設定
+        # 系統ごとに水槽をグルーピング
+        shrimp_tanks = {}
+        for tank_data in water_quality_data:
+            shrimp_id = tank_data.get('tank__shrimp__id')
+            if shrimp_id:
+                if shrimp_id not in shrimp_tanks:
+                    shrimp_tanks[shrimp_id] = []
+                shrimp_tanks[shrimp_id].append(tank_data)
+
+        colors = plt.cm.get_cmap('tab20', sum(len(set(tank['tank__name'] for tank in tanks)) for tanks in shrimp_tanks.values()))
+        color_index = 0
+
+        for shrimp_id, tanks in shrimp_tanks.items():
+            # 系統内の水槽をID順にソート
+            tanks.sort(key=lambda x: x['tank__name'])
+
+            # 重複する水槽名を解消
+            unique_tank_names = sorted(set(tank['tank__name'] for tank in tanks))
+
+            for tank_name in unique_tank_names:
+                dates = [data['date'] for data in water_quality_data if data['tank__name'] == tank_name]
+                values = [data[item] for data in water_quality_data if data['tank__name'] == tank_name]
+
+                color = colors(color_index)
+                ax.plot(dates, values, marker='o', label=tank_name, color=color, linewidth=2)
+                color_index += 1
+
+        # 凡例の表示
+        handles, labels = ax.get_legend_handles_labels()
+        ax.legend(handles, labels, loc='upper right')
+
+        ax.xaxis.set_major_formatter(DateFormatter('%m/%d'))
+        ax.xaxis.set_major_locator(DayLocator(interval=1))
         fig.autofmt_xdate()
 
-        # y軸の値の横に線を追加
         ax.grid(axis='y', linestyle='-', linewidth=0.5, color='gray', alpha=0.7)
-
 
         # グラフをbase64エンコードされた文字列に変換
         buffer = io.BytesIO()
@@ -152,7 +166,7 @@ class GraphView(TemplateView):
 
         context['graph'] = graph
         context['shrimps'] = ShrimpModel.objects.all()
-        context['selected_item'] = item_labels.get(item, '')  # 選択された項目名を日本語に変換
+        context['selected_item'] = item_labels.get(item, '')
         context['start_date'] = start_date
         context['end_date'] = end_date
         return context
