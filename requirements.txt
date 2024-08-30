@@ -2,3 +2,4 @@ Django==4.1.7
 mysqlclient
 matplotlib
 japanize_matplotlib
+requests
