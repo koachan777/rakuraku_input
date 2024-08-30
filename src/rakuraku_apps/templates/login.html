@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
-
-<div class="h1">ログイン画面</div> 
+<div class="text-center">
+    <img src="{% static 'img/header-logo.png' %}" alt="ロゴ" class="img-fluid mb-3" width="300" height="auto">
+    <div class="h1">ログイン画面</div>
+</div>
 {% endblock %}
 
 {% block header %}
