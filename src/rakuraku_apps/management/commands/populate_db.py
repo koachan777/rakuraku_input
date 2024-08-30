@@ -2,6 +2,7 @@ import random
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 from rakuraku_apps.models import User, TankModel, WaterQualityModel, ShrimpModel
+from rakuraku_apps.models import WaterQualityThresholdModel
 
 class Command(BaseCommand):
     help = 'Populate the database with test data'
@@ -10,11 +11,13 @@ class Command(BaseCommand):
         # parser.add_argument('--users', type=int, help='Number of users to create')
         parser.add_argument('--tanks', type=int, help='Number of tanks to create')
         parser.add_argument('--wq', type=int, help='Number of water quality records to create')
+        parser.add_argument('--init_thresholds', action='store_true', help='Populate water quality thresholds')
 
     def handle(self, *args, **kwargs):
         # user_count = kwargs.get('users')
         tank_count = kwargs.get('tanks')
         water_quality_count = kwargs.get('wq')
+        populate_thresholds = kwargs.get('init_thresholds')
 
         # if user_count is not None:
         #     self.populate_users(user_count)
@@ -22,6 +25,8 @@ class Command(BaseCommand):
             self.populate_tanks(tank_count)
         if water_quality_count is not None:
             self.populate_water_quality(water_quality_count)
+        if populate_thresholds is not None:
+            self.populate_water_quality_threshold()
 
     # def populate_users(self, count = 0):
     #     for _ in range(count):
@@ -66,3 +71,28 @@ class Command(BaseCommand):
                         notes=f'Test data {i}日目',
                         tank_id=tank_id
                     )
+                    
+    def populate_water_quality_threshold(self):
+        thresholds = [
+            {'parameter': 'water_temperature', 'reference_value_threshold': 2.5, 'previous_day_threshold': 2},
+            {'parameter': 'pH', 'reference_value_threshold': 1, 'previous_day_threshold': 1},
+            {'parameter': 'DO', 'reference_value_threshold': 1, 'previous_day_threshold': 1},
+            {'parameter': 'salinity', 'reference_value_threshold': 1, 'previous_day_threshold': 1},
+            {'parameter': 'NH4', 'reference_value_threshold': 1, 'previous_day_threshold': 1},
+            {'parameter': 'NO3', 'reference_value_threshold': 1, 'previous_day_threshold': 1},
+            {'parameter': 'Ca', 'reference_value_threshold': 1, 'previous_day_threshold': 1},
+            {'parameter': 'Al', 'reference_value_threshold': 1, 'previous_day_threshold': 1},
+            {'parameter': 'Mg', 'reference_value_threshold': 1, 'previous_day_threshold': 1},
+            {'parameter': 'NO2', 'reference_value_threshold': 5, 'previous_day_threshold': 5},
+        ]
+
+        for threshold in thresholds:
+            WaterQualityThresholdModel.objects.update_or_create(
+                parameter=threshold['parameter'],
+                defaults={
+                    'reference_value_threshold': threshold['reference_value_threshold'],
+                    'previous_day_threshold': threshold['previous_day_threshold'],
+                    'created_at': timezone.now(),
+                    'modified_at': timezone.now(),
+                }
+            )

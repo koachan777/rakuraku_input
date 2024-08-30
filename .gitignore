@@ -9,3 +9,4 @@ src/rakuraku_apps/migrations/0004_shrimpmodel_tankmodel_shrimp.py
 src/rakuraku_apps/migrations/0002_shrimpmodel_alter_standardvaluemodel_al_and_more.py
 src/.vscode/launch.json
 MySQL.md
+shellコマンドまとめ.md

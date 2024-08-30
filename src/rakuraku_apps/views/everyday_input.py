@@ -1,5 +1,5 @@
-from datetime import date
-
+from datetime import date, timedelta
+from django.utils import timezone
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
 from rakuraku_apps.models import StandardValueModel, TankModel, WaterQualityModel, WaterQualityThresholdModel
@@ -130,6 +130,27 @@ class EverydayConfirmInputView(TemplateView):
             'salinity': self.request.session.get('salinity', ''),
             'notes': self.request.session.get('notes', ''),
         }
+        
+        # 過去のデータの表示
+        # セッションデータから日付とタンクIDを取得
+        current_date = timezone.datetime.strptime(self.request.session.get('date', ''), '%Y-%m-%d').date()
+        tank_id = self.request.session.get('tank', '')
+
+        # 過去のデータを取得
+        previous_data = {
+            '1日前': WaterQualityModel.objects.filter(date=current_date - timedelta(days=1), tank_id=tank_id).first(),
+            '2日前': WaterQualityModel.objects.filter(date=current_date - timedelta(days=2), tank_id=tank_id).first(),
+            '7日前': WaterQualityModel.objects.filter(date=current_date - timedelta(days=7), tank_id=tank_id).first(),
+            '14日前': WaterQualityModel.objects.filter(date=current_date - timedelta(days=14), tank_id=tank_id).first(),
+            '1か月前': WaterQualityModel.objects.filter(date=current_date - timedelta(days=30), tank_id=tank_id).first(),
+            '1年前': WaterQualityModel.objects.filter(date=current_date - timedelta(days=365), tank_id=tank_id).first(),
+        }
+
+        # 結果を表示
+        # print("previous_data", previous_data)
+        
+        context['previous_data'] = previous_data       
+
 
         # 基準値を取得
         standard_value = StandardValueModel.get_or_create()
@@ -139,17 +160,25 @@ class EverydayConfirmInputView(TemplateView):
 
         # アラートメッセージを格納する辞書
         context['alerts'] = {}
+        
+        print("standard_value", standard_value)
+        print("thresholds", thresholds)
 
         # 各パラメーターについて基準値と比較
         for param in ['water_temperature', 'pH', 'DO', 'salinity', 'NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg']:
             input_value = self.request.session.get(param)
             if input_value:
+                print(f"{param} : {input_value}")
                 standard_value_param = getattr(standard_value, param)
+                print(f"standard_value_param : {standard_value_param}")
                 threshold = thresholds.get(param)
+                print(f"threshold : {threshold}")
                 if standard_value_param and threshold:
                     diff = abs(float(input_value) - standard_value_param)
                     if diff > threshold.reference_value_threshold:
                         context['alerts'][param] = "基準値の範囲を超えています"
+                        
+        print("context", context)
 
         return context
 
