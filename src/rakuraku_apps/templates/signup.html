@@ -1,23 +1,27 @@
 {% extends 'base.html' %}
+
 {% block title %}
     <div class="h1">新規登録</div>
 {% endblock %}
 {% block content %}
     <div>
-        <br>
-            <form method="POST">
-            {% csrf_token %}
-                {{ form.non_field_errors }}
-                {% for field in form %}
-                {{ field.label }}
-                {{ field }}
-                {{ field.errors }}
-        <br>
-        {% endfor %}
-        <div class="mt-3">
-            <button type="submit" class="btn btn-primary">登録</button>
-            <a href="{% url 'rakuraku_apps:manage_user' %}" class="btn btn-secondary">戻る</a>
-        </div>
+        <form method="POST">
+        {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% for field in form %}
+            {{ field.label }}
+            {{ field }}
+            {{ field.errors }}
+            
+            {% endfor %}
+            
         </form>
+    </div>
+    <div class="text-center mt-3"> 
+        <button type="submit" class="btn btn-primary">登録</button>
+    </div>
+            
+    <div class="text-center mt-3"> 
+        <a href="{% url 'rakuraku_apps:manage' %}" class="btn btn-secondary btn-lg">戻る</a>
     </div>
 {% endblock %}

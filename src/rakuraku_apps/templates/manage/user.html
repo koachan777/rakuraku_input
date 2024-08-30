@@ -6,12 +6,14 @@
 <h2>ユーザー</h2>
 <a href="{% url 'rakuraku_apps:signup' %}" class="btn btn-secondary">新規登録</a> 
 
-<ul>
+<ul class="centered-list">
     {% for user in users %}
     <li>{{ user.account_id }}</li>
     {% endfor %}
 </ul>
-<a href="{% url 'rakuraku_apps:manage' %}" class="btn btn-secondary btn-lg">戻る</a>
+<div class="text-center mt-3"> 
+    <a href="{% url 'rakuraku_apps:manage' %}" class="btn btn-secondary btn-lg">戻る</a>
+</div>
 {% include 'footer.html' %}
 
 {% endblock %}
