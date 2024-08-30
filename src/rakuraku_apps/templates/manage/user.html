@@ -1,19 +1,16 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<h1>管理者画面</h1>
-
-<h2>ユーザー</h2>
-<a href="{% url 'rakuraku_apps:signup' %}" class="btn btn-secondary">新規登録</a> 
-
-<ul class="centered-list">
-    {% for user in users %}
-    <li>{{ user.account_id }}</li>
-    {% endfor %}
-</ul>
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:manage' %}" class="btn btn-secondary btn-lg">戻る</a>
-</div>
-{% include 'footer.html' %}
-
-{% endblock %}
+{% extends 'base.html' %} {% block content %} 
+<div class="container">
+  <h1 class="text-center mb-4">管理者画面</h1>
+  <h2 class="text-center mb-4">ユーザー</h2>
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <ul class="list-group mb-4">{% for user in users %} 
+        <li class="list-group-item">{{ user.account_id }}</li>{% endfor %}
+      </ul>
+      <div class="d-flex flex-column align-items-center">
+        <a href="{% url 'rakuraku_apps:signup' %}" class="btn btn-primary mb-2">新規登録</a>
+        <a href="{% url 'rakuraku_apps:manage' %}" class="btn btn-secondary">戻る</a>
+      </div>
+    </div>
+  </div>
+</div>{% include 'footer.html' %} {% endblock %}
