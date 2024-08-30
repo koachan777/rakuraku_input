@@ -20,7 +20,9 @@
 </head>
 
 <body>
+  {% block header %}
   {% include 'header.html' %}
+  {% endblock %}
 
   <div class="container mx-auto text-center">
     {% block title %}

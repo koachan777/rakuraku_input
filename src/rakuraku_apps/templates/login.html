@@ -4,6 +4,11 @@
 
 <div class="h1">ログイン画面</div> 
 {% endblock %}
+
+{% block header %}
+<!-- Header部分を空にして非表示にする -->
+{% endblock %}
+
 {% block content %}
     <form method="post"> 
     {% csrf_token %} 
