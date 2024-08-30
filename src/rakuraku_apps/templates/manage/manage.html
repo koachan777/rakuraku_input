@@ -1,34 +1,50 @@
 {% extends 'base.html' %}
-
-{% block title %}管理者画面{% endblock %}
+{% load static %}
 
 {% block content %}
 {% if user.is_authenticated %}
-
-<div class="container"> 
-    <div class="row justify-content-center"> 
-        <div class="col-md-6"> 
-            <div class="card mt-5"> 
-                <div class="card-body"> 
-                    <h1 class="card-title text-center mb-4">管理者画面</h1> 
-                    <div class="d-grid gap-2"> 
-                        <a href="{% url 'rakuraku_apps:manage_user' %}" class="btn btn-primary btn-lg">ユーザー</a> 
-                        <a href="{% url 'rakuraku_apps:manage_tank' %}" class="btn btn-secondary btn-lg">水槽</a> 
-                        <a href="{% url 'rakuraku_apps:manage_value' %}" class="btn btn-primary btn-lg">水質</a> 
-                        <a href="{% url 'rakuraku_apps:manage_first_alert' %}" class="btn btn-secondary btn-lg">警告範囲</a> 
-                    </div> 
-                </div> 
-            </div> 
-            <div class="text-center mt-3"> 
-                <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-link">HOMEに戻る</a> 
-            </div> 
-        </div> 
-    </div> 
-</div> 
-{% else %} 
-<div class="text-center mt-5"> 
-    <p>管理者機能を使用するにはログインが必要です。</p> 
-    <a href="{% url 'rakuraku_apps:login' %}" class="btn btn-primary">ログイン</a> 
-</div> 
-{% endif %} 
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card mt-5 border-0">
+                <div class="card-body">
+                    <h1 class="card-title text-start mb-4">管理者画面</h1>
+                    <div class="d-grid gap-3">
+                        <a href="{% url 'rakuraku_apps:manage_user' %}" class="btn btn-primary btn-lg py-3">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <i class="fas fa-user fa-lg me-3"></i>
+                                <span class="fs-5">ユーザー</span>
+                            </div>
+                        </a>
+                        <a href="{% url 'rakuraku_apps:manage_tank' %}" class="btn btn-primary btn-lg py-3">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <i class="fas fa-shrimp fa-lg me-3"></i>
+                                <span class="fs-5">水槽</span>
+                            </div>
+                        </a>
+                        <a href="{% url 'rakuraku_apps:manage_value' %}" class="btn btn-primary btn-lg py-3">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <i class="fas fa-vial fa-lg me-3"></i>
+                                <span class="fs-5">水質</span>
+                            </div>
+                        </a>
+                        <a href="{% url 'rakuraku_apps:manage_alert' %}" class="btn btn-primary btn-lg py-3">
+                            <div class="d-flex align-items-center justify-content-center">
+                                <i class="fas fa-exclamation-triangle fa-lg me-3"></i>
+                                <span class="fs-5">警告範囲</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% include 'footer.html' %}
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="text-center mt-5">
+    <p>管理者機能を使用するにはログインが必要です。</p>
+    <a href="{% url 'rakuraku_apps:login' %}" class="btn btn-primary">ログイン</a>
+</div>
+{% endif %}
 {% endblock %}

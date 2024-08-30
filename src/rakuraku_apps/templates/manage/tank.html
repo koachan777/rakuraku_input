@@ -1,7 +1,29 @@
-水槽画面
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>管理者画面</h1>
+
+<h2>水槽</h2>
+
+<ul>
+    {% for tank in tanks %}
+    <li>{{ tank.name }} - {{ tank.shrimp.family }}</li>
+    {% endfor %}
+</ul>
+
+<div class="text-center mt-3">
+    <a href="{% url 'rakuraku_apps:create_tank' %}" class="btn btn-primary">水槽を追加する</a>
+</div>
+
+<div class="text-center mt-3">
+    <a href="{% url 'rakuraku_apps:create_shrimp' %}" class="btn btn-primary">系統を追加する</a>
+</div>
+
 <div class="text-center mt-3"> 
     <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-link">HOMEに戻る</a> 
 </div> 
 <div class="text-center mt-3"> 
     <a href="{% url 'rakuraku_apps:manage' %}" class="btn btn-link">戻る</a> 
 </div> 
+
+{% endblock %}

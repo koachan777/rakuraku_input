@@ -1,11 +1,50 @@
-定期測定入力１
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:interval_second_input' %}" class="btn btn-link">次へ</a> 
-</div> 
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:everyday_or_interval' %}" class="btn btn-link">戻る</a> 
+{% extends 'base.html' %}
+
+{% block title %}
+<h1 class="card-title text-center mt-3">水質データ入力 - Step1</h1> 
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+
+<div class="container"> 
+    <div class="row justify-content-center"> 
+        <div class="col-md-6"> 
+                <div class="card-body"> 
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="date" class="form-label">計測日</label>
+                            <input type="date" name="date" class="form-control" value="{{ today }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tank" class="form-label">水槽</label>
+                            <select name="tank" class="form-select" required>
+                                {% for tank in tanks %}
+                                    <option value="{{ tank.id }}">{{ tank.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="room_temperature" class="form-label">室温</label>
+                            <input type="number" name="room_temperature" class="form-control" min="0" max="100" required>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">次へ</button>
+                        </div>
+                    </form>
+                </div> 
+        </div> 
+    </div> 
 </div> 
 
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:home' %}" class="btn btn-link">HOMEに戻る</a> 
+{% include 'footer.html' %}
+
+{% else %} 
+<div class="text-center mt-5"> 
+    <p>データ入力機能を使用するにはログインが必要です。</p> 
+    <a href="{% url 'rakuraku_apps:login' %}" class="btn btn-primary">ログイン</a> 
 </div> 
+{% endif %} 
+{% endblock %}

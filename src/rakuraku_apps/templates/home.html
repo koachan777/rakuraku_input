@@ -2,23 +2,26 @@
 
 {% block title %}
 {% if user.is_authenticated %}
-<div class="h1"> 機能選択
-<a href="{% url 'rakuraku_apps:logout' %}" class="btn btn-primary float-end">Logout</a>
-</div>
+    
 {% endif %}
 {% endblock %}
 
 {% block content %}
 {% if user.is_authenticated %}
-
-<div class="h2">ようこそ {{ user.account_id }} さん</div> 
-<div class="list-group"> 
-    <a href="{% url 'rakuraku_apps:everyday_or_interval' %}" class="list-group-item list-group-item-action">データ入力</a> 
-    <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="list-group-item list-group-item-action">過去のデータ</a> 
-    <a href="{% url 'rakuraku_apps:manage' %}" class="list-group-item list-group-item-action">管理者画面</a> 
-</div> {% else %} 
-<div class="d-grid gap-2"> 
-    <a href="{% url 'rakuraku_apps:login' %}" class="btn btn-primary">ログイン</a> 
-</div> 
+    <div class="h2">
+        ようこそ {{ user.account_id }} 
+        <a>
+            さん
+        </a>
+    </div> 
+    <div class="list-group"> 
+        <a href="{% url 'rakuraku_apps:everyday_or_interval' %}" class="list-group-item list-group-item-action">データ入力</a> 
+        <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="list-group-item list-group-item-action">過去のデータ</a> 
+        <a href="{% url 'rakuraku_apps:manage' %}" class="list-group-item list-group-item-action">管理者画面</a> 
+    </div> 
+{% else %} 
+    <div class="d-grid gap-2"> 
+        <a href="{% url 'rakuraku_apps:login' %}" class="btn btn-primary">ログイン</a> 
+    </div> 
 {% endif %} 
 {% endblock %}
