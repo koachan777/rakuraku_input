@@ -8,7 +8,7 @@ from django.views.generic import TemplateView
 from django.shortcuts import redirect
 from rakuraku_apps.models import StandardValueModel, TankModel, WaterQualityModel, WaterQualityThresholdModel
 from rakuraku_apps.forms.input import WaterQualityForm
-import requests
+# import requests
 
 
 class EverydayOrIntervalView(TemplateView):
