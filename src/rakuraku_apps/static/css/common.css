@@ -1,3 +1,26 @@
+/* <span>で区切られた部分を等間隔に配置 */
+span-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px; /* スパン間の間隔を調整 */
+}
+
+span-container span {
+  flex: 1; /* 各スパンのサイズを均等にする */
+  text-align: center; /* テキストを中央揃え */
+}
+
+
+/* html, body {
+  font-family: 'Noto Sans JP', sans-serif;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+} */
+
 html, body {
   margin: 0;
   padding: 0;
@@ -79,7 +102,20 @@ body {
   font-weight: 700;
   text-decoration: underline;
   text-decoration-thickness: 2px;
+  /* text-decoration: none; */
 }
+
+
+/* .footer {
+  margin-top: auto;
+  text-align: center;
+  width: 100%;
+  height: 60px;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+} */
 
 .footer {
   width: 100%;
@@ -118,6 +154,12 @@ body {
   margin-right: 8px;
 }
 
+/* .original-btn:hover {
+  margin-top: 6px;
+  border-bottom: 1px solid #1B3C6F;
+  color: #fff;
+} */
+
 .original-btn i {
   margin-right: 8px;
 }
@@ -140,6 +182,20 @@ body {
   color: #fff;
 }
 
+/* .original-long-btn:hover {
+  margin-top: 6px;
+  border-bottom: 1px solid #1B3C6F;
+  color: #fff;
+} */
+
+/* 基準値のスタイル */
+.info {
+  font-size: 0.3rem; /* 基準値のフォントサイズ */
+  color: #555; /* 基準値の文字色 */
+  margin-top: 0;
+  margin-left: 10px; /* アラートメッセージと基準値の間隔 */
+}
+
 /* アラートメッセージのスタイル */
 .alert {
   font-size: 0.8rem; /* アラートメッセージのフォントサイズ */
@@ -151,3 +207,15 @@ body {
   padding: 3px;
   border-radius: 3px;
 }
+
+
+.botton {
+  background-color: red;
+}
+
+.left-aligned-container {
+  text-align: left; /* テキストの左寄せ */
+  float: left; /* 要素全体を左寄せ */
+  width: 100%; /* 要素の幅を100%にする場合は追加 */
+}
+
