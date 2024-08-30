@@ -22,6 +22,11 @@
 <body>
   {% block header %}
   {% include 'header.html' %}
+  {% if success_message %}
+  <div class="alert alert-success text-center" role="alert">
+      <span style="color: black;">{{ success_message }}</span>
+  </div>
+  {% endif %}
   {% endblock %}
 
   <div class="container mx-auto text-center">

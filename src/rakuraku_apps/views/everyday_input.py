@@ -194,6 +194,7 @@ class EverydayConfirmInputView(TemplateView):
             request.session.pop('DO', None)
             request.session.pop('salinity', None)
             request.session.pop('notes', None)
+            request.session['success_message'] = '測定結果を保存しました'
             return redirect('/home/')
         else:
             return redirect('/everyday/edit/')
