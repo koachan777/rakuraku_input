@@ -242,3 +242,33 @@ body {
   margin-right: 10px; /* テキストとの間隔を調整 */
   flex-shrink: 0; /* 記号が縮小されないようにする */
 }
+
+
+form {
+  max-width: 280px; /* フォーム全体の幅を設定 */
+  margin: 0 auto; /* フォームを中央に配置 */
+}
+
+form div {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+form label {
+  width: 280px; /* ラベルの幅を固定 */
+  text-align: left;
+  margin-right: 10px; /* ラベルと入力フィールドの間に余白を追加 */
+}
+
+form input {
+  flex-grow: 1; /* 入力フィールドが残りのスペースを占める */
+  width: 100%; /* 入力フィールドの幅を100%に設定 */
+  box-sizing: border-box; /* paddingを含めた幅の計算 */
+}
+
+button[type="submit"] {
+  margin-top: 20px; /* フォームのボタンに余白を追加 */
+  align-self: center; /* ボタンを中央に配置 */
+}
+

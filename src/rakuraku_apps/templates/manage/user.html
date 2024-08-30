@@ -6,7 +6,7 @@
 <h2>ユーザー</h2>
 <a href="{% url 'rakuraku_apps:signup' %}" class="btn btn-secondary">新規登録</a> 
 
-<ul>
+<ul class="centered-list">
     {% for user in users %}
     <li>{{ user.account_id }}</li>
     {% endfor %}
