@@ -1,59 +1,26 @@
-
 {% extends 'base.html' %}
 
 {% block content %}
 <h1>管理者画面</h1>
 
 <h2>水質</h2>
-<form method="post">
+<form method="post" class="container">
     {% csrf_token %}
-    <div>
-        <label>水温基準値:</label>
-        {{ form.water_temperature }}
+    {% for field in form %}
+    <div class="form-group row">
+        <label for="{{ field.id_for_label }}" class="col-md-4 col-form-label">{{ field.label }}:</label>
+        <div class="col-md-8">
+            {{ field }}
+        </div>
     </div>
-    <div>
-        <label>pH基準値:</label>
-        {{ form.pH }}
+    {% endfor %}
+    <div class="text-center mt-3">
+        <button type="submit" class="btn btn-primary">保存</button></div>
+        <div class="text-center mt-3">
+        <a href="{% url 'rakuraku_apps:manage' %}" class="btn btn-secondary">戻る</a>
     </div>
-    <div>
-        <label>DO基準値:</label>
-        {{ form.DO }}
-    </div>
-    <div>
-        <label>塩分濃度基準値:</label>
-        {{ form.salinity }}
-    </div>
-    <div>
-        <label>NH4基準値:</label>
-        {{ form.NH4 }}
-    </div>
-    <div>
-        <label>NO2基準値:</label>
-        {{ form.NO2 }}
-    </div>
-    <div>
-        <label>NO3基準値:</label>
-        {{ form.NO3 }}
-    </div>
-    <div>
-        <label>Ca基準値:</label>
-        {{ form.Ca }}
-    </div>
-    <div>
-        <label>Al基準値:</label>
-        {{ form.Al }}
-    </div>
-    <div>
-        <label>Mg基準値:</label>
-        {{ form.Mg }}
-    </div>
-
-    <button type="submit">保存</button>
 </form>
 
-<div class="text-center mt-3"> 
-<a href="{% url 'rakuraku_apps:manage' %}" class="btn btn-secondary btn-lg">戻る</a>
-</div>
 {% include 'footer.html' %}
 
 {% endblock %}
