@@ -11,6 +11,10 @@ from rakuraku_apps.forms.common import LoginForm, SignUpForm
 
 class HomeView(TemplateView):
     template_name = 'home.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['success_message'] = self.request.session.pop('success_message', None)
+        return context
 
 
 

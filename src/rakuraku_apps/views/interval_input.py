@@ -206,6 +206,7 @@ class IntervalConfirmInputView(TemplateView):
             request.session.pop('Al', None)
             request.session.pop('Mg', None)
             request.session.pop('notes', None)
+            request.session['success_message'] = '測定結果を保存しました'
             return redirect('/home/')
         else:
             return redirect('/interval/edit/')
