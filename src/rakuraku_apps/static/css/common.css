@@ -12,7 +12,7 @@ span-container span {
 }
 
 /* その他のスタイル */
-@charset "UTF-8";
+
 
 /* html, body {
   font-family: 'Noto Sans JP', sans-serif;
@@ -221,3 +221,24 @@ body {
   width: 100%; /* 要素の幅を100%にする場合は追加 */
 }
 
+/*管理者画面*/
+.centered-list {
+  padding: 0;
+  margin: 0 auto; /* リスト全体を中央に配置 */
+  list-style: none; /* デフォルトのリストスタイルを削除 */
+  display: block; /* インラインブロックをブロックに変更 */
+  width: fit-content; /* リストの幅をコンテンツに合わせる */
+}
+
+.centered-list li {
+  display: flex; /* フレックスボックスで配置 */
+  align-items: center; /* 垂直方向に中央揃え */
+  text-align: left; /* テキストを左揃え */
+  padding-left: 0; /* 余白を削除 */
+}
+
+.centered-list li::before {
+  content: "•"; /* カスタム箇条書き記号 */
+  margin-right: 10px; /* テキストとの間隔を調整 */
+  flex-shrink: 0; /* 記号が縮小されないようにする */
+}
