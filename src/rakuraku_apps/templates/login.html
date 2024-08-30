@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block PageCss %}
+<link href="{% static '/css/wave.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block title %}
 <div class="text-center">
     <div class="logo mb-5">
@@ -30,8 +34,13 @@
             <button type="submit" class="btn btn-primary">ログイン</button> 
         </div> 
     </form> 
+
+    <div id="wrapper">
+        <canvas id="waveCanvas"></canvas>
+    </div>
 {% endblock %}
 
 {% block extra_js %}
 <script src="{% static 'js/common.js' %}"></script>
+<script src="{% static 'js/wave.js' %}"></script>
 {% endblock %}
