@@ -44,15 +44,19 @@ class WarningRangeForm(forms.ModelForm):
 class WaterQualityThresholdForm(forms.ModelForm):
     class Meta:
         model = WaterQualityThresholdModel
-        fields = ['parameter', 'reference_value_threshold', 'previous_day_threshold']
+        fields = ['parameter', 'reference_value_threshold_min', 'reference_value_threshold_max', 'reference_value_threshold_range', 'previous_day_threshold']
         labels = {
             'parameter': 'パラメーター',
-            'reference_value_threshold': '基準値との差異閾値',
+            'reference_value_threshold_min': '基準の下限値',
+            'reference_value_threshold_max': '基準の上限値',
+            'reference_value_threshold_range': '基準の範囲',
             'previous_day_threshold': '前日との差異閾値',
         }
         widgets = {
             'parameter': forms.Select(attrs={'class': 'form-control'}),
-            'reference_value_threshold': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1', 'required': True}),
+            'reference_value_threshold_min': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1', 'required': True}),
+            'reference_value_threshold_max': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1', 'required': True}),
+            'reference_value_threshold_range': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1', 'required': True}),
             'previous_day_threshold': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1', 'required': True}),
         }
         

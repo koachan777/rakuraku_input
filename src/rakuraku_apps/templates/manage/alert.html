@@ -1,31 +1,40 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>水質アラート設定</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">保存</button>
-    </form>
-    <a href="{% url 'rakuraku_apps:manage' %}">HOME</a>
+<div class="container">
+    <h1 class="text-center mb-4">水質アラート設定</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <form method="post" class="p-4">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <div class="text-center">
+                    <a href="{% url 'rakuraku_apps:manage' %}" class="btn btn-secondary">戻る</a>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            var thresholds = JSON.parse('{{ thresholds|safe }}');
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var thresholds = JSON.parse('{{ thresholds|safe }}');
 
-            $('#id_parameter').change(function() {
-                var selectedParameter = $(this).val();
-                var threshold = thresholds[selectedParameter];
+        $('#id_parameter').change(function() {
+            var selectedParameter = $(this).val();
+            var threshold = thresholds[selectedParameter];
 
-                if (threshold) {
-                    $('#id_reference_value_threshold').val(threshold.reference_value_threshold);
-                    $('#id_previous_day_threshold').val(threshold.previous_day_threshold);
-                } else {
-                    $('#id_reference_value_threshold').val('');
-                    $('#id_previous_day_threshold').val('');
-                }
-            });
+            if (threshold) {
+                $('#id_reference_value_threshold').val(threshold.reference_value_threshold);
+                $('#id_previous_day_threshold').val(threshold.previous_day_threshold);
+            } else {
+                $('#id_reference_value_threshold').val('');
+                $('#id_previous_day_threshold').val('');
+            }
         });
-    </script>
+    });
+</script>
+{% include 'footer.html' %}
 {% endblock %}

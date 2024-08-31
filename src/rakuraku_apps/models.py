@@ -172,7 +172,9 @@ class WaterQualityThresholdModel(BaseModel):
     ]
 
     parameter = models.CharField("パラメーター", max_length=20, choices=PARAMETER_CHOICES)
-    reference_value_threshold = models.FloatField("基準値との差異閾値", null=True, blank=True)
+    reference_value_threshold_min = models.FloatField("基準の下限値", null=True, blank=True)
+    reference_value_threshold_max = models.FloatField("基準の上限値", null=True, blank=True)
+    reference_value_threshold_range = models.FloatField("基準の範囲", null=True, blank=True)
     previous_day_threshold = models.FloatField("前日との差異閾値", null=True, blank=True)
 
     class Meta:
@@ -183,11 +185,13 @@ class WaterQualityThresholdModel(BaseModel):
         return self.get_parameter_display()
 
     @classmethod
-    def update_or_create(cls, parameter, reference_value_threshold=None, previous_day_threshold=None):
+    def update_or_create(cls, parameter, reference_value_threshold_min=None, reference_value_threshold_max=None, previous_day_threshold=None):
         threshold, created = cls.objects.update_or_create(
             parameter=parameter,
             defaults={
-                'reference_value_threshold': reference_value_threshold,
+                'reference_value_threshold_min': reference_value_threshold_min,
+                'reference_value_threshold_max': reference_value_threshold_max,
+                'reference_value_threshold_range': reference_value_threshold_range,
                 'previous_day_threshold': previous_day_threshold,
             }
         )

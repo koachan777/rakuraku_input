@@ -1,9 +1,23 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/wave.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block title %}
-
-<div class="h1">ログイン画面</div> 
+<div class="text-center">
+    <div class="logo mb-5">
+    <img src="{% static 'img/header-logo.png' %}" alt="ロゴ" class="img-fluid mb-3" width="300" height="auto">
+    </div>
+    <div class="h1">ログイン画面</div>
+</div>
 {% endblock %}
+
+{% block header %}
+<!-- Header部分を空にして非表示にする -->
+{% endblock %}
+
 {% block content %}
     <form method="post"> 
     {% csrf_token %} 
@@ -20,4 +34,13 @@
             <button type="submit" class="btn btn-primary">ログイン</button> 
         </div> 
     </form> 
+
+    <div id="wrapper">
+        <canvas id="waveCanvas"></canvas>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/common.js' %}"></script>
+<script src="{% static 'js/wave.js' %}"></script>
 {% endblock %}

@@ -1,17 +1,14 @@
-{% extends 'base.html' %}
-
-{% block content %}
-<h1>水槽を追加する</h1>
-
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">保存</button>
-</form>
-
-<div class="text-center mt-3"> 
-    <a href="{% url 'rakuraku_apps:manage_tank' %}" class="btn btn-link">戻る</a> 
-</div> 
-
-{% endblock %}
-
+{% extends 'base.html' %} {% block content %} 
+<div class="container">
+  <h1 class="text-center mb-4">水槽を追加する</h1>
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <form method="post" class="p-4">{% csrf_token %} {{ form.as_p }} 
+        <div class="text-center">
+            <a href="{% url 'rakuraku_apps:manage_tank' %}" class="btn btn-secondary">戻る</a>
+          <button type="submit" class="btn btn-primary">保存</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>{% include 'footer.html' %} {% endblock %}
