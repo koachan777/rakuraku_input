@@ -43,7 +43,7 @@ body {
   vertical-align: middle;
 }
 
-/*自作ヘッダー*/
+/*ヘッダー*/
 .header {
   display: flex;
   height: 60px;
