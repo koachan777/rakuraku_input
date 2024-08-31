@@ -84,7 +84,9 @@ class ManageAlertView(View):
         form = WaterQualityThresholdForm()
         thresholds = {
             threshold.parameter: {
-                'reference_value_threshold': threshold.reference_value_threshold,
+                'reference_value_threshold_min': threshold.reference_value_threshold_min,
+                'reference_value_threshold_max': threshold.reference_value_threshold_max,
+                'reference_value_threshold_range': threshold.reference_value_threshold_range,
                 'previous_day_threshold': threshold.previous_day_threshold,
             }
             for threshold in WaterQualityThresholdModel.objects.all()
@@ -100,13 +102,17 @@ class ManageAlertView(View):
         form = WaterQualityThresholdForm(request.POST)
         if form.is_valid():
             parameter = form.cleaned_data['parameter']
-            reference_value_threshold = form.cleaned_data['reference_value_threshold']
+            reference_value_threshold_min = form.cleaned_data['reference_value_threshold_min']
+            reference_value_threshold_max = form.cleaned_data['reference_value_threshold_max']
+            reference_value_threshold_range = form.cleaned_data['reference_value_threshold_range']
             previous_day_threshold = form.cleaned_data['previous_day_threshold']
 
             threshold, created = WaterQualityThresholdModel.objects.update_or_create(
                 parameter=parameter,
                 defaults={
-                    'reference_value_threshold': reference_value_threshold,
+                    'reference_value_threshold_min': reference_value_threshold_min,
+                    'reference_value_threshold_max': reference_value_threshold_max,
+                    'reference_value_threshold_range': reference_value_threshold_range,
                     'previous_day_threshold': previous_day_threshold,
                 }
             )

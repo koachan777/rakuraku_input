@@ -89,43 +89,76 @@
                         <p><strong>水槽:</strong> {{ form_data.tank }}</p>
                         <p><strong>室温:</strong> {{ form_data.room_temperature }} ℃</p>
                         <p><strong>水温:</strong> 
-                            <span class="{% if 'water_temperature' in alerts %}highlight-background{% endif %}">
+                            <span class="{% if alerts.water_temperature != '' %}highlight-background{% endif %}">
                                 {{ form_data.water_temperature }} ℃
                             </span>
                         </p>
                         <p>
-                            {% if 'water_temperature' in alerts %}
-                            <span class="alert">{{ alerts.water_temperature }}</span>
+                            {% if alerts.water_temperature %}
+                                <!-- 辞書形式のデータの取得はfor文でしかできない -->
+                                {% for key, value in alerts.water_temperature.items %}
+                                    {% if key == 'previous_day_threshold' %}
+                                        <span class="alert">{{ value }}</span>
+                                    {% elif key == 'reference_value_threshold_min' %}
+                                        <span class="alert">{{ value }}</span>
+                                    {% elif key == 'reference_value_threshold_max' %}
+                                        <span class="alert">{{ value }}</span>
+                                    {% endif %}
+                                {% endfor %}
                             {% endif %}
                         </p>
                         <p><strong>pH:</strong> 
-                            <span class="{% if 'pH' in alerts %}highlight-background{% endif %}">
+                            <span class="{% if alerts.pH != '' %}highlight-background{% endif %}">
                                 {{ form_data.pH }}
                             </span>
                         </p>
                         <p>
-                            {% if 'pH' in alerts %}
-                            <span class="alert">{{ alerts.pH }}</span>
+                            {% if alerts.pH %}
+                                {% for key, value in alerts.pH.items %}
+                                    {% if key == 'previous_day_threshold' %}
+                                        <span class="alert">{{ value }}</span>
+                                    {% elif key == 'reference_value_threshold_min' %}
+                                        <span class="alert">{{ value }}</span>
+                                    {% elif key == 'reference_value_threshold_max' %}
+                                        <span class="alert">{{ value }}</span>
+                                    {% endif %}
+                                {% endfor %}
                             {% endif %}
                         </p>
                         <p><strong>DO:</strong> 
-                            <span class="{% if 'DO' in alerts %}highlight-background{% endif %}">
+                            <span class="{% if alerts.DO != '' %}highlight-background{% endif %}">
                                 {{ form_data.DO }} mg/L
                             </span>
                         </p>
                         <p>
-                            {% if 'DO' in alerts %}
-                            <span class="alert">{{ alerts.DO }}</span>
+                            {% if alerts.DO %}
+                                {% for key, value in alerts.DO.items %}
+                                    {% if key == 'previous_day_threshold' %}
+                                        <span class="alert">{{ value }}</span>
+                                    {% elif key == 'reference_value_threshold_min' %}
+                                        <span class="alert">{{ value }}</span>
+                                    {% elif key == 'reference_value_threshold_max' %}
+                                        <span class="alert">{{ value }}</span>
+                                    {% endif %}
+                                {% endfor %}
                             {% endif %}
                         </p>
                         <p><strong>塩分濃度:</strong> 
-                            <span class="{% if 'salinity' in alerts %}highlight-background{% endif %}">
+                            <span class="{% if alerts.salinity != '' %}highlight-background{% endif %}">
                                 {{ form_data.salinity }} %
                             </span>
                         </p>
                         <p>
-                            {% if 'salinity' in alerts %}
-                            <span class="alert">{{ alerts.salinity }}</span>
+                            {% if alerts.salinity %}
+                                {% for key, value in alerts.salinity.items %}
+                                    {% if key == 'previous_day_threshold' %}
+                                        <span class="alert">{{ value }}</span>
+                                    {% elif key == 'reference_value_threshold_min' %}
+                                        <span class="alert">{{ value }}</span>
+                                    {% elif key == 'reference_value_threshold_max' %}
+                                        <span class="alert">{{ value }}</span>
+                                    {% endif %}
+                                {% endfor %}
                             {% endif %}
                         </p>
 

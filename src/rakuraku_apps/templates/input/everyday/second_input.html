@@ -20,7 +20,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="pH" class="form-label">pH</label>
-                            <input type="number" name="pH" class="form-control" min="0" max="14" step="0.1" value="{{ form_data.pH }}" required>
+                            <input type="number" name="pH" class="form-control" min="0" max="14" step="0.01" value="{{ form_data.pH }}" required>
                         </div>
                         <div class="mb-3">
                             <label for="DO" class="form-label">DO</label>
@@ -28,7 +28,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="salinity" class="form-label">塩分濃度</label>
-                            <input type="number" name="salinity" class="form-control" min="0" max="100" step="0.1" value="{{ form_data.salinity }}" required>
+                            <input type="number" name="salinity" class="form-control" min="0" max="100" step="0.01" value="{{ form_data.salinity }}" required>
                         </div>
                         <div class="d-grid gap-2">
                             <button type="submit" class="btn btn-primary btn-lg">次へ</button>

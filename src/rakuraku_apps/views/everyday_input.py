@@ -153,7 +153,7 @@ class EverydayConfirmInputView(TemplateView):
 
 
         # 基準値を取得
-        standard_value = StandardValueModel.get_or_create()
+        # standard_value = StandardValueModel.get_or_create()
 
         # 閾値を取得
         thresholds = {t.parameter: t for t in WaterQualityThresholdModel.objects.all()}
@@ -161,24 +161,50 @@ class EverydayConfirmInputView(TemplateView):
         # アラートメッセージを格納する辞書
         context['alerts'] = {}
         
-        print("standard_value", standard_value)
+        # print("standard_value", standard_value)
         print("thresholds", thresholds)
 
         # 各パラメーターについて基準値と比較
         for param in ['water_temperature', 'pH', 'DO', 'salinity', 'NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg']:
             input_value = self.request.session.get(param)
             if input_value:
-                print(f"{param} : {input_value}")
-                standard_value_param = getattr(standard_value, param)
-                print(f"standard_value_param : {standard_value_param}")
                 threshold = thresholds.get(param)
-                print(f"threshold : {threshold}")
-                if standard_value_param and threshold:
-                    diff = abs(float(input_value) - standard_value_param)
-                    if diff > threshold.reference_value_threshold:
-                        context['alerts'][param] = "基準値の範囲を超えています"
+                print(f"{param} : {input_value} min : {threshold.reference_value_threshold_min} max : {threshold.reference_value_threshold_max} range : {threshold.reference_value_threshold_range} previous_day_threshold : {threshold.previous_day_threshold} ")
+                
+                context['alerts'][param] = ""
+                
+                previous_value = getattr(previous_data['1日前'], param, None)
+                if previous_value is not None and input_value is not None:
+                    if abs(float(previous_value) - float(input_value)) > threshold.previous_day_threshold:
+                        _arrow = ''
+                        if float(previous_value) - float(input_value) > 0:
+                            _arrow = '↓'    
+                        else:
+                            _arrow = '↑'
+                        context['alerts'][param] = {'previous_day_threshold': f"昨日から{round(abs(float(previous_value) - float(input_value)), 2)}{_arrow}"}
                         
-        print("context", context)
+                         
+                
+                # 基準値の最小値と最大値が同じ場合 → 基準値が一つの場合のもの
+                if threshold.reference_value_threshold_min == threshold.reference_value_threshold_max:
+                    try:
+                        if float(input_value) < threshold.reference_value_threshold_range - threshold.reference_value_threshold_min:
+                            context['alerts'][param] = {"reference_value_threshold_min": "基準値以下"}
+                        elif float(input_value) > threshold.reference_value_threshold_range + threshold.reference_value_threshold_min:
+                            context['alerts'][param] = {"reference_value_threshold_max": "基準値以上"}
+                    except:
+                        pass
+                        # おそらくmin, max, rangeがNoneの場合でうまく処理できていないとき，例外処理を何にするかは未定
+                
+                # 基準値の最小値と最大値が異なる場合
+                else:
+                    if threshold.reference_value_threshold_min != None and float(input_value) < threshold.reference_value_threshold_min:
+                        context['alerts'][param] = {"reference_value_threshold_min": "基準値以下"}
+                    elif threshold.reference_value_threshold_max != None and float(input_value) > threshold.reference_value_threshold_max:
+                        context['alerts'][param] = {"reference_value_threshold_max": "基準値以上"}
+                
+                        
+        # print("context", context)
 
         return context
 
