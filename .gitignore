@@ -10,3 +10,6 @@ src/rakuraku_apps/migrations/0002_shrimpmodel_alter_standardvaluemodel_al_and_mo
 src/.vscode/launch.json
 MySQL.md
 shellコマンドまとめ.md
+src/rakuraku_apps/migrations/0002_remove_waterqualitythresholdmodel_reference_value_threshold_and_more.py
+src/rakuraku_apps/migrations/0003_waterqualitythresholdmodel_reference_value_threshold_range.py
+_shell.py

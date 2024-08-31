@@ -1,26 +1,8 @@
-/* <span>で区切られた部分を等間隔に配置 */
-span-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 10px; /* スパン間の間隔を調整 */
-}
-
-span-container span {
-  flex: 1; /* 各スパンのサイズを均等にする */
-  text-align: center; /* テキストを中央揃え */
-}
-
-/* その他のスタイル */
-@charset "UTF-8";
-
 html, body {
-  font-family: 'Noto Sans JP', sans-serif;
   margin: 0;
   padding: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;  /* ページ全体がスクロール可能に */
+  height: 100%; /* ビューポート全体をカバー */
+  font-family: 'Noto Sans JP', sans-serif;
 }
 
 body {
@@ -29,19 +11,26 @@ body {
   min-height: 100vh; /* 画面全体を埋める */
 }
 
+.container {
+  flex: 1; /* コンテンツ部分が残りのスペースを取る */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* コンテンツを中央に配置（縦方向） */
+}
+
 /*footer*/
 .footline {
-    position: absolute;
-    bottom: 0px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    z-index: 1000;
-    padding: 5px 10px;
-    width: auto;
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 1000;
+  padding: 5px 10px;
+  width: auto;
 }
 
 /* 管理者画面のタイトルスタイル */
@@ -90,21 +79,17 @@ body {
   font-weight: 700;
   text-decoration: underline;
   text-decoration-thickness: 2px;
-  /* text-decoration: none; */
 }
-
 
 .footer {
-  margin-top: auto;
-  text-align: center;
   width: 100%;
   height: 60px;
-  z-index: 1000;
   display: flex;
-  justify-content: center; /* フッター内のコンテンツを中央揃え */
-  align-items: center; /* フッター内のコンテンツを上下中央揃え */
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin-top: auto;
 }
-
 
 .footer img {
   display: block;
@@ -112,9 +97,9 @@ body {
 }
 
 .original-btn {
-  display: flex; /* アイコンとテキストを横並びにする */
-  align-items: center; /* アイコンとテキストを上下中央揃え */
-  justify-content: center; /* ボタン内でコンテンツを中央揃え */
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   text-decoration: none;
   width: 120px;
@@ -123,24 +108,18 @@ body {
   padding: 10px;
   font-weight: bold;
   border-radius: 0.3rem;
-  border-bottom: 7px solid #1B3C6F;
+  /* border-bottom: 7px solid #1B3C6F; */
   background-color: rgba(47, 93, 163, 0.8);
   color: #fff;
   position: relative;
 }
 
 .original-btn i {
-  margin-right: 8px; /* アイコンとテキストの間にスペースを追加 */
-}
-
-.original-btn:hover {
-  margin-top: 6px;
-  border-bottom: 1px solid #1B3C6F;
-  color: #fff;
+  margin-right: 8px;
 }
 
 .original-btn i {
-  margin-right: 8px; /* アイコンとテキストの間にスペースを追加 */
+  margin-right: 8px;
 }
 
 .footer-btn-txt {
@@ -156,23 +135,9 @@ body {
   padding: 16px 8px;
   font-weight: bold;
   border-radius: 0.3rem;
-  border-bottom: 7px solid #1B3C6F;
+  /* border-bottom: 7px solid #1B3C6F; */
   background-color: rgba(47, 93, 163, 0.8);
   color: #fff;
-}
-
-.original-long-btn:hover {
-  margin-top: 6px;
-  border-bottom: 1px solid #1B3C6F;
-  color: #fff;
-}
-
-/* 基準値のスタイル */
-.info {
-  font-size: 0.3rem; /* 基準値のフォントサイズ */
-  color: #555; /* 基準値の文字色 */
-  margin-top: 0;
-  margin-left: 10px; /* アラートメッセージと基準値の間隔 */
 }
 
 /* アラートメッセージのスタイル */
@@ -185,15 +150,4 @@ body {
   background-color: #ffcccc; /* アラートがある場合の背景色 */
   padding: 3px;
   border-radius: 3px;
-}
-
-
-.botton {
-  background-color: red;
-}
-
-.left-aligned-container {
-  text-align: left; /* テキストの左寄せ */
-  float: left; /* 要素全体を左寄せ */
-  width: 100%; /* 要素の幅を100%にする場合は追加 */
 }

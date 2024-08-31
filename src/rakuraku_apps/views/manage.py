@@ -16,6 +16,7 @@ from rakuraku_apps.models import WaterQualityThresholdModel
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from rakuraku_apps.forms.manage import TankForm, ShrimpForm
+from django.db.models import Prefetch, Count
 
 
 
@@ -39,12 +40,16 @@ class ManageUserView(ListView):
 class ManageTankView(ListView):
     model = TankModel
     template_name = 'manage/tank.html'
-    context_object_name = 'tanks'
+    context_object_name = 'shrimps'
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = TankForm()
-        return context
+    def get_queryset(self):
+        return ShrimpModel.objects.annotate(
+            tank_count=Count('tank')
+        ).filter(
+            tank_count__gt=0
+        ).prefetch_related(
+            Prefetch('tank', queryset=TankModel.objects.order_by('name'))
+        )
 
 class CreateTankView(CreateView):
     model = TankModel

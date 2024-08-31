@@ -1,9 +1,12 @@
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
+
 from django.utils import timezone
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
 from rakuraku_apps.models import StandardValueModel, TankModel, WaterQualityModel, WaterQualityThresholdModel
 from rakuraku_apps.forms.input import WaterQualityForm
+
+# import requests
 
 
 class EverydayOrIntervalView(TemplateView):
@@ -22,7 +25,6 @@ class EverydayFirstInputView(TemplateView):
         context['tanks'] = TankModel.objects.all()
         today = date.today()
         context['today'] = today.strftime('%Y-%m-%d')
-        # context['amedama'] = 'amedamaとは？'
 
         # その日の日付のデータがすでに存在する場合は、そのデータを初期値として設定
         water_qualities = WaterQualityModel.objects.filter(date=today)
@@ -110,7 +112,6 @@ class EverydayCommentInputView(TemplateView):
     def post(self, request, *args, **kwargs):
         request.session['notes'] = request.POST['notes']
         return redirect('/everyday/confirm/')
-
 
 
 class EverydayConfirmInputView(TemplateView):
@@ -229,6 +230,13 @@ class EverydayConfirmInputView(TemplateView):
 
         if form.is_valid():
             form.save()
+
+            #ライン通知する際はコメントアウトを外す
+            # アラートが発生していた場合、LINEグループに通知を送信
+            # context = self.get_context_data()
+            # if context['alerts']:
+            #     self.send_line_notify(context['alerts'], context['form_data'])
+
             request.session.pop('water_quality_id', None)
             request.session.pop('date', None)
             request.session.pop('tank', None)
@@ -238,11 +246,42 @@ class EverydayConfirmInputView(TemplateView):
             request.session.pop('DO', None)
             request.session.pop('salinity', None)
             request.session.pop('notes', None)
+            request.session['success_message'] = '測定結果を保存しました'
             return redirect('/home/')
         else:
             return redirect('/everyday/edit/')
 
 
+    #ライン通知する際はコメントアウトを外す
+    # def send_line_notify(self, alerts, form_data):
+    #     line_notify_token = ''  # LINEグループ用のアクセストークンを設定
+    #     line_notify_api = 'https://notify-api.line.me/api/notify'
+
+    #     # 文字列から日付型に変換する
+    #     date_obj = datetime.strptime(form_data['date'], '%Y-%m-%d')
+    #     date_str = date_obj.strftime('%Y年%m月%d日')
+    #     alert_message = f"{date_str}\n\n"
+
+    #     if 'water_temperature' in alerts:
+    #         alert_message += f"水温: {form_data['water_temperature']}℃\n"
+    #         alert_message += f"{alerts['water_temperature']}\n\n"
+
+    #     if 'pH' in alerts:
+    #         alert_message += f"pH: {form_data['pH']}\n"
+    #         alert_message += f"{alerts['pH']}\n\n"
+
+    #     if 'DO' in alerts:
+    #         alert_message += f"DO: {form_data['DO']} mg/L\n"
+    #         alert_message += f"{alerts['DO']}\n\n"
+
+    #     if 'salinity' in alerts:
+    #         alert_message += f"塩分濃度: {form_data['salinity']} %\n"
+    #         alert_message += f"{alerts['salinity']}\n\n"
+
+    #     payload = {'message': alert_message.strip()}
+    #     headers = {'Authorization': f'Bearer {line_notify_token}'}
+
+    #     requests.post(line_notify_api, data=payload, headers=headers)
 
 class EverydayEditView(TemplateView):
     template_name = 'input/everyday/edit.html'
