@@ -1,11 +1,13 @@
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 
-from django.utils import timezone
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
 from rakuraku_apps.models import StandardValueModel, TankModel, WaterQualityModel, WaterQualityThresholdModel
 from rakuraku_apps.forms.input import WaterQualityForm
-
+from django.views.generic import TemplateView
+from django.shortcuts import redirect
+from rakuraku_apps.models import StandardValueModel, TankModel, WaterQualityModel, WaterQualityThresholdModel
+from rakuraku_apps.forms.input import WaterQualityForm
 # import requests
 
 
@@ -25,6 +27,7 @@ class EverydayFirstInputView(TemplateView):
         context['tanks'] = TankModel.objects.all()
         today = date.today()
         context['today'] = today.strftime('%Y-%m-%d')
+        # context['amedama'] = 'amedamaとは？'
 
         # その日の日付のデータがすでに存在する場合は、そのデータを初期値として設定
         water_qualities = WaterQualityModel.objects.filter(date=today)
@@ -131,81 +134,26 @@ class EverydayConfirmInputView(TemplateView):
             'salinity': self.request.session.get('salinity', ''),
             'notes': self.request.session.get('notes', ''),
         }
-        
-        # 過去のデータの表示
-        # セッションデータから日付とタンクIDを取得
-        current_date = timezone.datetime.strptime(self.request.session.get('date', ''), '%Y-%m-%d').date()
-        tank_id = self.request.session.get('tank', '')
-
-        # 過去のデータを取得
-        previous_data = {
-            '1日前': WaterQualityModel.objects.filter(date=current_date - timedelta(days=1), tank_id=tank_id).first(),
-            '2日前': WaterQualityModel.objects.filter(date=current_date - timedelta(days=2), tank_id=tank_id).first(),
-            '7日前': WaterQualityModel.objects.filter(date=current_date - timedelta(days=7), tank_id=tank_id).first(),
-            '14日前': WaterQualityModel.objects.filter(date=current_date - timedelta(days=14), tank_id=tank_id).first(),
-            '1か月前': WaterQualityModel.objects.filter(date=current_date - timedelta(days=30), tank_id=tank_id).first(),
-            '1年前': WaterQualityModel.objects.filter(date=current_date - timedelta(days=365), tank_id=tank_id).first(),
-        }
-
-        # 結果を表示
-        # print("previous_data", previous_data)
-        
-        context['previous_data'] = previous_data       
-
 
         # 基準値を取得
-        # standard_value = StandardValueModel.get_or_create()
+        standard_value = StandardValueModel.get_or_create()
 
         # 閾値を取得
         thresholds = {t.parameter: t for t in WaterQualityThresholdModel.objects.all()}
 
         # アラートメッセージを格納する辞書
         context['alerts'] = {}
-        
-        # print("standard_value", standard_value)
-        print("thresholds", thresholds)
 
         # 各パラメーターについて基準値と比較
         for param in ['water_temperature', 'pH', 'DO', 'salinity', 'NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg']:
             input_value = self.request.session.get(param)
             if input_value:
+                standard_value_param = getattr(standard_value, param)
                 threshold = thresholds.get(param)
-                print(f"{param} : {input_value} min : {threshold.reference_value_threshold_min} max : {threshold.reference_value_threshold_max} range : {threshold.reference_value_threshold_range} previous_day_threshold : {threshold.previous_day_threshold} ")
-                
-                context['alerts'][param] = ""
-                
-                previous_value = getattr(previous_data['1日前'], param, None)
-                if previous_value is not None and input_value is not None:
-                    if abs(float(previous_value) - float(input_value)) > threshold.previous_day_threshold:
-                        _arrow = ''
-                        if float(previous_value) - float(input_value) > 0:
-                            _arrow = '↓'    
-                        else:
-                            _arrow = '↑'
-                        context['alerts'][param] = {'previous_day_threshold': f"昨日から{round(abs(float(previous_value) - float(input_value)), 2)}{_arrow}"}
-                        
-                         
-                
-                # 基準値の最小値と最大値が同じ場合 → 基準値が一つの場合のもの
-                if threshold.reference_value_threshold_min == threshold.reference_value_threshold_max:
-                    try:
-                        if float(input_value) < threshold.reference_value_threshold_range - threshold.reference_value_threshold_min:
-                            context['alerts'][param] = {"reference_value_threshold_min": "基準値以下"}
-                        elif float(input_value) > threshold.reference_value_threshold_range + threshold.reference_value_threshold_min:
-                            context['alerts'][param] = {"reference_value_threshold_max": "基準値以上"}
-                    except:
-                        pass
-                        # おそらくmin, max, rangeがNoneの場合でうまく処理できていないとき，例外処理を何にするかは未定
-                
-                # 基準値の最小値と最大値が異なる場合
-                else:
-                    if threshold.reference_value_threshold_min != None and float(input_value) < threshold.reference_value_threshold_min:
-                        context['alerts'][param] = {"reference_value_threshold_min": "基準値以下"}
-                    elif threshold.reference_value_threshold_max != None and float(input_value) > threshold.reference_value_threshold_max:
-                        context['alerts'][param] = {"reference_value_threshold_max": "基準値以上"}
-                
-                        
-        # print("context", context)
+                if standard_value_param and threshold:
+                    diff = abs(float(input_value) - standard_value_param)
+                    if diff > threshold.reference_value_threshold:
+                        context['alerts'][param] = "基準値の範囲を超えています"
 
         return context
 

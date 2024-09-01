@@ -7,221 +7,69 @@
 {% block content %}
 {% if user.is_authenticated %}
 
-<style>
-.table-responsive {
-    overflow-x: auto; /* 横スクロールを有効にする */
-    display: block; /* ブロック要素として表示 */
-    width: 100%; /* 親要素の幅を100%に設定 */
-    max-width: 100%; /* 親要素の最大幅を100%に設定 */
-}
-
-.table {
-    table-layout: auto; /* テーブルのレイアウトを自動に設定 */
-    min-width: 200px; /* テーブル全体の幅を自動に設定 */
-
-}
-
-.table th, .table td {
-    /* padding: 16px; セルのパディングを調整 */
-    white-space: nowrap; /* テキストの折り返しを防止 */
-}
-
-
-
-.highlight-background {
-    background-color: yellow; /* アラートの背景色を設定 */
-}
-
-.alert {
-    color: red; /* アラートのテキスト色を設定 */
-}
-
-.field {
-    display: flex;
-}
-
-.d-inline-block.text-start {
-    width: 300px;  /*必要に応じて調整 */
-}
-
-/* スクロールバーの高さ */
-.table-responsive::-webkit-scrollbar {
-    height: 5px; 
-}
-
-/* スクロールバーの色 */
-.table-responsive::-webkit-scrollbar-thumb {
-    background: #888; 
-}
-
-/* スクロールバーのホバー時の色 */
-.table-responsive::-webkit-scrollbar-thumb:hover {
-    background: #555; 
-}
-
-/* スクロールバーの高さ */
-.table-responsive-inner::-webkit-scrollbar {
-    height: 20px; 
-}
-
-/* スクロールバーの色 */
-.table-responsive-inner::-webkit-scrollbar-thumb {
-    background: #888; 
-}
-
-/* スクロールバーのホバー時の色 */
-.table-responsive-inner::-webkit-scrollbar-thumb:hover {
-    background: #555; 
-}
-
-</style>
-
-
-
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card-body">
                 <h2 class="card-title text-center mb-4">入力内容の確認</h2>
-                <div class="field">
-                    <div class="d-inline-block text-start">
-                        <p><strong>計測日:</strong> {{ form_data.date }}</p>
-                        <p><strong>水槽:</strong> {{ form_data.tank }}</p>
-                        <p><strong>室温:</strong> {{ form_data.room_temperature }} ℃</p>
-                        <p><strong>水温:</strong> 
-                            <span class="{% if alerts.water_temperature != '' %}highlight-background{% endif %}">
-                                {{ form_data.water_temperature }} ℃
-                            </span>
-                        </p>
-                        <p>
-                            {% if alerts.water_temperature %}
-                                <!-- 辞書形式のデータの取得はfor文でしかできない -->
-                                {% for key, value in alerts.water_temperature.items %}
-                                    {% if key == 'previous_day_threshold' %}
-                                        <span class="alert">{{ value }}</span>
-                                    {% elif key == 'reference_value_threshold_min' %}
-                                        <span class="alert">{{ value }}</span>
-                                    {% elif key == 'reference_value_threshold_max' %}
-                                        <span class="alert">{{ value }}</span>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        </p>
-                        <p><strong>pH:</strong> 
-                            <span class="{% if alerts.pH != '' %}highlight-background{% endif %}">
-                                {{ form_data.pH }}
-                            </span>
-                        </p>
-                        <p>
-                            {% if alerts.pH %}
-                                {% for key, value in alerts.pH.items %}
-                                    {% if key == 'previous_day_threshold' %}
-                                        <span class="alert">{{ value }}</span>
-                                    {% elif key == 'reference_value_threshold_min' %}
-                                        <span class="alert">{{ value }}</span>
-                                    {% elif key == 'reference_value_threshold_max' %}
-                                        <span class="alert">{{ value }}</span>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        </p>
-                        <p><strong>DO:</strong> 
-                            <span class="{% if alerts.DO != '' %}highlight-background{% endif %}">
-                                {{ form_data.DO }} mg/L
-                            </span>
-                        </p>
-                        <p>
-                            {% if alerts.DO %}
-                                {% for key, value in alerts.DO.items %}
-                                    {% if key == 'previous_day_threshold' %}
-                                        <span class="alert">{{ value }}</span>
-                                    {% elif key == 'reference_value_threshold_min' %}
-                                        <span class="alert">{{ value }}</span>
-                                    {% elif key == 'reference_value_threshold_max' %}
-                                        <span class="alert">{{ value }}</span>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        </p>
-                        <p><strong>塩分濃度:</strong> 
-                            <span class="{% if alerts.salinity != '' %}highlight-background{% endif %}">
-                                {{ form_data.salinity }} %
-                            </span>
-                        </p>
-                        <p>
-                            {% if alerts.salinity %}
-                                {% for key, value in alerts.salinity.items %}
-                                    {% if key == 'previous_day_threshold' %}
-                                        <span class="alert">{{ value }}</span>
-                                    {% elif key == 'reference_value_threshold_min' %}
-                                        <span class="alert">{{ value }}</span>
-                                    {% elif key == 'reference_value_threshold_max' %}
-                                        <span class="alert">{{ value }}</span>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        </p>
+                <div class="d-inline-block text-start">
+                    <p><strong>計測日:</strong> {{ form_data.date }}</p>
+                    <p><strong>水槽:</strong> {{ form_data.tank }}</p>
+                    <span><strong>室温:</strong> {{ form_data.room_temperature }} ℃</span>
+                    <span>昨日</span>
+                    <span>一昨日</span>
+                    
+                    <p><strong>水温:</strong> 
+                        <span class="{% if 'water_temperature' in alerts %}highlight-background{% endif %}">
+                            {{ form_data.water_temperature }} ℃
+                        </span>
+                        <span>値</span>
+                        <span>値</span>
+                    </p>
+                    <p>
+                        {% if 'water_temperature' in alerts %}
+                        <span class="alert">{{ alerts.water_temperature }}</span>
+                        {% endif %}
+                    </p>
 
-                    </div>
-                    <div class="table-responsive mt-4">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    {% if previous_data.1日前 %}<th>昨日</th>{% endif %}
-                                    {% if previous_data.2日前 %}<th>一昨日</th>{% endif %}
-                                    {% if previous_data.7日前 %}<th>1週間前</th>{% endif %}
-                                    {% if previous_data.14日前 %}<th>2週間前</th>{% endif %}
-                                    {% if previous_data.1か月前 %}<th>1か月前</th>{% endif %}
-                                    {% if previous_data.1年前 %}<th>1年前</th>{% endif %}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    {% if previous_data.1日前 %}<td>{{ previous_data.1日前.water_temperature }}℃</td>{% endif %}
-                                    {% if previous_data.2日前 %}<td>{{ previous_data.2日前.water_temperature }}℃</td>{% endif %}
-                                    {% if previous_data.7日前 %}<td>{{ previous_data.7日前.water_temperature }}℃</td>{% endif %}
-                                    {% if previous_data.14日前 %}<td>{{ previous_data.14日前.water_temperature }}℃</td>{% endif %}
-                                    {% if previous_data.1か月前 %}<td>{{ previous_data.1か月前.water_temperature }}℃</td>{% endif %}
-                                    {% if previous_data.1年前 %}<td>{{ previous_data.1年前.water_temperature }}℃</td>{% endif %}
-                                </tr>
-                                <tr>
-                                    {% if previous_data.1日前 %}<td>{{ previous_data.1日前.room_temperature }}℃</td>{% endif %}
-                                    {% if previous_data.2日前 %}<td>{{ previous_data.2日前.room_temperature }}℃</td>{% endif %}
-                                    {% if previous_data.7日前 %}<td>{{ previous_data.7日前.room_temperature }}℃</td>{% endif %}
-                                    {% if previous_data.14日前 %}<td>{{ previous_data.14日前.room_temperature }}℃</td>{% endif %}
-                                    {% if previous_data.1か月前 %}<td>{{ previous_data.1か月前.room_temperature }}℃</td>{% endif %}
-                                    {% if previous_data.1年前 %}<td>{{ previous_data.1年前.room_temperature }}℃</td>{% endif %}
-                                </tr>
-                                <tr>
-                                    {% if previous_data.1日前 %}<td>{{ previous_data.1日前.pH }}</td>{% endif %}
-                                    {% if previous_data.2日前 %}<td>{{ previous_data.2日前.pH }}</td>{% endif %}
-                                    {% if previous_data.7日前 %}<td>{{ previous_data.7日前.pH }}</td>{% endif %}
-                                    {% if previous_data.14日前 %}<td>{{ previous_data.14日前.pH }}</td>{% endif %}
-                                    {% if previous_data.1か月前 %}<td>{{ previous_data.1か月前.pH }}</td>{% endif %}
-                                    {% if previous_data.1年前 %}<td>{{ previous_data.1年前.pH }}</td>{% endif %}
-                                </tr>
-                                <tr>
-                                    {% if previous_data.1日前 %}<td>{{ previous_data.1日前.DO }}</td>{% endif %}
-                                    {% if previous_data.2日前 %}<td>{{ previous_data.2日前.DO }}</td>{% endif %}
-                                    {% if previous_data.7日前 %}<td>{{ previous_data.7日前.DO }}</td>{% endif %}
-                                    {% if previous_data.14日前 %}<td>{{ previous_data.14日前.DO }}</td>{% endif %}
-                                    {% if previous_data.1か月前 %}<td>{{ previous_data.1か月前.DO }}</td>{% endif %}
-                                    {% if previous_data.1年前 %}<td>{{ previous_data.1年前.DO }}</td>{% endif %}
-                                </tr>
-                                <tr>
-                                    {% if previous_data.1日前 %}<td>{{ previous_data.1日前.salinity }}</td>{% endif %}
-                                    {% if previous_data.2日前 %}<td>{{ previous_data.2日前.salinity }}</td>{% endif %}
-                                    {% if previous_data.7日前 %}<td>{{ previous_data.7日前.salinity }}</td>{% endif %}
-                                    {% if previous_data.14日前 %}<td>{{ previous_data.14日前.salinity }}</td>{% endif %}
-                                    {% if previous_data.1か月前 %}<td>{{ previous_data.1か月前.salinity }}</td>{% endif %}
-                                    {% if previous_data.1年前 %}<td>{{ previous_data.1年前.salinity }}</td>{% endif %}
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <p><strong>pH:</strong> 
+                        <span class="{% if 'pH' in alerts %}highlight-background{% endif %}">
+                            {{ form_data.pH }}
+                        </span>
+                        <span>値</span>
+                        <span>値</span>
+                    </p>
+                    <p>
+                        {% if 'pH' in alerts %}
+                        <span class="alert">{{ alerts.pH }}</span>
+                        {% endif %}
+                    </p>
 
-                </div>
-                <div class="text-start">
+                    <p><strong>DO:</strong> 
+                        <span class="{% if 'DO' in alerts %}highlight-background{% endif %}">
+                            {{ form_data.DO }} mg/L
+                        </span>
+                        <span>値</span>
+                        <span>値</span>
+                    </p>
+                    <p>
+                        {% if 'DO' in alerts %}
+                        <span class="alert">{{ alerts.DO }}</span>
+                        {% endif %}
+                    </p>
+
+                    <p><strong>塩分濃度:</strong> 
+                        <span class="{% if 'salinity' in alerts %}highlight-background{% endif %}">
+                            {{ form_data.salinity }} %
+                        </span>
+                        <span>値</span>
+                        <span>値</span>
+                    </p>
+                        {% if 'salinity' in alerts %}
+                        <span class="alert">{{ alerts.salinity }}</span>
+                        {% endif %}
+                    </p>
+
                     <p><strong>備考:</strong> {{ form_data.notes }}</p>
                 </div>
             </div>

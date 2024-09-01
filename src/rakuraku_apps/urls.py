@@ -38,9 +38,6 @@ from rakuraku_apps.views.manage import (
     ManageView
 )
 
-from django.urls import path
-from .views.manage import PopulateDBView, ClearDBView
-
 app_name = "rakuraku_apps"
 
 urlpatterns = [
@@ -116,10 +113,4 @@ urlpatterns = [
 
     # 管理者画面　警告範囲
     path('manage/alert/',  ManageAlertView.as_view(), name='manage_alert'),
-    
-    # 管理者画面　データベースのダミーデータを入れる
-    path('populate_db/', PopulateDBView.as_view(), name='populate_db'),
-
-    # 管理者画面　データベースのダミーデータを削除する
-    path('clear_db/', ClearDBView.as_view(), name='clear_db'),
 ]

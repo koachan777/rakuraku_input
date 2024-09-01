@@ -8,8 +8,3 @@ src/rakuraku_apps/migrations/0003_alter_waterqualitymodel_unique_together.py
 src/rakuraku_apps/migrations/0004_shrimpmodel_tankmodel_shrimp.py
 src/rakuraku_apps/migrations/0002_shrimpmodel_alter_standardvaluemodel_al_and_more.py
 src/.vscode/launch.json
-MySQL.md
-shellコマンドまとめ.md
-src/rakuraku_apps/migrations/0002_remove_waterqualitythresholdmodel_reference_value_threshold_and_more.py
-src/rakuraku_apps/migrations/0003_waterqualitythresholdmodel_reference_value_threshold_range.py
-_shell.py
