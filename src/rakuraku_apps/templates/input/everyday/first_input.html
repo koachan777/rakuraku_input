@@ -10,29 +10,32 @@
 <div class="container"> 
     <div class="row justify-content-center"> 
         <div class="col-md-6"> 
-            <div class="card-body"> 
-                
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label for="date" class="form-label">計測日</label>
-                        <input type="date" name="date" class="form-control" value="{{ today }}" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="tank" class="form-label">水槽</label>
-                        <select name="tank" class="form-select" required>
-                            {% for tank in tanks %}
-                                <option value="{{ tank.id }}">{{ tank.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="mb-3">
-                        <label for="room_temperature" class="form-label">室温</label>
-                        <input type="number" name="room_temperature" class="form-control" min="0" max="100" required>
-                    </div>
-                    <button type="submit" class="original-btn">次へ</button>
-                </form>
-            </div> 
+                <div class="card-body"> 
+                    
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="date" class="form-label">計測日</label>
+                            <input type="date" name="date" class="form-control" value="{{ today }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="tank" class="form-label">水槽</label>
+                            <select name="tank" class="form-select" required>
+                                {% for tank in tanks %}
+                                    <option value="{{ tank.id }}">{{ tank.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="room_temperature" class="form-label">室温</label>
+                            <input type="number" name="room_temperature" class="form-control" min="0" max="100" step="0.1" value="{{ form_data.room_temperature }}" required>
+                        </div>
+                        <!-- <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">次へ</button>
+                        </div> -->
+                        <button type="submit" class="original-btn">次へ</button>
+                    </form>
+                </div> 
         </div> 
     </div> 
 </div> 

@@ -89,7 +89,9 @@ class ManageAlertView(View):
         form = WaterQualityThresholdForm()
         thresholds = {
             threshold.parameter: {
-                'reference_value_threshold': threshold.reference_value_threshold,
+                'reference_value_threshold_min': threshold.reference_value_threshold_min,
+                'reference_value_threshold_max': threshold.reference_value_threshold_max,
+                'reference_value_threshold_range': threshold.reference_value_threshold_range,
                 'previous_day_threshold': threshold.previous_day_threshold,
             }
             for threshold in WaterQualityThresholdModel.objects.all()
@@ -105,13 +107,17 @@ class ManageAlertView(View):
         form = WaterQualityThresholdForm(request.POST)
         if form.is_valid():
             parameter = form.cleaned_data['parameter']
-            reference_value_threshold = form.cleaned_data['reference_value_threshold']
+            reference_value_threshold_min = form.cleaned_data['reference_value_threshold_min']
+            reference_value_threshold_max = form.cleaned_data['reference_value_threshold_max']
+            reference_value_threshold_range = form.cleaned_data['reference_value_threshold_range']
             previous_day_threshold = form.cleaned_data['previous_day_threshold']
 
             threshold, created = WaterQualityThresholdModel.objects.update_or_create(
                 parameter=parameter,
                 defaults={
-                    'reference_value_threshold': reference_value_threshold,
+                    'reference_value_threshold_min': reference_value_threshold_min,
+                    'reference_value_threshold_max': reference_value_threshold_max,
+                    'reference_value_threshold_range': reference_value_threshold_range,
                     'previous_day_threshold': previous_day_threshold,
                 }
             )
@@ -122,3 +128,49 @@ class ManageAlertView(View):
             'form': form,
         }
         return render(request, 'manage/alert.html', context)
+    
+    
+    
+from django.core.management import call_command
+from django.http import HttpResponse
+from django.views.generic.edit import FormView
+from rakuraku_apps.forms.manage import PopulateDBForm, ClearDBForm
+
+class PopulateDBView(FormView):
+    template_name = 'manage/populate_db.html'
+    form_class = PopulateDBForm
+    success_url = reverse_lazy('rakuraku_apps:manage_tank')
+
+    def form_valid(self, form):
+        # users = form.cleaned_data.get('users')
+        tanks = form.cleaned_data.get('tanks')
+        water_quality = form.cleaned_data.get('water_quality')
+
+        # if users:
+        #     call_command('populate_db', users=users)
+        if tanks:
+            call_command('populate_db', tanks=tanks)
+        if water_quality:
+            call_command('populate_db', wq=water_quality)
+
+        return super().form_valid(form)
+
+class ClearDBView(FormView):
+    template_name = 'manage/clear_db.html'
+    form_class = ClearDBForm
+    success_url = reverse_lazy('rakuraku_apps:manage_tank')
+
+    def form_valid(self, form):
+        # users = form.cleaned_data.get('users')
+        tanks = form.cleaned_data.get('tanks')
+        water_quality = form.cleaned_data.get('water_quality')
+
+        # if users:
+        #     call_command('clear_db', users=True)
+        if tanks:
+            call_command('clear_db', tanks=True)
+        if water_quality:
+            call_command('clear_db', wq=True)
+
+        return super().form_valid(form)
+    

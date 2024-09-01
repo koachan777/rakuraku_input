@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>データベースにデータを追加</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">実行</button>
+</form>
+
+<div class="text-center mt-3">
+    <a href="{% url 'rakuraku_apps:manage_tank' %}" class="btn btn-link">戻る</a>
+</div>
+
+{% endblock %}
