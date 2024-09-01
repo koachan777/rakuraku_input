@@ -150,9 +150,9 @@ class EverydayConfirmInputView(TemplateView):
             if input_value:
                 standard_value_param = getattr(standard_value, param)
                 threshold = thresholds.get(param)
-                if standard_value_param and threshold:
+                if input_value and standard_value_param is not None and threshold is not None:
                     diff = abs(float(input_value) - standard_value_param)
-                    if diff > threshold.reference_value_threshold:
+                    if threshold.reference_value_threshold is not None and diff > threshold.reference_value_threshold:
                         context['alerts'][param] = "基準値の範囲を超えています"
 
         return context
