@@ -19,29 +19,31 @@
 {% endblock %}
 
 {% block content %}
-<div class="container1">
-    <form method="post"> 
-    {% csrf_token %} 
-    {{ form.non_field_errors }} 
-        <div class="mb-3"> 
-            <label for="id_username" class="form-label">ユーザーID:</label> 
-            <input type="text" name="username" class="form-control" required id="id_username"> 
-        </div> 
-        <div class="mb-3"> 
-            <label for="id_password" class="form-label">pass:</label> 
-            <input type="password" name="password" class="form-control" required id="id_password"> 
-        </div> 
-        <div class="d-grid gap-2"> 
-            <button type="submit" class="btn btn-primary">ログイン</button> 
-        </div> 
-    </form> 
+<body class="no-scroll">
+    <div class="container1">
+        <form method="post"> 
+        {% csrf_token %} 
+        {{ form.non_field_errors }} 
+            <div class="mb-3"> 
+                <label for="id_username" class="form-label">ユーザーID:</label> 
+                <input type="text" name="username" class="form-control" required id="id_username"> 
+            </div> 
+            <div class="mb-3"> 
+                <label for="id_password" class="form-label">pass:</label> 
+                <input type="password" name="password" class="form-control" required id="id_password"> 
+            </div> 
+            <div class="d-grid gap-2"> 
+                <button type="submit" class="btn btn-primary">ログイン</button> 
+            </div> 
+        </form> 
 
-    <body class="no-scroll">
+        
         <div id="wrapper">
             <canvas id="waveCanvas"></canvas>
         </div>
-    </body>
-</div>
+        
+    </div>
+</body>
 {% endblock %}
 
 {% block extra_js %}
