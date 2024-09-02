@@ -47,12 +47,12 @@ class IntervalWaterQualityForm(forms.ModelForm):
         widget=forms.Select(),
     )
     room_temperature = forms.FloatField(label='室温', min_value=0, max_value=100, required=False, widget=forms.NumberInput(attrs={'step': '0.1'}))
-    NH4 = forms.FloatField(label='NH4', min_value=0, max_value=14, required=False, widget=forms.NumberInput(attrs={'step': '0.1'}))
-    NO2 = forms.FloatField(label='NO2', min_value=0, max_value=14, required=False, widget=forms.NumberInput(attrs={'step': '0.1'}))
+    NH4 = forms.FloatField(label='NH4', min_value=0, max_value=100, required=False, widget=forms.NumberInput(attrs={'step': '0.1'}))
+    NO2 = forms.FloatField(label='NO2', min_value=0, max_value=100, required=False, widget=forms.NumberInput(attrs={'step': '0.1'}))
     NO3 = forms.FloatField(label='NO3', min_value=0, max_value=100, required=False, widget=forms.NumberInput(attrs={'step': '0.1'}))
-    Ca = forms.FloatField(label='Ca', min_value=0, max_value=100, required=False, widget=forms.NumberInput(attrs={'step': '0.1'}))
-    Al = forms.FloatField(label='Al', min_value=0, max_value=100, required=False, widget=forms.NumberInput(attrs={'step': '0.1'}))
-    Mg = forms.FloatField(label='Mg', min_value=0, max_value=100, required=False, widget=forms.NumberInput(attrs={'step': '0.1'}))
+    Ca = forms.FloatField(label='Ca', min_value=0, max_value=500, required=False, widget=forms.NumberInput(attrs={'step': '1'}))
+    Al = forms.FloatField(label='Al', min_value=0, max_value=300, required=False, widget=forms.NumberInput(attrs={'step': '1'}))
+    Mg = forms.FloatField(label='Mg', min_value=0, max_value=1000, required=False, widget=forms.NumberInput(attrs={'step': '1'}))
     notes = forms.CharField(label='備考', widget=forms.Textarea(attrs={'rows': 4}), required=False)
 
 
