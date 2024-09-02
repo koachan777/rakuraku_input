@@ -6,91 +6,106 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card-body">
-                <h2 class="card-title text-center mb-4">入力内容の確認</h2>
-                <div class="d-inline-block text-start">
-                    <p><strong>計測日:</strong> {{ form_data.date }}</p>
-                    <p><strong>水槽:</strong> {{ form_data.tank }}</p>
-                    <span><strong>室温:</strong> {{ form_data.room_temperature }} ℃</span>
-                    <span>昨日</span>
-                    <span>一昨日</span>
-                    
-                    <p><strong>水温:</strong> 
-                        <span class="{% if 'water_temperature' in alerts %}highlight-background{% endif %}">
-                            {{ form_data.water_temperature }} ℃
-                        </span>
-                        <span>値</span>
-                        <span>値</span>
-                    </p>
-                    <p>
-                        {% if 'water_temperature' in alerts %}
-                        <span class="alert">{{ alerts.water_temperature }}</span>
-                        {% endif %}
-                    </p>
-
-                    <p><strong>pH:</strong> 
-                        <span class="{% if 'pH' in alerts %}highlight-background{% endif %}">
-                            {{ form_data.pH }}
-                        </span>
-                        <span>値</span>
-                        <span>値</span>
-                    </p>
-                    <p>
-                        {% if 'pH' in alerts %}
-                        <span class="alert">{{ alerts.pH }}</span>
-                        {% endif %}
-                    </p>
-
-                    <p><strong>DO:</strong> 
-                        <span class="{% if 'DO' in alerts %}highlight-background{% endif %}">
-                            {{ form_data.DO }} mg/L
-                        </span>
-                        <span>値</span>
-                        <span>値</span>
-                    </p>
-                    <p>
-                        {% if 'DO' in alerts %}
-                        <span class="alert">{{ alerts.DO }}</span>
-                        {% endif %}
-                    </p>
-
-                    <p><strong>塩分濃度:</strong> 
-                        <span class="{% if 'salinity' in alerts %}highlight-background{% endif %}">
-                            {{ form_data.salinity }} %
-                        </span>
-                        <span>値</span>
-                        <span>値</span>
-                    </p>
-                        {% if 'salinity' in alerts %}
-                        <span class="alert">{{ alerts.salinity }}</span>
-                        {% endif %}
-                    </p>
-
-                    <p><strong>備考:</strong> {{ form_data.notes }}</p>
-                </div>
-            </div>
-            <form method="post" class="mt-4">
-                {% csrf_token %}
-                <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary btn-lg">保存</button>
-                    <a href="{% url 'rakuraku_apps:everyday_edit' %}" class="btn btn-warning btn-lg">編集</a>
-                    <a href="{% url 'rakuraku_apps:everyday_comment' %}" class="btn btn-secondary btn-lg">戻る</a>
-                </div>
-            </form>
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card-body">
+        <h2 class="card-title text-center mb-4">入力内容の確認</h2>
+        <div class="d-inline-block text-start">
+          <p>
+            <strong>計測日:</strong>{{ form_data.date }}
+          </p>
+          <p>
+            <strong>水槽:</strong>{{ form_data.tank }}
+          </p>
+          <p>
+            <strong>室温:</strong>{{ form_data.room_temperature }} ℃
+          </p>
+          <table class="table">
+            <thead>
+              <tr>
+                <th></th>
+                <th class="text-nowrap text-center align-middle">今回</th>
+                <th class="text-nowrap text-center align-middle">昨日</th>
+                <th class="text-nowrap text-center align-middle">一昨日</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="align-middle"><strong>水温</strong></td>
+                <td class="text-nowrap text-center align-middle {% if 'water_temperature' in bg_colors %}{{ bg_colors.water_temperature }}{% endif %}">
+                  {{ form_data.water_temperature }}℃<br>
+                  {% if 'water_temperature' in alerts %}
+                    {% for message in alerts.water_temperature %}
+                      <span class="text-danger small d-block">{{ message }}</span>
+                    {% endfor %}
+                  {% endif %}
+                </td>
+                <td class="text-nowrap text-center align-middle">{% if previous_values.1.water_temperature %}{{ previous_values.1.water_temperature }}℃{% endif %}</td>
+                <td class="text-nowrap text-center align-middle">{% if previous_values.2.water_temperature %}{{ previous_values.2.water_temperature }}℃{% endif %}</td>
+              </tr>
+              <tr>
+                <td class="align-middle"><strong>pH</strong></td>
+                <td class="text-nowrap text-center align-middle {% if 'pH' in bg_colors %}{{ bg_colors.pH }}{% endif %}">
+                  {{ form_data.pH }}<br>
+                  {% if 'pH' in alerts %}
+                    {% for message in alerts.pH %}
+                      <span class="text-danger small d-block">{{ message }}</span>
+                    {% endfor %}
+                  {% endif %}
+                </td>
+                <td class="text-nowrap text-center align-middle">{% if previous_values.1.pH %}{{ previous_values.1.pH }}{% endif %}</td>
+                <td class="text-nowrap text-center align-middle">{% if previous_values.2.pH %}{{ previous_values.2.pH }}{% endif %}</td>
+              </tr>
+              <tr>
+                <td class="align-middle"><strong>DO</strong></td>
+                <td class="text-nowrap text-center align-middle {% if 'DO' in bg_colors %}{{ bg_colors.DO }}{% endif %}">
+                  {{ form_data.DO }}mg/L<br>
+                  {% if 'DO' in alerts %}
+                    {% for message in alerts.DO %}
+                      <span class="text-danger small d-block">{{ message }}</span>
+                    {% endfor %}
+                  {% endif %}
+                </td>
+                <td class="text-nowrap text-center align-middle">{% if previous_values.1.DO %}{{ previous_values.1.DO }}mg/L{% endif %}</td>
+                <td class="text-nowrap text-center align-middle">{% if previous_values.2.DO %}{{ previous_values.2.DO }}mg/L{% endif %}</td>
+              </tr>
+              <tr>
+                <td class="align-middle"><strong>塩分濃度</strong></td>
+                <td class="text-nowrap text-center align-middle {% if 'salinity' in bg_colors %}{{ bg_colors.salinity }}{% endif %}">
+                  {{ form_data.salinity }}%<br>
+                  {% if 'salinity' in alerts %}
+                    {% for message in alerts.salinity %}
+                      <span class="text-danger small d-block">{{ message }}</span>
+                    {% endfor %}
+                  {% endif %}
+                </td>
+                <td class="text-nowrap text-center align-middle">{% if previous_values.1.salinity %}{{ previous_values.1.salinity }}%{% endif %}</td>
+                <td class="text-nowrap text-center align-middle">{% if previous_values.2.salinity %}{{ previous_values.2.salinity }}%{% endif %}</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            <strong>備考:</strong>{{ form_data.notes }}
+          </p>
         </div>
+      </div>
+      <form method="post" class="mt-4">
+        {% csrf_token %}
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-primary btn-lg">保存</button>
+          <a href="{% url 'rakuraku_apps:everyday_edit' %}" class="btn btn-warning btn-lg">編集</a>
+          <a href="{% url 'rakuraku_apps:everyday_comment' %}" class="btn btn-secondary btn-lg">戻る</a>
+        </div>
+      </form>
     </div>
+  </div>
 </div>
-
 {% include 'footer.html' %}
-
 {% else %}
 <div class="text-center mt-5">
-    <p>確認ページにアクセスするにはログインが必要です。</p>
-    <a href="{% url 'rakuraku_apps:login' %}" class="btn btn-primary">ログイン</a>
+  <p>確認ページにアクセスするにはログインが必要です。</p>
+  <a href="{% url 'rakuraku_apps:login' %}" class="btn btn-primary">ログイン</a>
 </div>
 {% endif %}
 {% endblock %}

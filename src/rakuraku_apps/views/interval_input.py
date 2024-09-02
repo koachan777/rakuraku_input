@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from rakuraku_apps.forms.input import IntervalWaterQualityForm
 from rakuraku_apps.models import TankModel, WaterQualityModel, WaterQualityThresholdModel
+from datetime import datetime, timedelta
 
 
 
@@ -132,13 +133,15 @@ class IntervalCommentInputView(TemplateView):
 
 class IntervalConfirmInputView(TemplateView):
     template_name = 'input/interval/confirm.html'
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         tank_id = self.request.session.get('tank', '')
         tank = TankModel.objects.get(pk=tank_id)
-        context['form_data'] = {
-            'date': self.request.session.get('date', ''),
+        date = self.request.session.get('date', '')
+        
+        form_data = {
+            'date': date,
             'tank': tank.name,
             'room_temperature': self.request.session.get('room_temperature', ''),
             'NH4': self.request.session.get('NH4', ''),
@@ -149,27 +152,66 @@ class IntervalConfirmInputView(TemplateView):
             'Mg': self.request.session.get('Mg', ''),
             'notes': self.request.session.get('notes', ''),
         }
-
-        # 基準値を取得
-        # standard_value = StandardValueModel.get_or_create()
-
-        # 閾値を取得
-        # thresholds = {t.parameter: t for t in WaterQualityThresholdModel.objects.all()}
-
-        # # アラートメッセージを格納する辞書
-        # context['alerts'] = {}
-
-        # # 各パラメーターについて基準値と比較
-        # for param in ['water_temperature', 'pH', 'DO', 'salinity', 'NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg']:
-        #     input_value = self.request.session.get(param)
-        #     if input_value:
-        #         standard_value_param = getattr(standard_value, param)
-        #         threshold = thresholds.get(param)
-        #         if input_value and standard_value_param is not None and threshold is not None:
-        #             diff = abs(float(input_value) - standard_value_param)
-        #             if threshold.reference_value_threshold is not None and diff > threshold.reference_value_threshold:
-        #                 context['alerts'][param] = "基準値の範囲を超えています"
-
+        context['form_data'] = form_data
+        
+        # アラートメッセージと背景色を格納する辞書を初期化
+        alerts = {}
+        bg_colors = {}
+        
+        # 基準値の範囲内にあるかどうかを確認
+        for param in ['NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg']:
+            threshold = WaterQualityThresholdModel.objects.filter(parameter=param).first()
+            if threshold:
+                value = form_data.get(param)
+                if value:
+                    if threshold.reference_value_threshold_min and float(value) < threshold.reference_value_threshold_min:
+                        diff = threshold.reference_value_threshold_min - float(value)
+                        alerts.setdefault(param, []).append(f"基準値より{diff:.1f}↓")
+                        bg_colors[param] = 'table-warning'
+                    elif threshold.reference_value_threshold_max and float(value) > threshold.reference_value_threshold_max:
+                        diff = float(value) - threshold.reference_value_threshold_max
+                        alerts.setdefault(param, []).append(f"基準値より{diff:.1f}↑")
+                        bg_colors[param] = 'table-warning'
+        
+        # 前回の値から大きく離れているかどうかを確認
+        previous_day = datetime.strptime(date, '%Y-%m-%d').date() - timedelta(days=1)
+        previous_water_quality = WaterQualityModel.objects.filter(date=previous_day, tank=tank).first()
+        if previous_water_quality:
+            for param in ['NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg']:
+                threshold = WaterQualityThresholdModel.objects.filter(parameter=param).first()
+                if threshold and threshold.previous_day_threshold:
+                    current_value = form_data.get(param)
+                    previous_value = getattr(previous_water_quality, param)
+                    if current_value and previous_value:
+                        diff = float(current_value) - previous_value
+                        if abs(diff) > threshold.previous_day_threshold:
+                            if diff > 0:
+                                alerts.setdefault(param, []).append(f"前回より{diff:.1f}↑")
+                            else:
+                                alerts.setdefault(param, []).append(f"前回より{abs(diff):.1f}↓")
+                            if param in bg_colors:
+                                bg_colors[param] = 'table-danger'
+                            else:
+                                bg_colors[param] = 'table-warning'
+        
+        context['alerts'] = alerts
+        context['bg_colors'] = bg_colors
+        
+        # 昨日、一昨日、一週間前の値を取得
+        context['previous_values'] = {}
+        for days in [1, 2]:
+            previous_date = datetime.strptime(date, '%Y-%m-%d').date() - timedelta(days=days)
+            previous_water_quality = WaterQualityModel.objects.filter(date=previous_date, tank=tank).first()
+            if previous_water_quality:
+                context['previous_values'][days] = {
+                    'NH4': previous_water_quality.NH4,
+                    'NO2': previous_water_quality.NO2,
+                    'NO3': previous_water_quality.NO3,
+                    'Ca': previous_water_quality.Ca,
+                    'Al': previous_water_quality.Al,
+                    'Mg': previous_water_quality.Mg,
+                }
+        
         return context
 
     def post(self, request, *args, **kwargs):
