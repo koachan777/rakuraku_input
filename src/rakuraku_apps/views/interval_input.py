@@ -237,17 +237,6 @@ class IntervalConfirmInputView(TemplateView):
 
         if form.is_valid():
             form.save()
-            request.session.pop('water_quality_id', None)
-            request.session.pop('date', None)
-            request.session.pop('tank', None)
-            request.session.pop('room_temperature', None)
-            request.session.pop('NH4', None)
-            request.session.pop('NO2', None)
-            request.session.pop('NO3', None)
-            request.session.pop('Ca', None)
-            request.session.pop('Al', None)
-            request.session.pop('Mg', None)
-            request.session.pop('notes', None)
             request.session['success_message'] = '測定結果を保存しました'
             return redirect('/home/')
         else:

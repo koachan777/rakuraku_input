@@ -14,7 +14,19 @@ from datetime import datetime, timedelta
 
 class EverydayOrIntervalView(TemplateView):
     template_name = 'input/evryday_or_interval.html'
-
+    def get(self, request, *args, **kwargs):
+        request.session.pop('water_quality_id', None)
+        request.session.pop('date', None)
+        request.session.pop('tank', None)
+        request.session.pop('room_temperature', None)
+        request.session.pop('NH4', None)
+        request.session.pop('NO2', None)
+        request.session.pop('NO3', None)
+        request.session.pop('Ca', None)
+        request.session.pop('Al', None)
+        request.session.pop('Mg', None)
+        request.session.pop('notes', None)
+        return super().get(request, *args, **kwargs)
 
 
 class EverydayFirstInputView(TemplateView):
@@ -208,26 +220,14 @@ class EverydayConfirmInputView(TemplateView):
             'salinity': request.session['salinity'],
             'notes': request.session['notes'],
         }
-
         water_quality_id = request.session.get('water_quality_id')
         if water_quality_id:
             water_quality = WaterQualityModel.objects.get(id=water_quality_id)
             form = WaterQualityForm(form_data, instance=water_quality)
         else:
             form = WaterQualityForm(form_data)
-
         if form.is_valid():
             form.save()
-
-            request.session.pop('water_quality_id', None)
-            request.session.pop('date', None)
-            request.session.pop('tank', None)
-            request.session.pop('room_temperature', None)
-            request.session.pop('water_temperature', None)
-            request.session.pop('pH', None)
-            request.session.pop('DO', None)
-            request.session.pop('salinity', None)
-            request.session.pop('notes', None)
             request.session['success_message'] = '測定結果を保存しました'
             return redirect('/home/')
         else:
