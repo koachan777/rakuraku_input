@@ -2,9 +2,8 @@ import json
 from urllib import request
 from django.views.generic import TemplateView, ListView
 from rakuraku_apps.models import ShrimpModel, TankModel, User, WaterQualityThresholdModel
-from rakuraku_apps.forms.manage import UserForm, WaterQualityThresholdForm, TankForm, WarningRangeForm
+from rakuraku_apps.forms.manage import UserForm, WaterQualityThresholdForm, TankForm
 from django.views.generic import UpdateView
-from rakuraku_apps.models import StandardValueModel
 from django.shortcuts import render, redirect
 from django.views import View
 import json
@@ -72,53 +71,57 @@ class CreateShrimpView(CreateView):
     success_url = reverse_lazy('rakuraku_apps:manage_tank')
 
 
-class ManageValueView(UpdateView):
-    model = StandardValueModel
-    form_class = WarningRangeForm
+class ManageValueView(TemplateView):
     template_name = 'manage/value.html'
-    success_url = '/manage/'
 
-    def get_object(self, queryset=None):
-        return StandardValueModel.get_or_create()
-    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = WaterQualityThresholdForm(initial={
+            'water_temperature_max': getattr(WaterQualityThresholdModel.objects.filter(parameter='water_temperature').first(), 'reference_value_threshold_max', None),
+            'water_temperature_min': getattr(WaterQualityThresholdModel.objects.filter(parameter='water_temperature').first(), 'reference_value_threshold_min', None),
+            'water_temperature_diff': getattr(WaterQualityThresholdModel.objects.filter(parameter='water_temperature').first(), 'previous_day_threshold', None),
+            'pH_max': getattr(WaterQualityThresholdModel.objects.filter(parameter='pH').first(), 'reference_value_threshold_max', None),
+            'pH_min': getattr(WaterQualityThresholdModel.objects.filter(parameter='pH').first(), 'reference_value_threshold_min', None),
+            'pH_diff': getattr(WaterQualityThresholdModel.objects.filter(parameter='pH').first(), 'previous_day_threshold', None),
+            'DO_max': getattr(WaterQualityThresholdModel.objects.filter(parameter='DO').first(), 'reference_value_threshold_max', None),
+            'DO_min': getattr(WaterQualityThresholdModel.objects.filter(parameter='DO').first(), 'reference_value_threshold_min', None),
+            'DO_diff': getattr(WaterQualityThresholdModel.objects.filter(parameter='DO').first(), 'previous_day_threshold', None),
+            'salinity_max': getattr(WaterQualityThresholdModel.objects.filter(parameter='salinity').first(), 'reference_value_threshold_max', None),
+            'salinity_min': getattr(WaterQualityThresholdModel.objects.filter(parameter='salinity').first(), 'reference_value_threshold_min', None),
+            'salinity_diff': getattr(WaterQualityThresholdModel.objects.filter(parameter='salinity').first(), 'previous_day_threshold', None),
+            'NH4_max': getattr(WaterQualityThresholdModel.objects.filter(parameter='NH4').first(), 'reference_value_threshold_max', None),
+            'NH4_min': getattr(WaterQualityThresholdModel.objects.filter(parameter='NH4').first(), 'reference_value_threshold_min', None),
+            'NH4_diff': getattr(WaterQualityThresholdModel.objects.filter(parameter='NH4').first(), 'previous_day_threshold', None),
+            'NO2_max': getattr(WaterQualityThresholdModel.objects.filter(parameter='NO2').first(), 'reference_value_threshold_max', None),
+            'NO2_min': getattr(WaterQualityThresholdModel.objects.filter(parameter='NO2').first(), 'reference_value_threshold_min', None),
+            'NO2_diff': getattr(WaterQualityThresholdModel.objects.filter(parameter='NO2').first(), 'previous_day_threshold', None),
+            'NO3_max': getattr(WaterQualityThresholdModel.objects.filter(parameter='NO3').first(), 'reference_value_threshold_max', None),
+            'NO3_min': getattr(WaterQualityThresholdModel.objects.filter(parameter='NO3').first(), 'reference_value_threshold_min', None),
+            'NO3_diff': getattr(WaterQualityThresholdModel.objects.filter(parameter='NO3').first(), 'previous_day_threshold', None),
+            'Ca_max': getattr(WaterQualityThresholdModel.objects.filter(parameter='Ca').first(), 'reference_value_threshold_max', None),
+            'Ca_min': getattr(WaterQualityThresholdModel.objects.filter(parameter='Ca').first(), 'reference_value_threshold_min', None),
+            'Ca_diff': getattr(WaterQualityThresholdModel.objects.filter(parameter='Ca').first(), 'previous_day_threshold', None),
+            'Al_max': getattr(WaterQualityThresholdModel.objects.filter(parameter='Al').first(), 'reference_value_threshold_max', None),
+            'Al_min': getattr(WaterQualityThresholdModel.objects.filter(parameter='Al').first(), 'reference_value_threshold_min', None),
+            'Al_diff': getattr(WaterQualityThresholdModel.objects.filter(parameter='Al').first(), 'previous_day_threshold', None),
+            'Mg_max': getattr(WaterQualityThresholdModel.objects.filter(parameter='Mg').first(), 'reference_value_threshold_max', None),
+            'Mg_min': getattr(WaterQualityThresholdModel.objects.filter(parameter='Mg').first(), 'reference_value_threshold_max', None),
+            'Mg_diff': getattr(WaterQualityThresholdModel.objects.filter(parameter='Mg').first(), 'previous_day_threshold', None),
+        })
+        return context
 
-
-
-class ManageAlertView(View):
-    def get(self, request):
-        form = WaterQualityThresholdForm()
-        thresholds = {
-            threshold.parameter: {
-                'reference_value_threshold': threshold.reference_value_threshold,
-                'previous_day_threshold': threshold.previous_day_threshold,
-            }
-            for threshold in WaterQualityThresholdModel.objects.all()
-        }
-        context = {
-            'form': form,
-            'thresholds': json.dumps(thresholds),
-        }
-        return render(request, 'manage/alert.html', context)
-
-
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         form = WaterQualityThresholdForm(request.POST)
         if form.is_valid():
-            parameter = form.cleaned_data['parameter']
-            reference_value_threshold = form.cleaned_data['reference_value_threshold']
-            previous_day_threshold = form.cleaned_data['previous_day_threshold']
-
-            threshold, created = WaterQualityThresholdModel.objects.update_or_create(
-                parameter=parameter,
-                defaults={
-                    'reference_value_threshold': reference_value_threshold,
-                    'previous_day_threshold': previous_day_threshold,
-                }
-            )
-
-            return redirect('/manage/')
-
-        context = {
-            'form': form,
-        }
-        return render(request, 'manage/alert.html', context)
+            WaterQualityThresholdModel.update_or_create('water_temperature', form.cleaned_data['water_temperature_max'], form.cleaned_data['water_temperature_min'], form.cleaned_data['water_temperature_diff'])
+            WaterQualityThresholdModel.update_or_create('pH', form.cleaned_data['pH_max'], form.cleaned_data['pH_min'], form.cleaned_data['pH_diff'])
+            WaterQualityThresholdModel.update_or_create('DO', form.cleaned_data['DO_max'], form.cleaned_data['DO_min'], form.cleaned_data['DO_diff'])
+            WaterQualityThresholdModel.update_or_create('salinity', form.cleaned_data['salinity_max'], form.cleaned_data['salinity_min'], form.cleaned_data['salinity_diff'])
+            WaterQualityThresholdModel.update_or_create('NH4', form.cleaned_data['NH4_max'],form.cleaned_data['NH4_min'], form.cleaned_data['NH4_diff'])
+            WaterQualityThresholdModel.update_or_create('NO2', form.cleaned_data['NO2_max'], form.cleaned_data['NO2_min'], form.cleaned_data['NO2_diff'])
+            WaterQualityThresholdModel.update_or_create('NO3', form.cleaned_data['NO3_max'], form.cleaned_data['NO3_min'], form.cleaned_data['NO3_diff'])
+            WaterQualityThresholdModel.update_or_create('Ca', form.cleaned_data['Ca_max'], form.cleaned_data['Ca_min'], form.cleaned_data['Ca_diff'])
+            WaterQualityThresholdModel.update_or_create('Al', form.cleaned_data['Al_max'], form.cleaned_data['Al_min'], form.cleaned_data['Al_diff'])
+            WaterQualityThresholdModel.update_or_create('Mg', form.cleaned_data['Mg_max'], form.cleaned_data['Mg_min'], form.cleaned_data['Mg_diff'])
+            return redirect('rakuraku_apps:manage')
+        return self.render_to_response(self.get_context_data(form=form))

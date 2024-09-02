@@ -2,11 +2,11 @@ from datetime import date, datetime
 
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
-from rakuraku_apps.models import StandardValueModel, TankModel, WaterQualityModel, WaterQualityThresholdModel
+from rakuraku_apps.models import TankModel, WaterQualityModel, WaterQualityThresholdModel
 from rakuraku_apps.forms.input import WaterQualityForm
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
-from rakuraku_apps.models import StandardValueModel, TankModel, WaterQualityModel, WaterQualityThresholdModel
+from rakuraku_apps.models import TankModel, WaterQualityModel, WaterQualityThresholdModel
 from rakuraku_apps.forms.input import WaterQualityForm
 # import requests
 
@@ -136,24 +136,24 @@ class EverydayConfirmInputView(TemplateView):
         }
 
         # 基準値を取得
-        standard_value = StandardValueModel.get_or_create()
+        # standard_value = StandardValueModel.get_or_create()
 
         # 閾値を取得
-        thresholds = {t.parameter: t for t in WaterQualityThresholdModel.objects.all()}
+        # thresholds = {t.parameter: t for t in WaterQualityThresholdModel.objects.all()}
 
-        # アラートメッセージを格納する辞書
-        context['alerts'] = {}
+        # # アラートメッセージを格納する辞書
+        # context['alerts'] = {}
 
-        # 各パラメーターについて基準値と比較
-        for param in ['water_temperature', 'pH', 'DO', 'salinity', 'NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg']:
-            input_value = self.request.session.get(param)
-            if input_value:
-                standard_value_param = getattr(standard_value, param)
-                threshold = thresholds.get(param)
-                if input_value and standard_value_param is not None and threshold is not None:
-                    diff = abs(float(input_value) - standard_value_param)
-                    if threshold.reference_value_threshold is not None and diff > threshold.reference_value_threshold:
-                        context['alerts'][param] = "基準値の範囲を超えています"
+        # # 各パラメーターについて基準値と比較
+        # for param in ['water_temperature', 'pH', 'DO', 'salinity', 'NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg']:
+        #     input_value = self.request.session.get(param)
+        #     if input_value:
+        #         standard_value_param = getattr(standard_value, param)
+        #         threshold = thresholds.get(param)
+        #         if input_value and standard_value_param is not None and threshold is not None:
+        #             diff = abs(float(input_value) - standard_value_param)
+        #             if threshold.reference_value_threshold is not None and diff > threshold.reference_value_threshold:
+        #                 context['alerts'][param] = "基準値の範囲を超えています"
 
         return context
 

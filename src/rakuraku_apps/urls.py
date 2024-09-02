@@ -31,7 +31,6 @@ from rakuraku_apps.views.log import (
 from rakuraku_apps.views.manage import (
     CreateShrimpView,
     CreateTankView,
-    ManageAlertView,
     ManageValueView, 
     ManageTankView, 
     ManageUserView, 
@@ -111,6 +110,4 @@ urlpatterns = [
     # 管理者画面　水質基準値
     path('manage/value/', ManageValueView.as_view(), name='manage_value'),
 
-    # 管理者画面　警告範囲
-    path('manage/alert/',  ManageAlertView.as_view(), name='manage_alert'),
 ]
