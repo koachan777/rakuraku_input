@@ -1,14 +1,27 @@
-{% extends 'base.html' %} {% block content %} 
+{% extends 'base.html' %}
+{% block content %} 
+
 <div class="container">
   <h1 class="text-center mb-4">水槽を追加する</h1>
   <div class="row justify-content-center">
     <div class="col-md-6">
-      <form method="post" class="p-4">{% csrf_token %} {{ form.as_p }} 
+      <form method="post" class="p-4">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="{{ form.name.id_for_label }}">名前</label>
+          <input type="text" name="name" class="form-control" min="0" max="100" required>
+        </div>
+        <div class="form-group">
+          <label for="{{ form.shrimp.id_for_label }}">系統</label>
+          {{ form.shrimp }}
+        </div> 
         <div class="text-center">
-            <a href="{% url 'rakuraku_apps:manage_tank' %}" class="btn btn-secondary">戻る</a>
+          <a href="{% url 'rakuraku_apps:manage_tank' %}" class="btn btn-secondary">戻る</a>
           <button type="submit" class="btn btn-primary">保存</button>
         </div>
       </form>
     </div>
   </div>
-</div>{% include 'footer.html' %} {% endblock %}
+</div>
+{% include 'footer.html' %}
+{% endblock %}
