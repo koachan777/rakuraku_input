@@ -1,14 +1,28 @@
-FROM python:3.11.1
+ARG PYTHON_VERSION=3.10-slim
+
+FROM python:${PYTHON_VERSION}
+
+ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
-RUN mkdir /code
+
+# 必要なパッケージのインストール
+RUN apt-get update && apt-get install -y \
+    default-mysql-client \
+    gcc \
+    libmariadb-dev \
+    pkg-config
+
+RUN mkdir -p /code
+
 WORKDIR /code
-COPY requirements.txt /code/
 
-RUN apt-get update && apt-get install -y default-mysql-client
+COPY requirements.txt /tmp/requirements.txt
+RUN set -ex && \
+    pip install --upgrade pip && \
+    pip install -r /tmp/requirements.txt && \
+    rm -rf /root/.cache/
+COPY . /code
 
-RUN pip install --upgrade pip && pip install -r requirements.txt
-COPY . /code/
+EXPOSE 8000
 
-RUN echo 'alias pmrun="python3 manage.py runserver 0.0.0.0:8000"' >> ~/.bashrc
-RUN echo 'alias pmdb="python3 manage.py dbshell"' >> ~/.bashrc
-RUN echo 'alias pm="python3 manage.py"' >> ~/.bashrc
+CMD ["gunicorn","--bind",":8000","--workers","2","rakuraku_project.wsgi"]
