@@ -10,3 +10,4 @@ src/rakuraku_apps/migrations/0002_shrimpmodel_alter_standardvaluemodel_al_and_mo
 src/.vscode/launch.json
 src/rakuraku_apps/migrations/0005_remove_waterqualitythresholdmodel_reference_value_threshold_and_more.py
 src/rakuraku_apps/migrations/0006_delete_standardvaluemodel.py
+src/rakuraku_apps/migrations/0007_waterqualitymodel_notify_line.py

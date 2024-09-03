@@ -15,6 +15,8 @@ class WaterQualityForm(forms.ModelForm):
         label='水槽',
         widget=forms.Select(),
     )
+    notify_line = forms.BooleanField(label='LINEに通知する', required=False)
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -22,7 +24,7 @@ class WaterQualityForm(forms.ModelForm):
         
     class Meta:
         model = WaterQualityModel
-        fields = ['date', 'room_temperature', 'water_temperature', 'pH', 'DO', 'salinity', 'notes', 'tank']
+        fields = ['date', 'room_temperature', 'water_temperature', 'pH', 'DO', 'salinity', 'notes', 'tank', 'notify_line']
 
     def clean(self):
         cleaned_data = super().clean()
@@ -54,6 +56,7 @@ class IntervalWaterQualityForm(forms.ModelForm):
     Al = forms.FloatField(label='Al', min_value=0, max_value=300, required=False, widget=forms.NumberInput(attrs={'step': '1'}))
     Mg = forms.FloatField(label='Mg', min_value=0, max_value=1000, required=False, widget=forms.NumberInput(attrs={'step': '1'}))
     notes = forms.CharField(label='備考', widget=forms.Textarea(attrs={'rows': 4}), required=False)
+    notify_line = forms.BooleanField(label='LINEに通知する', required=False)
 
 
     def __init__(self, *args, **kwargs):
@@ -62,7 +65,7 @@ class IntervalWaterQualityForm(forms.ModelForm):
         
     class Meta:
         model = WaterQualityModel
-        fields = ['date', 'tank', 'room_temperature', 'NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg', 'notes']
+        fields = ['date', 'tank', 'room_temperature', 'NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg', 'notes', 'notify_line']
 
     def clean(self):
         cleaned_data = super().clean()

@@ -9,7 +9,9 @@ from django.shortcuts import redirect
 from rakuraku_apps.models import TankModel, WaterQualityModel, WaterQualityThresholdModel
 from rakuraku_apps.forms.input import WaterQualityForm
 from datetime import datetime, timedelta
-# import requests
+
+from django.conf import settings
+import requests
 
 
 class EverydayOrIntervalView(TemplateView):
@@ -207,6 +209,9 @@ class EverydayConfirmInputView(TemplateView):
                     'salinity': previous_water_quality.salinity,
                 }
         
+        # alertsをrequest.sessionに保存
+        self.request.session['alerts'] = alerts
+        
         return context
 
     def post(self, request, *args, **kwargs):
@@ -219,6 +224,7 @@ class EverydayConfirmInputView(TemplateView):
             'DO': request.session['DO'],
             'salinity': request.session['salinity'],
             'notes': request.session['notes'],
+            'notify_line': request.POST.get('notify_line', False),
         }
         water_quality_id = request.session.get('water_quality_id')
         if water_quality_id:
@@ -227,11 +233,38 @@ class EverydayConfirmInputView(TemplateView):
         else:
             form = WaterQualityForm(form_data)
         if form.is_valid():
-            form.save()
+            water_quality = form.save()
             request.session['success_message'] = '測定結果を保存しました'
+            
+            # アラートがある場合にLINEに通知する
+            if water_quality.notify_line and any(request.session['alerts'].values()):
+                self.send_line_notification(request.session['alerts'], form_data)
+
             return redirect('/home/')
         else:
             return redirect('/everyday/edit/')
+
+    def send_line_notification(self, alerts, form_data):
+        # フィールド名を日本語に変換するための辞書
+        field_name_dict = {
+            'water_temperature': '水温',
+            'pH': 'pH',
+            'DO': 'DO',
+            'salinity': '塩分濃度',
+        }
+
+        message = "測定結果\n"
+        for param, alert_messages in alerts.items():
+            # フィールド名を日本語に変換
+            param_name = field_name_dict.get(param, param)
+            message += f"\n{param_name} : {form_data[param]}\n"
+            for alert in alert_messages:
+                message += f"- {alert}\n"
+
+        url = 'https://notify-api.line.me/api/notify'
+        headers = {'Authorization': f'Bearer {settings.LINE_NOTIFY_ACCESS_TOKEN}'}
+        data = {'message': message}
+        requests.post(url, headers=headers, data=data)
 
 
 class EverydayEditView(TemplateView):

@@ -126,6 +126,9 @@ class WaterQualityModel(BaseModel):
         related_name="water_quality",
         on_delete=models.PROTECT,
     )
+    notify_line = models.BooleanField(default=False)
+
+
     class Meta:
         verbose_name = "水質"
         db_table = "water_quality"
