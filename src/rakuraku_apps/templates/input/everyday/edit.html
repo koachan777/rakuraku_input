@@ -10,80 +10,13 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card-body"> <!-- 全体を中央揃え -->
-                <form method="post">
-                    <input type="hidden" name="csrfmiddlewaretoken" value="UYTvxevaKifJpbAV5WocC6GfreX7kyD0etZ5oqenYa7wFLiCz3LkEiMpZkuOExNx">
-                    
-                    <div class="form-group row mb-3">
-                        <label for="id_date" class="col-sm-4 col-form-label">計測日:</label>
-                        <div class="col-sm-8">
-                            <input type="date" name="date" value="2024-09-03" required id="id_date" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group row mb-3">
-                        <label for="id_room_temperature" class="col-sm-4 col-form-label">室温:</label>
-                        <div class="col-sm-8">
-                            <input type="number" name="room_temperature" value="2" step="0.1" min="0" max="100" id="id_room_temperature" class="form-control">    
-                        </div>
-                    </div>
-
-                    <div class="form-group row mb-3">
-                        <label for="id_water_temperature" class="col-sm-4 col-form-label">水温:</label>
-                        <div class="col-sm-8">
-                            <input type="number" name="water_temperature" value="31.6" step="0.1" min="0" max="100" id="id_water_temperature" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group row mb-3">
-                        <label for="id_pH" class="col-sm-4 col-form-label">pH:</label>
-                        <div class="col-sm-8">
-                            <input type="number" name="pH" value="6.7" step="0.1" min="0" max="14" id="id_pH" class="form-control">   
-                        </div>
-                    </div>
-                    
-                    <div class="form-group row mb-3">
-                        <label for="id_DO" class="col-sm-4 col-form-label">DO:</label>
-                        <div class="col-sm-8">
-                            <input type="number" name="DO" value="7.5" step="0.1" min="0" max="100" id="id_DO" class="form-control">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group row mb-3">
-                        <label for="id_salinity" class="col-sm-4 col-form-label">塩分濃度:</label>
-                        <div class="col-sm-8">
-                            <input type="number" name="salinity" value="2.1" step="0.1" min="0" max="100" id="id_salinity" class="form-control">                                           
-                        </div>
-                    </div>
-                    
-                    <div class="form-group row mb-3">
-                        <label for="id_notes" class="col-sm-4 col-form-label">備考:</label>
-                        <div class="col-sm-8">
-                            <textarea name="notes" cols="40" rows="4" id="id_notes" class="form-control"></textarea>                                      
-                        </div>
-                    </div>
-
-                    <div class="form-group row mb-3">
-                        <label for="id_tank" class="col-sm-4 col-form-label">水槽:</label>
-                        <div class="col-sm-8">
-                            <select name="tank" class="form-select" required>
-                                {% for tank in tanks %}
-                                    <option value="{{ tank.id }}">{{ tank.name }}</option>
-                                {% endfor %}
-                            </select>                     
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="id_notify_line" class="col-sm-4 col-form-label">LINEに通知する:</label>
-                        <div class="col-sm-8">
-                            <input type="checkbox" name="notify_line" id="id_notify_line">   
-                        </div>
-                    </div>
-
+            <div class="card-body text-center"> <!-- 全体を中央揃え -->
+                <form method="post" class="d-inline-block text-start"> <!-- フォームをインラインブロックにし、左揃え -->
+                    {% csrf_token %}
+                    {{ form.as_p }}  <!-- フォームフィールドを <p> タグでラップして出力 -->
                     <div class="d-grid gap-2 mt-3">
                         <button type="submit" class="btn btn-primary btn-lg">確認画面へ</button>
-                        <a href="/everyday/confirm/" class="btn btn-secondary btn-lg">戻る</a>
+                        <a href="{% url 'rakuraku_apps:everyday_confirm' %}" class="btn btn-secondary btn-lg">戻る</a>
                     </div>
                 </form>
             </div>
