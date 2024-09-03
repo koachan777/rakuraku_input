@@ -118,12 +118,21 @@
       </div>
       <form method="post" class="mt-4">
         {% csrf_token %}
+        <div class="form-check mb-3 text-center">
+            <div class="d-inline-block">
+                <input class="form-check-input" type="checkbox" name="notify_line" id="notify_line" {% if notify_line %}checked{% endif %}>
+                <label class="form-check-label" for="notify_line">
+                    LINEに通知する
+                </label>
+            </div>
+        </div>
         <div class="d-grid gap-2">
           <button type="submit" class="btn btn-primary btn-lg">保存</button>
           <a href="{% url 'rakuraku_apps:interval_edit' %}" class="btn btn-warning btn-lg">編集</a>
           <a href="{% url 'rakuraku_apps:interval_comment' %}" class="btn btn-secondary btn-lg">戻る</a>
         </div>
       </form>
+    
     </div>
   </div>
 </div>

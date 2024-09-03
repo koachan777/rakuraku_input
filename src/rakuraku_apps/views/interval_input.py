@@ -5,6 +5,8 @@ from django.views.generic import TemplateView
 from rakuraku_apps.forms.input import IntervalWaterQualityForm
 from rakuraku_apps.models import TankModel, WaterQualityModel, WaterQualityThresholdModel
 from datetime import datetime, timedelta
+import requests
+from django.conf import settings
 
 
 
@@ -211,7 +213,8 @@ class IntervalConfirmInputView(TemplateView):
                     'Al': previous_water_quality.Al,
                     'Mg': previous_water_quality.Mg,
                 }
-        
+        self.request.session['alerts'] = alerts
+
         return context
 
     def post(self, request, *args, **kwargs):
@@ -226,6 +229,7 @@ class IntervalConfirmInputView(TemplateView):
             'Al': request.session['Al'],
             'Mg': request.session['Mg'],
             'notes': request.session['notes'],
+            'notify_line': request.POST.get('notify_line', False),
         }
 
         water_quality_id = request.session.get('water_quality_id')
@@ -236,22 +240,41 @@ class IntervalConfirmInputView(TemplateView):
             form = IntervalWaterQualityForm(form_data)
 
         if form.is_valid():
-            form.save()
-            request.session.pop('water_quality_id', None)
-            request.session.pop('date', None)
-            request.session.pop('tank', None)
-            request.session.pop('room_temperature', None)
-            request.session.pop('NH4', None)
-            request.session.pop('NO2', None)
-            request.session.pop('NO3', None)
-            request.session.pop('Ca', None)
-            request.session.pop('Al', None)
-            request.session.pop('Mg', None)
-            request.session.pop('notes', None)
+            water_quality = form.save()
             request.session['success_message'] = '測定結果を保存しました'
+            
+            # アラートがある場合にLINEに通知する
+            if water_quality.notify_line and any(request.session['alerts'].values()):
+                self.send_line_notification(request.session['alerts'], form_data)
+
             return redirect('/home/')
         else:
             return redirect('/interval/edit/')
+
+    def send_line_notification(self, alerts, form_data):
+        # フィールド名を日本語に変換するための辞書
+        field_name_dict = {
+            'NH4': 'NH4',
+            'NO2': 'NO2',
+            'NO3': 'NO3',
+            'Ca': 'Ca',
+            'Al': 'Al',
+            'Mg': 'Mg',
+        }
+
+        message = "測定結果\n"
+        for param, alert_messages in alerts.items():
+            # フィールド名を日本語に変換
+            param_name = field_name_dict.get(param, param)
+            message += f"\n{param_name} : {form_data[param]}\n"
+            for alert in alert_messages:
+                message += f"- {alert}\n"
+
+        url = 'https://notify-api.line.me/api/notify'
+        headers = {'Authorization': f'Bearer {settings.LINE_NOTIFY_ACCESS_TOKEN}'}
+        data = {'message': message}
+        requests.post(url, headers=headers, data=data)
+
 
 class IntervalEditView(TemplateView):
     template_name = 'input/interval/edit.html'
