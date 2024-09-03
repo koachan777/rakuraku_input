@@ -38,7 +38,7 @@ from rakuraku_apps.views.manage import (
 )
 
 from django.urls import path
-from .views.manage import PopulateDBView, ClearDBView
+# from .views.manage import PopulateDBView, ClearDBView
 
 app_name = "rakuraku_apps"
 
