@@ -106,17 +106,17 @@ class TankModel(BaseModel):
 
 class WaterQualityModel(BaseModel):
     date = models.DateField("計測日")
-    room_temperature = models.FloatField("室温", null=True)
-    water_temperature = models.FloatField("水温", null=True)
-    pH = models.FloatField("ph", null=True)
-    DO = models.FloatField("DO", null=True)
-    salinity = models.FloatField("塩分濃度", null=True)
-    NH4 = models.FloatField("NH4", null=True)
-    NO2 = models.FloatField("NO2", null=True)
-    NO3 = models.FloatField("NO3", null=True)
-    Ca = models.FloatField("Ca", null=True)
-    Al = models.FloatField("Al", null=True)
-    Mg = models.FloatField("Mg", null=True)
+    room_temperature = models.FloatField("室温", null=True, blank=True)
+    water_temperature = models.FloatField("水温", null=True, blank=True)
+    pH = models.FloatField("ph", null=True, blank=True)
+    DO = models.FloatField("DO", null=True, blank=True)
+    salinity = models.FloatField("塩分濃度", null=True, blank=True)
+    NH4 = models.FloatField("NH4", null=True, blank=True)
+    NO2 = models.FloatField("NO2", null=True, blank=True)
+    NO3 = models.FloatField("NO3", null=True, blank=True)
+    Ca = models.FloatField("Ca", null=True, blank=True)
+    Al = models.FloatField("Al", null=True, blank=True)
+    Mg = models.FloatField("Mg", null=True, blank=True)
     notes = models.TextField("備考", max_length=512, null=True, blank=True)
     tank = models.ForeignKey(
         "TankModel",
