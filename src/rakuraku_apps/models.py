@@ -106,17 +106,17 @@ class TankModel(BaseModel):
 
 class WaterQualityModel(BaseModel):
     date = models.DateField("計測日")
-    room_temperature = models.FloatField("室温", null=True)
-    water_temperature = models.FloatField("水温", null=True)
-    pH = models.FloatField("ph", null=True)
-    DO = models.FloatField("DO", null=True)
-    salinity = models.FloatField("塩分濃度", null=True)
-    NH4 = models.FloatField("NH4", null=True)
-    NO2 = models.FloatField("NO2", null=True)
-    NO3 = models.FloatField("NO3", null=True)
-    Ca = models.FloatField("Ca", null=True)
-    Al = models.FloatField("Al", null=True)
-    Mg = models.FloatField("Mg", null=True)
+    room_temperature = models.FloatField("室温", null=True, blank=True)
+    water_temperature = models.FloatField("水温", null=True, blank=True)
+    pH = models.FloatField("ph", null=True, blank=True)
+    DO = models.FloatField("DO", null=True, blank=True)
+    salinity = models.FloatField("塩分濃度", null=True, blank=True)
+    NH4 = models.FloatField("NH4", null=True, blank=True)
+    NO2 = models.FloatField("NO2", null=True, blank=True)
+    NO3 = models.FloatField("NO3", null=True, blank=True)
+    Ca = models.FloatField("Ca", null=True, blank=True)
+    Al = models.FloatField("Al", null=True, blank=True)
+    Mg = models.FloatField("Mg", null=True, blank=True)
     notes = models.TextField("備考", max_length=512, null=True, blank=True)
     tank = models.ForeignKey(
         "TankModel",
@@ -126,36 +126,13 @@ class WaterQualityModel(BaseModel):
         related_name="water_quality",
         on_delete=models.PROTECT,
     )
+    notify_line = models.BooleanField(default=False)
+
+
     class Meta:
         verbose_name = "水質"
         db_table = "water_quality"
         unique_together = ('date', 'tank')
-
-
-
-class StandardValueModel(BaseModel):
-    water_temperature = models.FloatField("水温基準値", null=True)
-    pH = models.FloatField("pH基準値", null=True)
-    DO = models.FloatField("DO基準値", null=True)
-    salinity = models.FloatField("塩分濃度基準値", null=True)
-    NH4 = models.FloatField("NH4基準値", null=True)
-    NO2 = models.FloatField("NO2基準値", null=True)
-    NO3 = models.FloatField("NO3基準値", null=True)
-    Ca = models.FloatField("Ca基準値", null=True)
-    Al = models.FloatField("Al基準値", null=True)
-    Mg = models.FloatField("Mg基準値", null=True)
-
-    class Meta:
-        verbose_name = "基準値"
-        db_table = "standard_value"
-
-    @classmethod
-    def get_or_create(cls):
-        if cls.objects.count() == 0:
-            return cls.objects.create()
-        return cls.objects.first()
-    
-
 
 class WaterQualityThresholdModel(BaseModel):
     PARAMETER_CHOICES = [
@@ -172,9 +149,8 @@ class WaterQualityThresholdModel(BaseModel):
     ]
 
     parameter = models.CharField("パラメーター", max_length=20, choices=PARAMETER_CHOICES)
-    reference_value_threshold_min = models.FloatField("基準の下限値", null=True, blank=True)
     reference_value_threshold_max = models.FloatField("基準の上限値", null=True, blank=True)
-    reference_value_threshold_range = models.FloatField("基準の範囲", null=True, blank=True)
+    reference_value_threshold_min = models.FloatField("基準の下限値", null=True, blank=True)
     previous_day_threshold = models.FloatField("前日との差異閾値", null=True, blank=True)
 
     class Meta:
@@ -185,13 +161,12 @@ class WaterQualityThresholdModel(BaseModel):
         return self.get_parameter_display()
 
     @classmethod
-    def update_or_create(cls, parameter, reference_value_threshold_min=None, reference_value_threshold_max=None, previous_day_threshold=None):
+    def update_or_create(cls, parameter, reference_value_threshold_max=None, reference_value_threshold_min=None, previous_day_threshold=None):
         threshold, created = cls.objects.update_or_create(
             parameter=parameter,
             defaults={
-                'reference_value_threshold_min': reference_value_threshold_min,
                 'reference_value_threshold_max': reference_value_threshold_max,
-                'reference_value_threshold_range': reference_value_threshold_range,
+                'reference_value_threshold_min': reference_value_threshold_min,
                 'previous_day_threshold': previous_day_threshold,
             }
         )

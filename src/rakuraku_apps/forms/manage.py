@@ -1,7 +1,6 @@
 from django import forms
-from rakuraku_apps.models import ShrimpModel, StandardValueModel, User
+from rakuraku_apps.models import ShrimpModel, User, WaterQualityThresholdModel
 from rakuraku_apps.models import TankModel
-from rakuraku_apps.models import StandardValueModel, WaterQualityThresholdModel
 
 class UserForm(forms.ModelForm):
     class Meta:
@@ -24,51 +23,35 @@ class ShrimpForm(forms.ModelForm):
         model = ShrimpModel
         fields = ['family']
 
-class WarningRangeForm(forms.ModelForm):
-    class Meta:
-        model = StandardValueModel
-        fields = [
-            'water_temperature',
-            'pH',
-            'DO',
-            'salinity',
-            'NH4',
-            'NO2',
-            'NO3',
-            'Ca',
-            'Al',
-            'Mg',
-        ]
 
-
-class WaterQualityThresholdForm(forms.ModelForm):
-    class Meta:
-        model = WaterQualityThresholdModel
-        fields = ['parameter', 'reference_value_threshold_min', 'reference_value_threshold_max', 'reference_value_threshold_range', 'previous_day_threshold']
-        labels = {
-            'parameter': 'パラメーター',
-            'reference_value_threshold_min': '基準の下限値',
-            'reference_value_threshold_max': '基準の上限値',
-            'reference_value_threshold_range': '基準の範囲',
-            'previous_day_threshold': '前日との差異閾値',
-        }
-        widgets = {
-            'parameter': forms.Select(attrs={'class': 'form-control'}),
-            'reference_value_threshold_min': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1', 'required': True}),
-            'reference_value_threshold_max': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1', 'required': True}),
-            'reference_value_threshold_range': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1', 'required': True}),
-            'previous_day_threshold': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.1', 'required': True}),
-        }
-        
-        
-from django import forms
-
-class PopulateDBForm(forms.Form):
-    # users = forms.IntegerField(required=False, label='ユーザー数')
-    tanks = forms.IntegerField(required=False, label='水槽数')
-    water_quality = forms.IntegerField(required=False, label='水質データ数')
-
-class ClearDBForm(forms.Form):
-    # users = forms.BooleanField(required=False, label='ユーザーを削除')
-    tanks = forms.BooleanField(required=False, label='水槽を削除')
-    water_quality = forms.BooleanField(required=False, label='水質データを削除')
+class WaterQualityThresholdForm(forms.Form):
+    water_temperature_min = forms.FloatField(label='水温の下限値', required=False)
+    water_temperature_max = forms.FloatField(label='水温の上限値', required=False)
+    water_temperature_diff = forms.FloatField(label='水温の前日差異閾値', required=False)
+    pH_min = forms.FloatField(label='pHの下限値', required=False)
+    pH_max = forms.FloatField(label='pHの上限値', required=False)
+    pH_diff = forms.FloatField(label='pHの前日差異閾値', required=False)
+    DO_min = forms.FloatField(label='DOの下限値', required=False)
+    DO_max = forms.FloatField(label='DOの上限値', required=False)
+    DO_diff = forms.FloatField(label='DOの前日差異閾値', required=False)
+    salinity_min = forms.FloatField(label='塩分濃度の下限値', required=False)
+    salinity_max = forms.FloatField(label='塩分濃度の上限値', required=False)
+    salinity_diff = forms.FloatField(label='塩分濃度の前日差異閾値', required=False)
+    NH4_min = forms.FloatField(label='NH4の下限値', required=False)
+    NH4_max = forms.FloatField(label='NH4の上限値', required=False)
+    NH4_diff = forms.FloatField(label='NH4の前日差異閾値', required=False)
+    NO2_min = forms.FloatField(label='NH4の下限値', required=False)
+    NO2_max = forms.FloatField(label='NO2の上限値', required=False)
+    NO2_diff = forms.FloatField(label='NO2の前日差異閾値', required=False)
+    NO3_min = forms.FloatField(label='NO3の下限値', required=False)
+    NO3_max = forms.FloatField(label='NO3の上限値', required=False)
+    NO3_diff = forms.FloatField(label='NO3の前日差異閾値', required=False)
+    Ca_min = forms.FloatField(label='Caの下限値', required=False)
+    Ca_max = forms.FloatField(label='Caの上限値', required=False)
+    Ca_diff = forms.FloatField(label='Caの前日差異閾値', required=False)
+    Al_min = forms.FloatField(label='Alの下限値', required=False)
+    Al_max = forms.FloatField(label='Alの上限値', required=False)
+    Al_diff = forms.FloatField(label='Alの前日差異閾値', required=False)
+    Mg_min = forms.FloatField(label='Mgの下限値', required=False)
+    Mg_max = forms.FloatField(label='Mgの上限値', required=False)
+    Mg_diff = forms.FloatField(label='Mgの前日差異閾値', required=False)
