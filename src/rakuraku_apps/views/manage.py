@@ -16,7 +16,8 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView
 from rakuraku_apps.forms.manage import TankForm, ShrimpForm
 from django.db.models import Prefetch, Count
-
+from django.views.generic import DeleteView
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 
 class ManageView(TemplateView):
@@ -33,6 +34,15 @@ class ManageUserView(ListView):
         context = super().get_context_data(**kwargs)
         context['form'] = UserForm()
         return context
+    
+class DeleteUserView(UserPassesTestMixin, DeleteView):
+    model = User
+    success_url = reverse_lazy('rakuraku_apps:manage_user')
+    template_name = None
+
+    def test_func(self):
+        user = self.get_object()
+        return user != self.request.user
 
 
 
@@ -49,6 +59,17 @@ class ManageTankView(ListView):
         ).prefetch_related(
             Prefetch('tank', queryset=TankModel.objects.order_by('name'))
         )
+    
+class DeleteTankView(DeleteView):
+    model = TankModel
+    success_url = reverse_lazy('rakuraku_apps:manage_tank')
+    template_name = None  # テンプレート名を指定
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.water_quality.all().delete()  # 関連する水質データを削除
+        return super().delete(request, *args, **kwargs)
+
 
 class CreateTankView(CreateView):
     model = TankModel

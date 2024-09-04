@@ -124,7 +124,7 @@ class WaterQualityModel(BaseModel):
         blank=False,
         null=False,
         related_name="water_quality",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
     )
     notify_line = models.BooleanField(default=False)
 

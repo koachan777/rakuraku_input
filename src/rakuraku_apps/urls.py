@@ -31,6 +31,8 @@ from rakuraku_apps.views.log import (
 from rakuraku_apps.views.manage import (
     CreateShrimpView,
     CreateTankView,
+    DeleteTankView,
+    DeleteUserView,
     ManageValueView, 
     ManageTankView, 
     ManageUserView, 
@@ -100,9 +102,11 @@ urlpatterns = [
 
     # 管理者画面　ユーザー
     path('manage/user/', ManageUserView.as_view(), name='manage_user'),
+    path('manage/user/<int:pk>/delete/', DeleteUserView.as_view(), name='delete_user'),
 
     # 管理者画面　水槽
     path('manage/tank/', ManageTankView.as_view(), name='manage_tank'),
+    path('manage/tank/<int:pk>/delete/', DeleteTankView.as_view(), name='delete_tank'),
 
     path('manage/create_tank', CreateTankView.as_view(), name='create_tank'),
     path('manage/create_shrimp', CreateShrimpView.as_view(), name='create_shrimp'),

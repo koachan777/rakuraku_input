@@ -3,6 +3,9 @@
 
 {% block PageCss %}
 <link href="{% static '/css/button.css' %}" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 {% endblock %}
 
 {% block title %}
@@ -13,11 +16,43 @@
 {% block content %}
 
 <div class="container">
-  <!-- <h2 class="text-center mb-4">ユーザー</h2> -->
   <div class="row justify-content-center">
     <div class="col-md-6">
-      <ul class="list-group mb-4">{% for user in users %} 
-        <li class="list-group-item">{{ user.account_id }}</li>{% endfor %}
+      <ul class="list-group mb-4">
+        {% for user in users %}
+          <li class="list-group-item d-flex justify-content-center align-items-center position-relative">
+            <span class="text-center" style="width: calc(100% - 2rem);">{{ user.account_id }}</span>
+            {% if user != request.user %}
+              <button type="button" class="btn btn-danger btn-sm position-absolute" style="right: 0.5rem;" data-toggle="modal" data-target="#deleteUserModal{{ user.id }}">
+                <i class="fas fa-trash"></i>
+              </button>
+            {% endif %}
+          </li>
+
+          <!-- Modal -->
+          <div class="modal fade" id="deleteUserModal{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel{{ user.id }}" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="deleteUserModalLabel{{ user.id }}">ユーザーの削除</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  本当に"{{ user.account_id }}"を削除しますか？
+                </div>
+                <div class="modal-footer">
+                  <form method="post" action="{% url 'rakuraku_apps:delete_user' user.id %}">
+                    {% csrf_token %}
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
+                    <button type="submit" class="btn btn-danger">削除</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
       </ul>
       <div class="d-grid gap-2">
         <a href="{% url 'rakuraku_apps:signup' %}" class="original-long-btn">新規登録</a>
