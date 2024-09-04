@@ -139,6 +139,8 @@ class GraphView(TemplateView):
         # 現在の期間のグラフを描画
         current_graph = draw_graph(water_quality_data, item, item_labels, start_date, end_date, compare_last_year)
         
+        last_year_graph = None
+        last_year_data_exists = False
         if compare_last_year:
             # 一年前の期間を計算
             last_year_start_date = (datetime.strptime(start_date, '%Y-%m-%d') - timedelta(days=365)).strftime('%Y-%m-%d')
@@ -152,13 +154,14 @@ class GraphView(TemplateView):
             last_year_water_quality_data = last_year_water_quality_data.values('date', 'tank__name', 'tank__shrimp__id', item)
             last_year_water_quality_data = last_year_water_quality_data.order_by('date', 'tank__id')
 
-            # 一年前のグラフを描画
-            last_year_graph = draw_graph(last_year_water_quality_data, item, item_labels, last_year_start_date, last_year_end_date, compare_last_year)
-        else:
-            last_year_graph = None
+            if last_year_water_quality_data.exists() and any(data[item] is not None for data in last_year_water_quality_data):
+                last_year_data_exists = True
+                # 一年前のグラフを描画
+                last_year_graph = draw_graph(last_year_water_quality_data, item, item_labels, last_year_start_date, last_year_end_date, compare_last_year)
 
         context['current_graph'] = current_graph
         context['last_year_graph'] = last_year_graph
+        context['last_year_data_exists'] = last_year_data_exists
         context['shrimps'] = ShrimpModel.objects.all()
         context['selected_item'] = item
         context['start_date'] = start_date
