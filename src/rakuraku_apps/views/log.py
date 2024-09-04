@@ -15,7 +15,9 @@ from matplotlib.dates import DateFormatter, DayLocator
 from django.shortcuts import get_object_or_404, redirect
 from django.shortcuts import render, redirect
 from rakuraku_apps.forms.log import WaterQualityEditForm
-
+import openpyxl
+from django.http import HttpResponse
+from openpyxl.utils import get_column_letter
 
 
 class TableOrGraphView(TemplateView):
@@ -90,6 +92,127 @@ def delete_water_quality(request, pk):
     if request.method == 'POST':
         water_quality.delete()
     return redirect('rakuraku_apps:table')
+
+def export_to_excel(request):
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+    shrimp_id = request.GET.get('shrimp')
+    item = request.GET.get('item')
+
+    if not start_date:
+        start_date = (datetime.today() - timedelta(days=7)).strftime('%Y-%m-%d')
+    if not end_date:
+        end_date = datetime.today().strftime('%Y-%m-%d')
+
+    query = Q(date__range=[start_date, end_date])
+
+    if shrimp_id:
+        query &= Q(tank__shrimp__id=shrimp_id)
+        tanks = TankModel.objects.filter(shrimp__id=shrimp_id, water_quality__date__range=[start_date, end_date]).distinct()
+    else:
+        tanks = TankModel.objects.filter(water_quality__date__range=[start_date, end_date]).distinct()
+
+    water_quality_data = WaterQualityModel.objects.filter(query).select_related('tank', 'tank__shrimp')
+
+    # Excelファイルを作成
+    wb = openpyxl.Workbook()
+    ws = wb.active
+
+    if item:
+        # 項目名を日本語に変換
+        item_name_dict = {
+            'water_temperature': '水温',
+            'pH': 'pH',
+            'DO': 'DO',
+            'salinity': '塩分濃度',
+            'NH4': 'NH4',
+            'NO2': 'NO2',
+            'NO3': 'NO3',
+            'Ca': 'Ca',
+            'Al': 'Al',
+            'Mg': 'Mg',
+        }
+        item_name = item_name_dict.get(item, item)
+
+        # 項目名をタイトルとして一番左に表示
+        ws.cell(row=1, column=1, value=item_name)
+
+        # ヘッダー行を書き込む
+        col = 2
+        for tank in tanks:
+            ws.cell(row=2, column=col, value=tank.name)
+            col += 1
+
+        # データ行を書き込む
+        dates = water_quality_data.values_list('date', flat=True).distinct().order_by('date')
+        row = 3
+        for date in dates:
+            ws.cell(row=row, column=1, value=date)
+            col = 2
+            for tank in tanks:
+                tank_data = water_quality_data.filter(date=date, tank=tank).first()
+                if tank_data:
+                    ws.cell(row=row, column=col, value=getattr(tank_data, item) or '-')
+                col += 1
+            row += 1
+    else:
+        # ヘッダー行を書き込む
+        ws.cell(row=1, column=1, value='日付')
+        col = 2
+        for tank in tanks:
+            ws.merge_cells(start_row=1, start_column=col, end_row=1, end_column=col+12)
+            ws.cell(row=1, column=col, value=tank.name)
+            col += 13
+
+        items = ['室温', '水温', 'pH', 'DO', '塩分濃度', 'NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg', '備考']
+        row = 2
+        col = 1
+        ws.cell(row=row, column=col, value='')
+        col += 1
+        for tank in tanks:
+            for item_name in items:
+                ws.cell(row=row, column=col, value=item_name)
+                col += 1
+            col += 1
+
+        # データ行を書き込む
+        dates = water_quality_data.values_list('date', flat=True).distinct().order_by('date')
+        row = 3
+        for date in dates:
+            ws.cell(row=row, column=1, value=date)
+            col = 2
+            for tank in tanks:
+                tank_data = water_quality_data.filter(date=date, tank=tank).first()
+                if tank_data:
+                    ws.cell(row=row, column=col, value=tank_data.room_temperature or '-')
+                    ws.cell(row=row, column=col+1, value=tank_data.water_temperature or '-')
+                    ws.cell(row=row, column=col+2, value=tank_data.pH or '-')
+                    ws.cell(row=row, column=col+3, value=tank_data.DO or '-')
+                    ws.cell(row=row, column=col+4, value=tank_data.salinity or '-')
+                    ws.cell(row=row, column=col+5, value=tank_data.NH4 or '-')
+                    ws.cell(row=row, column=col+6, value=tank_data.NO2 or '-')
+                    ws.cell(row=row, column=col+7, value=tank_data.NO3 or '-')
+                    ws.cell(row=row, column=col+8, value=tank_data.Ca or '-')
+                    ws.cell(row=row, column=col+9, value=tank_data.Al or '-')
+                    ws.cell(row=row, column=col+10, value=tank_data.Mg or '-')
+                    ws.cell(row=row, column=col+11, value=tank_data.notes or '-')
+                col += 13
+            row += 1
+
+    # セルの幅を自動調整
+    for column_cells in ws.columns:
+        max_length = 0
+        for cell in column_cells:
+            if cell.value:
+                max_length = max(max_length, sum(2 if ord(c) > 127 else 1 for c in str(cell.value)))
+        adjusted_width = (max_length + 2) * 1.2
+        ws.column_dimensions[get_column_letter(column_cells[0].column)].width = adjusted_width
+
+    # Excelファイルをレスポンスとして返す
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=water_quality_data.xlsx'
+    wb.save(response)
+    return response
 
 class GraphView(TemplateView):
     template_name = 'log/graph.html'

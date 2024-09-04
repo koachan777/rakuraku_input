@@ -27,7 +27,8 @@ from rakuraku_apps.views.interval_input import (
 from rakuraku_apps.views.log import (
     GraphView, 
     TableOrGraphView, 
-    TableView
+    TableView,
+    export_to_excel
 )
 from rakuraku_apps.views.manage import (
     CreateShrimpView,
@@ -96,6 +97,8 @@ urlpatterns = [
     path('table/', TableView.as_view(), name='table'),
     path('edit_water_quality/<int:pk>/', log.edit_water_quality, name='edit_water_quality'),
     path('delete_water_quality/<int:pk>/', log.delete_water_quality, name='delete_water_quality'),
+    path('export_to_excel/', export_to_excel, name='export_to_excel'),
+
     # 過去のデータ　グラフ
     path('graph/', GraphView.as_view(), name='graph'),
 
