@@ -150,8 +150,15 @@ class GraphView(TemplateView):
         handles, labels = ax.get_legend_handles_labels()
         ax.legend(handles, labels, loc='upper right')
 
+        # 日付の間隔を計算
+        num_days = (datetime.strptime(end_date, '%Y-%m-%d') - datetime.strptime(start_date, '%Y-%m-%d')).days + 1
+        if num_days > 20:
+            interval = 5
+        else:
+            interval = 1
+
         ax.xaxis.set_major_formatter(DateFormatter('%m/%d'))
-        ax.xaxis.set_major_locator(DayLocator(interval=1))
+        ax.xaxis.set_major_locator(DayLocator(interval=interval))
         fig.autofmt_xdate()
 
         ax.grid(axis='y', linestyle='-', linewidth=0.5, color='gray', alpha=0.7)
