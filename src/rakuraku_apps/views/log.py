@@ -169,7 +169,7 @@ class GraphView(TemplateView):
 
         # 単位がある場合のみ、グラフの枠の外の左上に表示
         if unit:
-            plt.figtext(0.01, 0.925, f'({unit})', fontsize=12, bbox=dict(facecolor='white', alpha=0.8, edgecolor='none', pad=2))
+            plt.figtext(0.03, 0.925, f'({unit})', fontsize=12, bbox=dict(facecolor='white', alpha=0.8, edgecolor='none', pad=2))
 
 
         # グラフをbase64エンコードされた文字列に変換
