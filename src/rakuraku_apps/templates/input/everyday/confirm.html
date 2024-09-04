@@ -100,11 +100,11 @@
       <form method="post" class="mt-4">
         {% csrf_token %}
         <div class="form-check mb-3 text-center">
-            <div class="d-inline-block">
-                <input class="form-check-input" type="checkbox" name="notify_line" id="notify_line" {% if notify_line %}checked{% endif %}>
-                                <label class="form-check-label" for="notify_line">
-                    アラートをLINEに通知する
-                </label>
+          <div class="d-inline-block">
+              <input class="form-check-input" type="checkbox" name="notify_line" id="notify_line" {% if notify_line %}checked{% endif %}>
+              <label class="form-check-label" for="notify_line">
+                  アラートをLINEに通知する
+              </label>
             </div>
         </div>
         <div class="d-grid gap-2">

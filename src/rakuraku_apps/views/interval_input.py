@@ -214,6 +214,7 @@ class IntervalConfirmInputView(TemplateView):
                     'Mg': previous_water_quality.Mg,
                 }
         self.request.session['alerts'] = alerts
+        context['notify_line'] = True
 
         return context
 
@@ -229,7 +230,7 @@ class IntervalConfirmInputView(TemplateView):
             'Al': request.session['Al'],
             'Mg': request.session['Mg'],
             'notes': request.session['notes'],
-            'notify_line': request.POST.get('notify_line', False),
+            'notify_line': request.POST.get('notify_line', '') == 'on',  # 変更
         }
 
         water_quality_id = request.session.get('water_quality_id')
@@ -242,7 +243,8 @@ class IntervalConfirmInputView(TemplateView):
         if form.is_valid():
             water_quality = form.save()
             request.session['success_message'] = '測定結果を保存しました'
-            
+            water_quality.notify_line = form_data['notify_line']  # 追加
+
             # アラートがある場合にLINEに通知する
             if water_quality.notify_line and any(request.session['alerts'].values()):
                 self.send_line_notification(request.session['alerts'], form_data)

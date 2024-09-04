@@ -211,7 +211,8 @@ class EverydayConfirmInputView(TemplateView):
         
         # alertsをrequest.sessionに保存
         self.request.session['alerts'] = alerts
-        
+        context['notify_line'] = True
+
         return context
 
     def post(self, request, *args, **kwargs):
@@ -224,7 +225,7 @@ class EverydayConfirmInputView(TemplateView):
             'DO': request.session['DO'],
             'salinity': request.session['salinity'],
             'notes': request.session['notes'],
-            'notify_line': request.POST.get('notify_line', False),
+            'notify_line': request.POST.get('notify_line', '') == 'on',  # 変更
         }
         water_quality_id = request.session.get('water_quality_id')
         if water_quality_id:
@@ -235,6 +236,8 @@ class EverydayConfirmInputView(TemplateView):
         if form.is_valid():
             water_quality = form.save()
             request.session['success_message'] = '測定結果を保存しました'
+            water_quality.notify_line = form_data['notify_line']  # 追加
+
             
             # アラートがある場合にLINEに通知する
             if water_quality.notify_line and any(request.session['alerts'].values()):
