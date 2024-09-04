@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block title %}
 <h1 class="card-title text-center mt-3">水質データ入力 - Step3</h1>
@@ -20,7 +25,7 @@
                         </div>
                         <div class="d-grid gap-2">
                             <button type="submit" class="original-long-btn" style="border: none;">次へ</button>
-                            <a href="{% url 'rakuraku_apps:everyday_second_input' %}" class="original-long-btn-gray">戻る</a>
+                            <a href="{% url 'rakuraku_apps:everyday_second_input' %}" style="display: block; text-align: center; text-decoration: none; width: 100%; margin: auto; padding: 16px 8px; font-weight: bold; border-radius: 0.3rem; background-color: rgba(112, 123, 141, 0.8); color: #fff;">戻る</a>
                         </div>
                     </form>
                 </div>  

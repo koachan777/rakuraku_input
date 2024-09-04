@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block title %}
 <h1 class="card-title text-center mt-3">水質データ入力 - Step4</h1>
@@ -19,8 +24,8 @@
                             <textarea name="notes" class="form-control" rows="4">{{ form_data.notes }}</textarea>
                         </div>
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">次へ</button>
-                            <a href="{% url 'rakuraku_apps:interval_third_input' %}" class="btn btn-secondary btn-lg">戻る</a>
+                            <button type="submit" class="original-long-btn">次へ</button>
+                            <a href="{% url 'rakuraku_apps:interval_third_input' %}" class="original-long-btn-gray">戻る</a>
                         </div>
                     </form>
                 </div>  

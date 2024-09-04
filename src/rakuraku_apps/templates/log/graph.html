@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -46,8 +51,8 @@
                 </div>
             </div>
         </div>
-        <div class="text-center mt-4">
-            <button type="submit" class="btn btn-primary btn-lg">表示</button>
+        <div class="d-grid gap-2">
+            <button type="submit" class="original-long-btn">表示</button>
         </div>
     </form>
     <hr>
@@ -55,18 +60,19 @@
         <div class="text-center">
             <img src="data:image/png;base64,{{ graph }}" alt="Water Quality Graph" id="graph-image" class="img-fluid">
         </div>
-        <div class="position-absolute top-0 end-0 mt-3 me-3 d-none d-lg-block">
-            <a href="#" class="btn btn-primary" id="save-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">保存</a>
-        </div>
+        <!-- <div class="position-absolute top-0 end-0 mt-3 me-3 d-none d-lg-block">
+            <a href="#" class="original-btn" id="save-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">保存</a>
+        </div> -->
     </div>
-    <div class="text-center mt-3 d-lg-none">
-        <a href="#" class="btn btn-primary" id="save-graph-mobile" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">保存</a>
+    <div class="d-grid gap-2">
+        <a href="#" class="original-long-btn" id="save-graph-mobile" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">保存</a>
+        <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="original-long-btn-gray">戻る</a>
     </div>
 </div>
 
-<div class="text-center my-4">
-    <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="btn btn-secondary btn-lg">戻る</a>
-</div>
+<!-- <div class="d-grid gap-2">
+    <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="original-long-btn">戻る</a>
+</div> -->
 
 
 {% include 'footer.html' %} 

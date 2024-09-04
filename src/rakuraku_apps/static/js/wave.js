@@ -33,7 +33,7 @@ function init() {
     canvasList.push(document.getElementById("waveCanvas"));
     // colorList.push(['#43c0e4']);
     colorList.push(['#56B2C8']);
-  
+
     // 各キャンバスの初期化
     for (var canvasIndex in canvasList) {
         var canvas = canvasList[canvasIndex];

@@ -15,8 +15,9 @@
                     {% csrf_token %}
                     {{ form.as_p }}  <!-- フォームフィールドを <p> タグでラップして出力 -->
                     <div class="d-grid gap-2 mt-3">
-                        <button type="submit" class="btn btn-primary btn-lg">確認画面へ</button>
-                        <a href="{% url 'rakuraku_apps:everyday_confirm' %}" class="btn btn-secondary btn-lg">戻る</a>
+                        <button type="submit" class="original-long-btn" style="border: none;">確認画面へ</button>
+                        <a href="{% url 'rakuraku_apps:everyday_confirm' %}"
+                        style="display: block; text-align: center; text-decoration: none; width: 100%; margin: auto; padding: 16px 8px; font-weight: bold; border-radius: 0.3rem; background-color: rgba(112, 123, 141, 0.8); color: #fff;">戻る</a>
                     </div>
                 </form>
             </div>
