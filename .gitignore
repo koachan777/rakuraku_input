@@ -13,4 +13,5 @@ src/rakuraku_apps/migrations/0006_delete_standardvaluemodel.py
 src/rakuraku_apps/migrations/0007_waterqualitymodel_notify_line.py
 src/rakuraku_apps/migrations/0008_alter_waterqualitymodel_al_and_more.py
 src/sql_migration.md
-src/rakuraku_apps/migrations/0001_initial.py
+src/rakuraku_apps/migrations/0001_initial.pysrc/rakuraku_apps/migrations/0002_delete_standardvaluemodel_and_more.py
+fly.toml
