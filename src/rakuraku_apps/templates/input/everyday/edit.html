@@ -11,67 +11,14 @@
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card-body text-center"> <!-- 全体を中央揃え -->
-                <form method="post">
+                <form method="post" class="d-inline-block text-start"> <!-- フォームをインラインブロックにし、左揃え -->
                     {% csrf_token %}
-                    <div class="form-group row">
-                        <label class="col-sm-4 col-form-label">{{ form.room_temperature.label_tag }}</label>
-                        <div class="col-sm-8">
-                            {{ form.room_temperature }}
-                        </div>
-                    </div>
-                
-                    <div class="form-group row">
-                        <label class="col-sm-4 col-form-label">{{ form.water_temperature.label_tag }}</label>
-                        <div class="col-sm-8">
-                            {{ form.water_temperature }}
-                        </div>
-                    </div>
-                
-                    <div class="form-group row">
-                        <label class="col-sm-4 col-form-label">{{ form.pH.label_tag }}</label>
-                        <div class="col-sm-8">
-                            {{ form.pH }}
-                        </div>
-                    </div>
-                
-                    <div class="form-group row">
-                        <label class="col-sm-4 col-form-label">{{ form.DO.label_tag }}</label>
-                        <div class="col-sm-8">
-                            {{ form.DO }}
-                        </div>
-                    </div>
-                
-                    <div class="form-group row">
-                        <label class="col-sm-4 col-form-label">{{ form.salinity.label_tag }}</label>
-                        <div class="col-sm-8">
-                            {{ form.salinity }}
-                        </div>
-                    </div>
-                
-                    <div class="form-group row">
-                        <label class="col-sm-4 col-form-label">{{ form.tank.label_tag }}</label>
-                        <div class="col-sm-8">
-                            {{ form.tank }}
-                        </div>
-                    </div>
-                
-                    <div class="form-group row">
-                        <label class="col-sm-4 col-form-label">{{ form.notes.label_tag }}</label>
-                        <div class="col-sm-8">
-                            {{ form.notes }}
-                        </div>
-                    </div>
-                
-                    <p>
-                        {{ form.notify_line.label_tag }}
-                        {{ form.notify_line }}
-                    </p>
-
+                    {{ form.as_p }}  <!-- フォームフィールドを <p> タグでラップして出力 -->
                     <div class="d-grid gap-2 mt-3">
                         <button type="submit" class="btn btn-primary btn-lg">確認画面へ</button>
                         <a href="{% url 'rakuraku_apps:everyday_confirm' %}" class="btn btn-secondary btn-lg">戻る</a>
                     </div>
-                </form>                
+                </form>
             </div>
         </div>
     </div>
