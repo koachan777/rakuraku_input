@@ -182,7 +182,7 @@ class GraphView(TemplateView):
 
         context['graph'] = graph
         context['shrimps'] = ShrimpModel.objects.all()
-        context['selected_item'] = item_labels.get(item, '')
+        context['selected_item'] = item  # 選択された項目をそのまま渡す
         context['start_date'] = start_date
         context['end_date'] = end_date
         return context
