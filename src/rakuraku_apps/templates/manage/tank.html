@@ -44,7 +44,8 @@
                     </button>
                   </div>
                   <div class="modal-body">
-                    本当に"{{ tank.name }}"を削除しますか？
+                    本当に"{{ tank.name }}"を削除しますか？<br>
+                    "{{ tank.name }}"の水質データも全て削除されます。
                   </div>
                   <div class="modal-footer">
                     <form method="post" action="{% url 'rakuraku_apps:delete_tank' tank.id %}">
