@@ -5,7 +5,15 @@
 <link href="{% static '/css/button.css' %}" rel="stylesheet">
 {% endblock %}
 
+
+
+{% block title %}
+<h1 class="card-title text-center mt-3" style="font-size: 32px; margin-bottom: 16px;">過去のデータ</h1>
+{% endblock %}
+
+
 {% block content %}
+
 {% if user.is_authenticated %}
 
 <div class="container"> 
@@ -13,7 +21,6 @@
         <div class="col-md-6"> 
             <div class="card mt-5 border-0"> 
                 <div class="card-body"> 
-                    <h1 class="card-title text-start mb-4">過去のデータ</h1> 
                     <div class="d-grid gap-3"> 
                         <a href="{% url 'rakuraku_apps:table' %}" class="original-long-btn"> 
                             <div class="d-flex align-items-center justify-content-center"> 

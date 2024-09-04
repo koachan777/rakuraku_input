@@ -7,7 +7,8 @@
 
 
 {% block title %}
-<h1 class="card-title text-center mt-3">水質データ入力 - 確認</h1>
+<h1 class="card-title text-center mt-3" style="font-size: 32px; margin-bottom: 16px;">データ入力</h1> 
+<h2 class="text-center mb-4">定期測定 入力データの確認</h2>
 {% endblock %}
 
 {% block content %}
@@ -16,7 +17,7 @@
   <div class="row justify-content-center">
     <div class="col-md-8">
       <div class="card-body">
-        <h2 class="card-title text-center mb-4">入力内容の確認</h2>
+        <!-- <h2 class="card-title text-center mb-4">入力内容の確認</h2> -->
         <div class="d-inline-block text-start">
           <p>
             <strong>計測日:</strong>{{ form_data.date }}
