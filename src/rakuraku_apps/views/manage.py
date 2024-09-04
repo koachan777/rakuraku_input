@@ -1,22 +1,14 @@
-import json
 from urllib import request
-from django.views.generic import TemplateView, ListView
-from rakuraku_apps.models import ShrimpModel, TankModel, User, WaterQualityThresholdModel
-from rakuraku_apps.forms.manage import UserForm, WaterQualityThresholdForm, TankForm
-from django.views.generic import UpdateView
-from django.shortcuts import render, redirect
-from django.views import View
-import json
-from django.core.serializers.json import DjangoJSONEncoder
-from django.shortcuts import render, redirect
-from django.views import View
-from rakuraku_apps.forms.manage import WaterQualityThresholdForm
-from rakuraku_apps.models import WaterQualityThresholdModel
-from django.urls import reverse_lazy
-from django.views.generic import CreateView
-from rakuraku_apps.forms.manage import TankForm, ShrimpForm
-from django.db.models import Prefetch, Count
 
+from django.views.generic import TemplateView, ListView, CreateView, DeleteView
+from django.shortcuts import render, redirect
+from django.urls import reverse_lazy
+from django.db.models import Prefetch, Count
+from django.contrib.auth.mixins import UserPassesTestMixin
+
+from rakuraku_apps.models import ShrimpModel, TankModel, User, WaterQualityThresholdModel
+from rakuraku_apps.forms.manage import UserForm, WaterQualityThresholdForm, TankForm, WaterQualityThresholdForm, ShrimpForm
+from rakuraku_apps.models import WaterQualityThresholdModel
 
 
 class ManageView(TemplateView):
@@ -33,6 +25,17 @@ class ManageUserView(ListView):
         context = super().get_context_data(**kwargs)
         context['form'] = UserForm()
         return context
+    
+
+
+class DeleteUserView(UserPassesTestMixin, DeleteView):
+    model = User
+    success_url = reverse_lazy('rakuraku_apps:manage_user')
+    template_name = None
+
+    def test_func(self):
+        user = self.get_object()
+        return user != self.request.user
 
 
 
@@ -49,6 +52,20 @@ class ManageTankView(ListView):
         ).prefetch_related(
             Prefetch('tank', queryset=TankModel.objects.order_by('name'))
         )
+    
+
+
+class DeleteTankView(DeleteView):
+    model = TankModel
+    success_url = reverse_lazy('rakuraku_apps:manage_tank')
+    template_name = None
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.water_quality.all().delete()  # 関連する水質データを削除
+        return super().delete(request, *args, **kwargs)
+
+
 
 class CreateTankView(CreateView):
     model = TankModel
@@ -64,11 +81,14 @@ class CreateTankView(CreateView):
             return self.form_invalid(form)
         return super().form_valid(form)
 
+
+
 class CreateShrimpView(CreateView):
     model = ShrimpModel
     form_class = ShrimpForm
     template_name = 'manage/create_shrimp.html'
     success_url = reverse_lazy('rakuraku_apps:manage_tank')
+
 
 
 class ManageValueView(TemplateView):

@@ -1,17 +1,14 @@
-from datetime import date, datetime
-
-from django.views.generic import TemplateView
-from django.shortcuts import redirect
-from rakuraku_apps.models import TankModel, WaterQualityModel, WaterQualityThresholdModel
-from rakuraku_apps.forms.input import WaterQualityForm
-from django.views.generic import TemplateView
-from django.shortcuts import redirect
-from rakuraku_apps.models import TankModel, WaterQualityModel, WaterQualityThresholdModel
-from rakuraku_apps.forms.input import WaterQualityForm
-from datetime import datetime, timedelta
-
-from django.conf import settings
 import requests
+
+from datetime import date, datetime, timedelta
+
+from django.views.generic import TemplateView
+from django.shortcuts import redirect
+from django.conf import settings
+
+from rakuraku_apps.models import TankModel, WaterQualityModel, WaterQualityThresholdModel
+from rakuraku_apps.forms.input import WaterQualityForm
+
 
 
 class EverydayOrIntervalView(TemplateView):
@@ -31,6 +28,7 @@ class EverydayOrIntervalView(TemplateView):
         return super().get(request, *args, **kwargs)
 
 
+
 class EverydayFirstInputView(TemplateView):
     template_name = 'input/everyday/first_input.html'
 
@@ -42,7 +40,6 @@ class EverydayFirstInputView(TemplateView):
         context['tanks'] = TankModel.objects.all()
         today = date.today()
         context['today'] = today.strftime('%Y-%m-%d')
-        # context['amedama'] = 'amedamaとは？'
 
         # その日の日付のデータがすでに存在する場合は、そのデータを初期値として設定
         water_qualities = WaterQualityModel.objects.filter(date=today)
@@ -95,6 +92,8 @@ class EverydayFirstInputView(TemplateView):
             request.session['notes'] = ''
         return redirect('/everyday/second_input/')
 
+
+
 class EverydaySecondInputView(TemplateView):
     template_name = 'input/everyday/second_input.html'
 
@@ -130,6 +129,7 @@ class EverydayCommentInputView(TemplateView):
     def post(self, request, *args, **kwargs):
         request.session['notes'] = request.POST['notes']
         return redirect('/everyday/confirm/')
+
 
 
 class EverydayConfirmInputView(TemplateView):
@@ -211,7 +211,8 @@ class EverydayConfirmInputView(TemplateView):
         
         # alertsをrequest.sessionに保存
         self.request.session['alerts'] = alerts
-        
+        context['notify_line'] = True
+
         return context
 
     def post(self, request, *args, **kwargs):
@@ -224,7 +225,7 @@ class EverydayConfirmInputView(TemplateView):
             'DO': request.session['DO'],
             'salinity': request.session['salinity'],
             'notes': request.session['notes'],
-            'notify_line': request.POST.get('notify_line', False),
+            'notify_line': request.POST.get('notify_line', '') == 'on',
         }
         water_quality_id = request.session.get('water_quality_id')
         if water_quality_id:
@@ -235,6 +236,8 @@ class EverydayConfirmInputView(TemplateView):
         if form.is_valid():
             water_quality = form.save()
             request.session['success_message'] = '測定結果を保存しました'
+            water_quality.notify_line = form_data['notify_line']
+
             
             # アラートがある場合にLINEに通知する
             if water_quality.notify_line and any(request.session['alerts'].values()):
@@ -267,6 +270,7 @@ class EverydayConfirmInputView(TemplateView):
         requests.post(url, headers=headers, data=data)
 
 
+
 class EverydayEditView(TemplateView):
     template_name = 'input/everyday/edit.html'
 
@@ -288,7 +292,7 @@ class EverydayEditView(TemplateView):
         form = WaterQualityForm(request.POST)
         if form.is_valid():
             request.session['date'] = form.cleaned_data['date'].strftime('%Y-%m-%d')
-            request.session['tank'] = form.cleaned_data['tank'].pk  # 変更
+            request.session['tank'] = form.cleaned_data['tank'].pk
             request.session['room_temperature'] = form.cleaned_data['room_temperature']
             request.session['water_temperature'] = form.cleaned_data['water_temperature']
             request.session['pH'] = form.cleaned_data['pH']

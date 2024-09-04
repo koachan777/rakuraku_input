@@ -34,6 +34,7 @@ class UserManager(BaseUserManager):
         )
 
 
+
 class User(AbstractBaseUser, PermissionsMixin):
 
     account_id = models.CharField(
@@ -64,8 +65,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'account_id'  # ログイン時、ユーザー名の代わりにaccount_idを使用
-    REQUIRED_FIELDS = []  # スーパーユーザー作成時に必要なフィールドはなし
+    USERNAME_FIELD = 'account_id'
+    REQUIRED_FIELDS = []
 
     def __str__(self):
         return self.account_id
@@ -86,6 +87,7 @@ class ShrimpModel(BaseModel):
     class Meta:
         verbose_name = "系統"
         db_table = "shrimp"
+
 
 
 class TankModel(BaseModel):
@@ -124,15 +126,16 @@ class WaterQualityModel(BaseModel):
         blank=False,
         null=False,
         related_name="water_quality",
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
     )
     notify_line = models.BooleanField(default=False)
-
 
     class Meta:
         verbose_name = "水質"
         db_table = "water_quality"
         unique_together = ('date', 'tank')
+
+
 
 class WaterQualityThresholdModel(BaseModel):
     PARAMETER_CHOICES = [

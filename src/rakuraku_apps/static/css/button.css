@@ -85,3 +85,17 @@
     color: #fff;
     border: none;
 }
+
+.original-long-btn-excel {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+    margin: auto;
+    padding: 16px 8px;
+    font-weight: bold;
+    border-radius: 0.3rem;
+    background-color: rgba(11, 147, 74, 0.8);
+    color: #fff;
+    border: none;
+}

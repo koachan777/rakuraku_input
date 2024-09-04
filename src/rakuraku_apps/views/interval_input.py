@@ -1,13 +1,12 @@
-from datetime import date
+import requests
+from datetime import date, datetime, timedelta
 
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
-from rakuraku_apps.forms.input import IntervalWaterQualityForm
-from rakuraku_apps.models import TankModel, WaterQualityModel, WaterQualityThresholdModel
-from datetime import datetime, timedelta
-import requests
 from django.conf import settings
 
+from rakuraku_apps.forms.input import IntervalWaterQualityForm
+from rakuraku_apps.models import TankModel, WaterQualityModel, WaterQualityThresholdModel
 
 
 class IntervalFirstInputView(TemplateView):
@@ -83,6 +82,8 @@ class IntervalFirstInputView(TemplateView):
             
         return redirect('/interval/second_input/')
 
+
+
 class IntervalSecondInputView(TemplateView):
     template_name = 'input/interval/second_input.html'
     
@@ -100,6 +101,8 @@ class IntervalSecondInputView(TemplateView):
         request.session['NO2'] = request.POST['NO2']
         request.session['NO3'] = request.POST['NO3']
         return redirect('/interval/third_input/')
+
+
 
 class IntervalThirdInputView(TemplateView):
     template_name = 'input/interval/third_input.html'
@@ -119,6 +122,8 @@ class IntervalThirdInputView(TemplateView):
         request.session['Mg'] = request.POST['Mg']
         return redirect('/interval/comment/')
 
+
+
 class IntervalCommentInputView(TemplateView):
     template_name = 'input/interval/comment_input.html'
     
@@ -132,6 +137,8 @@ class IntervalCommentInputView(TemplateView):
     def post(self, request, *args, **kwargs):
         request.session['notes'] = request.POST['notes']
         return redirect('/interval/confirm/')
+
+
 
 class IntervalConfirmInputView(TemplateView):
     template_name = 'input/interval/confirm.html'
@@ -214,6 +221,7 @@ class IntervalConfirmInputView(TemplateView):
                     'Mg': previous_water_quality.Mg,
                 }
         self.request.session['alerts'] = alerts
+        context['notify_line'] = True
 
         return context
 
@@ -229,7 +237,7 @@ class IntervalConfirmInputView(TemplateView):
             'Al': request.session['Al'],
             'Mg': request.session['Mg'],
             'notes': request.session['notes'],
-            'notify_line': request.POST.get('notify_line', False),
+            'notify_line': request.POST.get('notify_line', '') == 'on',
         }
 
         water_quality_id = request.session.get('water_quality_id')
@@ -242,7 +250,8 @@ class IntervalConfirmInputView(TemplateView):
         if form.is_valid():
             water_quality = form.save()
             request.session['success_message'] = '測定結果を保存しました'
-            
+            water_quality.notify_line = form_data['notify_line']
+
             # アラートがある場合にLINEに通知する
             if water_quality.notify_line and any(request.session['alerts'].values()):
                 self.send_line_notification(request.session['alerts'], form_data)
@@ -274,6 +283,7 @@ class IntervalConfirmInputView(TemplateView):
         headers = {'Authorization': f'Bearer {settings.LINE_NOTIFY_ACCESS_TOKEN}'}
         data = {'message': message}
         requests.post(url, headers=headers, data=data)
+
 
 
 class IntervalEditView(TemplateView):
