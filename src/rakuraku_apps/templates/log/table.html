@@ -3,6 +3,9 @@
 
 {% block PageCss %}
 <link href="{% static '/css/button.css' %}" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 {% endblock %}
 
 {% load custom_tags %}
@@ -122,6 +125,7 @@
                     <th><nobr>Al</nobr></th>
                     <th><nobr>Mg</nobr></th>
                     <th><nobr>備考</nobr></th>
+                    <th><nobr>編集/削除</nobr></th>
                 </tr>
             </thead>
             <tbody>
@@ -140,7 +144,36 @@
                     <td><nobr>{{ data.Al|default:"-" }}</nobr></td>
                     <td><nobr>{{ data.Mg|default:"-" }}</nobr></td>
                     <td><nobr>{{ data.notes|default:"-" }}</nobr></td>
+                    <td>
+                        <a href="{% url 'rakuraku_apps:edit_water_quality' data.id %}" class="btn btn-sm btn-primary">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ data.id }}">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
                 </tr>
+<!-- 削除確認モーダル -->
+<div class="modal fade" id="deleteModal{{ data.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{ data.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel{{ data.id }}">データの削除</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                本当にこのデータを削除しますか？
+            </div>
+            <div class="modal-footer">
+                <form action="{% url 'rakuraku_apps:delete_water_quality' data.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                    <button type="submit" class="btn btn-danger">削除</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
                 {% endfor %}
             </tbody>
         </table>

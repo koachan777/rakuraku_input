@@ -1,4 +1,5 @@
 from django.urls import path, include
+from .views import log
 
 from rakuraku_apps.views.common import (
     CustomLoginView,
@@ -93,7 +94,8 @@ urlpatterns = [
 
     # 過去のデータ　表
     path('table/', TableView.as_view(), name='table'),
-
+    path('edit_water_quality/<int:pk>/', log.edit_water_quality, name='edit_water_quality'),
+    path('delete_water_quality/<int:pk>/', log.delete_water_quality, name='delete_water_quality'),
     # 過去のデータ　グラフ
     path('graph/', GraphView.as_view(), name='graph'),
 

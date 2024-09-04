@@ -12,6 +12,10 @@ import matplotlib.pyplot as plt
 from matplotlib.dates import DateFormatter
 import japanize_matplotlib
 from matplotlib.dates import DateFormatter, DayLocator
+from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import render, redirect
+from rakuraku_apps.forms.log import WaterQualityEditForm
+
 
 
 class TableOrGraphView(TemplateView):
@@ -62,14 +66,30 @@ class TableView(TemplateView):
             water_quality_data = water_quality_data.values('date', 'tank__name', 'pH', 'DO', 'salinity', 'NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg', 'water_temperature', 'room_temperature', 'notes')
 
         # 水槽名の昇順と日付の昇順で並び替え
-        water_quality_data = water_quality_data.order_by('tank__name', 'date')
-
+        water_quality_data = water_quality_data.order_by('tank__name', 'date').values('id', 'date', 'tank__name', 'pH', 'DO', 'salinity', 'NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg', 'water_temperature', 'room_temperature', 'notes')
         context['water_quality_data'] = water_quality_data
         context['shrimps'] = ShrimpModel.objects.all()
         context['start_date'] = start_date
         context['end_date'] = end_date
 
         return context
+    
+def edit_water_quality(request, pk):
+    water_quality = get_object_or_404(WaterQualityModel, pk=pk)
+    if request.method == 'POST':
+        form = WaterQualityEditForm(request.POST, instance=water_quality)
+        if form.is_valid():
+            form.save()
+            return redirect('rakuraku_apps:table')
+    else:
+        form = WaterQualityEditForm(instance=water_quality)
+    return render(request, 'log/edit_water_quality.html', {'form': form})
+
+def delete_water_quality(request, pk):
+    water_quality = get_object_or_404(WaterQualityModel, pk=pk)
+    if request.method == 'POST':
+        water_quality.delete()
+    return redirect('rakuraku_apps:table')
 
 class GraphView(TemplateView):
     template_name = 'log/graph.html'

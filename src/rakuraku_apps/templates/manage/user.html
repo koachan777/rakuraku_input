@@ -24,7 +24,7 @@
             <span class="text-center" style="width: calc(100% - 2rem);">{{ user.account_id }}</span>
             {% if user != request.user %}
               <button type="button" class="btn btn-danger btn-sm position-absolute" style="right: 0.5rem;" data-toggle="modal" data-target="#deleteUserModal{{ user.id }}">
-                <i class="fas fa-trash"></i>
+                <i class="fas fa-user-minus"></i>
               </button>
             {% endif %}
           </li>
