@@ -157,10 +157,18 @@ class GraphView(TemplateView):
         else:
             interval = 1
 
-        ax.xaxis.set_major_formatter(DateFormatter('%m/%d'))
+        # 年をまたぐかどうかを判定
+        start_year = datetime.strptime(start_date, '%Y-%m-%d').year
+        end_year = datetime.strptime(end_date, '%Y-%m-%d').year
+        if start_year != end_year:
+            date_format = '%Y/%m/%d'
+        else:
+            date_format = '%m/%d'
+
+
+        ax.xaxis.set_major_formatter(DateFormatter(date_format))
         ax.xaxis.set_major_locator(DayLocator(interval=interval))
         fig.autofmt_xdate()
-
         ax.grid(axis='y', linestyle='-', linewidth=0.5, color='gray', alpha=0.7)
 
         # 単位を設定
