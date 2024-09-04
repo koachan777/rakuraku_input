@@ -100,6 +100,8 @@ class GraphView(TemplateView):
         end_date = self.request.GET.get('end_date')
         shrimp_id = self.request.GET.get('shrimp')
         item = self.request.GET.get('item')
+        compare_last_year = self.request.GET.get('compare_last_year')
+
         if not start_date:
             start_date = (datetime.today() - timedelta(days=7)).strftime('%Y-%m-%d')
         if not end_date:
@@ -134,49 +136,83 @@ class GraphView(TemplateView):
 
         water_quality_data = water_quality_data.order_by('date', 'tank__id')
 
-        # グラフの描画
-        fig, ax = plt.subplots(figsize=(10, 6), tight_layout=True)
-        fig.subplots_adjust(top=0.9)
-        fig.suptitle(item_labels.get(item, ''), fontsize=24, fontweight='bold')
+        # 現在の期間のグラフを描画
+        current_graph = draw_graph(water_quality_data, item, item_labels, start_date, end_date, compare_last_year)
+        
+        if compare_last_year:
+            # 一年前の期間を計算
+            last_year_start_date = (datetime.strptime(start_date, '%Y-%m-%d') - timedelta(days=365)).strftime('%Y-%m-%d')
+            last_year_end_date = (datetime.strptime(end_date, '%Y-%m-%d') - timedelta(days=365)).strftime('%Y-%m-%d')
 
-        # 系統ごとに水槽をグルーピング
-        shrimp_tanks = {}
-        for tank_data in water_quality_data:
-            shrimp_id = tank_data.get('tank__shrimp__id')
+            # 一年前のデータを取得
+            last_year_query = Q(date__range=[last_year_start_date, last_year_end_date])
             if shrimp_id:
-                if shrimp_id not in shrimp_tanks:
-                    shrimp_tanks[shrimp_id] = []
-                shrimp_tanks[shrimp_id].append(tank_data)
+                last_year_query &= Q(tank__shrimp__id=shrimp_id)
+            last_year_water_quality_data = WaterQualityModel.objects.filter(last_year_query).select_related('tank', 'tank__shrimp')
+            last_year_water_quality_data = last_year_water_quality_data.values('date', 'tank__name', 'tank__shrimp__id', item)
+            last_year_water_quality_data = last_year_water_quality_data.order_by('date', 'tank__id')
 
-        colors = plt.cm.get_cmap('tab20', sum(len(set(tank['tank__name'] for tank in tanks)) for tanks in shrimp_tanks.values()))
-        color_index = 0
-
-        for shrimp_id, tanks in shrimp_tanks.items():
-            # 系統内の水槽をID順にソート
-            tanks.sort(key=lambda x: x['tank__name'])
-
-            # 重複する水槽名を解消
-            unique_tank_names = sorted(set(tank['tank__name'] for tank in tanks))
-
-            for tank_name in unique_tank_names:
-                dates = [data['date'] for data in water_quality_data if data['tank__name'] == tank_name]
-                values = [data[item] for data in water_quality_data if data['tank__name'] == tank_name]
-
-                color = colors(color_index)
-                ax.plot(dates, values, marker='o', label=tank_name, color=color, linewidth=2)
-                color_index += 1
-
-        # 凡例の表示
-        handles, labels = ax.get_legend_handles_labels()
-        ax.legend(handles, labels, loc='upper right')
-
-        # 日付の間隔を計算
-        num_days = (datetime.strptime(end_date, '%Y-%m-%d') - datetime.strptime(start_date, '%Y-%m-%d')).days + 1
-        if num_days > 20:
-            interval = 5
+            # 一年前のグラフを描画
+            last_year_graph = draw_graph(last_year_water_quality_data, item, item_labels, last_year_start_date, last_year_end_date, compare_last_year)
         else:
-            interval = 1
+            last_year_graph = None
 
+        context['current_graph'] = current_graph
+        context['last_year_graph'] = last_year_graph
+        context['shrimps'] = ShrimpModel.objects.all()
+        context['selected_item'] = item
+        context['start_date'] = start_date
+        context['end_date'] = end_date
+        context['compare_last_year'] = compare_last_year
+        return context
+
+def draw_graph(water_quality_data, item, item_labels, start_date, end_date, compare_last_year=False):
+    fig, ax = plt.subplots(figsize=(10, 6), tight_layout=True)
+    fig.subplots_adjust(top=0.9)
+    fig.suptitle(item_labels.get(item, ''), fontsize=24, fontweight='bold')
+
+    # 系統ごとに水槽をグルーピング
+    shrimp_tanks = {}
+    for tank_data in water_quality_data:
+        shrimp_id = tank_data.get('tank__shrimp__id')
+        if shrimp_id:
+            if shrimp_id not in shrimp_tanks:
+                shrimp_tanks[shrimp_id] = []
+            shrimp_tanks[shrimp_id].append(tank_data)
+
+    colors = plt.cm.get_cmap('tab20', sum(len(set(tank['tank__name'] for tank in tanks)) for tanks in shrimp_tanks.values()))
+    color_index = 0
+
+    for shrimp_id, tanks in shrimp_tanks.items():
+        # 系統内の水槽をID順にソート
+        tanks.sort(key=lambda x: x['tank__name'])
+
+        # 重複する水槽名を解消
+        unique_tank_names = sorted(set(tank['tank__name'] for tank in tanks))
+
+        for tank_name in unique_tank_names:
+            dates = [data['date'] for data in water_quality_data if data['tank__name'] == tank_name]
+            values = [data[item] for data in water_quality_data if data['tank__name'] == tank_name]
+
+            color = colors(color_index)
+            ax.plot(dates, values, marker='o', label=tank_name, color=color, linewidth=2)
+            color_index += 1
+
+    # 凡例の表示
+    handles, labels = ax.get_legend_handles_labels()
+    ax.legend(handles, labels, loc='upper right')
+
+    # 日付の間隔を計算
+    num_days = (datetime.strptime(end_date, '%Y-%m-%d') - datetime.strptime(start_date, '%Y-%m-%d')).days + 1
+    if num_days > 20:
+        interval = 5
+    else:
+        interval = 1
+
+    # 「昨年のデータと比較する」チェックボックスがオンの場合は、常に年を含める
+    if compare_last_year:
+        date_format = '%Y/%m/%d'
+    else:
         # 年をまたぐかどうかを判定
         start_year = datetime.strptime(start_date, '%Y-%m-%d').year
         end_year = datetime.strptime(end_date, '%Y-%m-%d').year
@@ -185,39 +221,32 @@ class GraphView(TemplateView):
         else:
             date_format = '%m/%d'
 
+    ax.xaxis.set_major_formatter(DateFormatter(date_format))
+    ax.xaxis.set_major_locator(DayLocator(interval=interval))
+    fig.autofmt_xdate()
+    ax.grid(axis='y', linestyle='-', linewidth=0.5, color='gray', alpha=0.7)
 
-        ax.xaxis.set_major_formatter(DateFormatter(date_format))
-        ax.xaxis.set_major_locator(DayLocator(interval=interval))
-        fig.autofmt_xdate()
-        ax.grid(axis='y', linestyle='-', linewidth=0.5, color='gray', alpha=0.7)
+    # 単位を設定
+    unit = ''
+    if item == 'water_temperature':
+        unit = '°C'
+    elif item == 'DO':
+        unit = 'mg/L'
+    elif item == 'salinity':
+        unit = '%'
+    elif item in ['NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg']:
+        unit = 'mg/L'
 
-        # 単位を設定
-        unit = ''
-        if item == 'water_temperature':
-            unit = '°C'
-        elif item == 'DO':
-            unit = 'mg/L'
-        elif item == 'salinity':
-            unit = '%'
-        elif item in ['NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg']:
-            unit = 'mg/L'
+    # 単位がある場合のみ、グラフの枠の外の左上に表示
+    if unit:
+        plt.figtext(0.03, 0.925, f'({unit})', fontsize=12, bbox=dict(facecolor='white', alpha=0.8, edgecolor='none', pad=2))
 
-        # 単位がある場合のみ、グラフの枠の外の左上に表示
-        if unit:
-            plt.figtext(0.03, 0.925, f'({unit})', fontsize=12, bbox=dict(facecolor='white', alpha=0.8, edgecolor='none', pad=2))
+    # グラフをbase64エンコードされた文字列に変換
+    buffer = io.BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    image_png = buffer.getvalue()
+    graph = base64.b64encode(image_png).decode('utf-8')
+    buffer.close()
 
-
-        # グラフをbase64エンコードされた文字列に変換
-        buffer = io.BytesIO()
-        plt.savefig(buffer, format='png')
-        buffer.seek(0)
-        image_png = buffer.getvalue()
-        graph = base64.b64encode(image_png).decode('utf-8')
-        buffer.close()
-
-        context['graph'] = graph
-        context['shrimps'] = ShrimpModel.objects.all()
-        context['selected_item'] = item  # 選択された項目をそのまま渡す
-        context['start_date'] = start_date
-        context['end_date'] = end_date
-        return context
+    return graph

@@ -51,6 +51,14 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="compare_last_year" name="compare_last_year" {% if request.GET.compare_last_year %}checked{% endif %}>
+                    <label class="form-check-label" for="compare_last_year">昨年のデータと比較する</label>
+                </div>
+            </div>
+        </div>
         <div class="text-center mt-4">
             <button type="submit" class="original-long-btn">表示</button>
         </div>
@@ -58,12 +66,24 @@
     <hr>
     <div class="position-relative">
         <div class="text-center">
-            <img src="data:image/png;base64,{{ graph }}" alt="Water Quality Graph" id="graph-image" class="img-fluid">
+            <img src="data:image/png;base64,{{ current_graph }}" alt="Current Water Quality Graph" id="current-graph-image" class="img-fluid">
         </div>
         <div class="position-absolute top-0 end-0 mt-3 me-3 d-none d-lg-block">
-            <a href="#" class="original-btn" id="save-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">保存</a>
+            <a href="#" class="original-btn" id="save-current-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">保存</a>
         </div>
     </div>
+
+    {% if last_year_graph %}
+    <div class="position-relative mt-5">
+        <div class="text-center">
+            <img src="data:image/png;base64,{{ last_year_graph }}" alt="Last Year Water Quality Graph" id="last-year-graph-image" class="img-fluid">
+        </div>
+        <div class="position-absolute top-0 end-0 mt-3 me-3 d-none d-lg-block">
+            <a href="#" class="original-btn" id="save-last-year-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">保存</a>
+        </div>
+    </div>
+    {% endif %}
+
     <div class="text-center my-4">
         <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="original-long-btn-gray">戻る</a>
     </div>
@@ -72,8 +92,8 @@
 {% include 'footer.html' %} 
 
 <script>
-    document.getElementById('save-graph').addEventListener('click', function(event) {
-        var imgElement = document.getElementById('graph-image');
+    document.getElementById('save-current-graph').addEventListener('click', function(event) {
+        var imgElement = document.getElementById('current-graph-image');
         var imgSrc = imgElement.src;
         var item = event.target.getAttribute('data-item');
         var startDate = event.target.getAttribute('data-start-date');
@@ -87,6 +107,22 @@
         link.click();
     });
 
+    {% if last_year_graph %}
+    document.getElementById('save-last-year-graph').addEventListener('click', function(event) {
+        var imgElement = document.getElementById('last-year-graph-image');
+        var imgSrc = imgElement.src;
+        var item = event.target.getAttribute('data-item');
+        var startDate = event.target.getAttribute('data-start-date');
+        var endDate = event.target.getAttribute('data-end-date');
+        var fileName = item + '_' + startDate + '-' + endDate + '_last_year.png';
+
+        var link = document.createElement('a');
+        link.download = fileName;
+        link.href = imgSrc;
+
+        link.click();
+    });
+    {% endif %}
 </script>
 
 {% endblock %}
