@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block title %}
 <h1 class="card-title text-center mt-3">水質データ入力 - 確認</h1>
@@ -101,9 +106,9 @@
             </div>
         </div>
         <div class="d-grid gap-2">
-            <button type="submit" class="btn btn-primary btn-lg">保存</button>
-            <a href="{% url 'rakuraku_apps:everyday_edit' %}" class="btn btn-warning btn-lg">編集</a>
-            <a href="{% url 'rakuraku_apps:everyday_comment' %}" class="btn btn-secondary btn-lg">戻る</a>
+            <button type="submit" class="original-long-btn">保存</button>
+            <a href="{% url 'rakuraku_apps:everyday_edit' %}" class="original-long-btn-green">編集</a>
+            <a href="{% url 'rakuraku_apps:everyday_comment' %}" class="original-long-btn-gray">戻る</a>
         </div>
     </form>
     </div>

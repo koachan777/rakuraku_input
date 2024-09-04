@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -8,9 +13,9 @@
             <form method="post" class="p-4">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <div class="text-center">
-                    <a href="{% url 'rakuraku_apps:manage_tank' %}" class="btn btn-secondary">戻る</a>
-                    <button type="submit" class="btn btn-primary">保存</button>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="original-long-btn">保存</button>
+                    <a href="{% url 'rakuraku_apps:manage_tank' %}" class="original-long-btn-gray">戻る</a>
                 </div>
             </form>
         </div>

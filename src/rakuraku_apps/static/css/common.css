@@ -96,7 +96,7 @@ body {
   margin: 0 auto;
 }
 
-.original-btn {
+/* .original-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -108,13 +108,12 @@ body {
   padding: 10px;
   font-weight: bold;
   border-radius: 0.3rem;
-  /* border-bottom: 7px solid #1B3C6F; */
   background-color: rgba(47, 93, 163, 0.8);
   color: #fff;
   position: relative;
-}
+} */
 
-.original-btn i {
+/* .original-btn i {
   margin-right: 8px;
 }
 
@@ -124,9 +123,9 @@ body {
 
 .footer-btn-txt {
   font-size: 16px;
-}
+} */
 
-.original-long-btn {
+/* .original-long-btn {
   display: block;
   text-align: center;
   text-decoration: none;
@@ -135,7 +134,6 @@ body {
   padding: 16px 8px;
   font-weight: bold;
   border-radius: 0.3rem;
-  /* border-bottom: 7px solid #1B3C6F; */
   background-color: rgba(47, 93, 163, 0.8);
   color: #fff;
 }
@@ -149,10 +147,9 @@ body {
   padding: 16px 8px;
   font-weight: bold;
   border-radius: 0.3rem;
-  /* border-bottom: 7px solid #1B3C6F; */
   background-color: rgba(112, 123, 141, 0.8);
   color: #fff;
-}
+} */
 
 /* アラートメッセージのスタイル */
 .alert {

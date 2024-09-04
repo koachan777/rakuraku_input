@@ -1,4 +1,10 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% load custom_tags %}
 
 {% block content %}
@@ -48,8 +54,8 @@
                 </div>
             </div>
         </div>
-        <div class="text-center mt-4">
-            <button type="submit" class="btn btn-primary btn-lg">表示</button>
+        <div class="d-grid gap-2">
+            <button type="submit" class="original-long-btn">表示</button>
         </div>
     </form>
     <hr>
@@ -137,8 +143,8 @@
     {% endif %}
 </div>
 
-<div class="text-center mb-4">
-    <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="btn btn-secondary btn-lg">戻る</a>
+<div class="d-grid gap-2">
+    <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="original-long-btn-gray">戻る</a>
 </div>
 
 {% include 'footer.html' %}

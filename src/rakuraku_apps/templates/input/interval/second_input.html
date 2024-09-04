@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block title %}
 <h1 class="card-title text-center mt-3">水質データ入力 - Step2</h1> 
@@ -27,7 +32,7 @@
                             <input type="number" name="NO3" class="form-control" min="0" max="100" step="0.1" value="{{ form_data.NO3 }}">
                         </div>
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">次へ</button>
+                            <button type="submit" class="original-long-btn">次へ</button>
                         </div>
                     </form>
                 </div> 
