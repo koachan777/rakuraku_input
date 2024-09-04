@@ -28,6 +28,22 @@
     font-size: 16px;
 }
 
+.original-big-btn {
+    font-size: 16px;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+    height: 90px;
+    margin: auto;
+    padding: 32px 8px;
+    font-weight: bold;
+    border-radius: 0.3rem;
+    background-color: rgba(47, 93, 163, 0.8);
+    color: #fff;
+    border: none;
+}
+
 .original-long-btn {
     display: block;
     text-align: center;
