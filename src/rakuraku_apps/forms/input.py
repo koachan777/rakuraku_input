@@ -16,7 +16,6 @@ class WaterQualityForm(forms.ModelForm):
         widget=forms.Select(),
     )
 
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['tank'].label_from_instance = lambda obj: obj.name
@@ -40,6 +39,7 @@ class WaterQualityForm(forms.ModelForm):
         return cleaned_data
     
     
+
 class IntervalWaterQualityForm(forms.ModelForm):
     date = forms.DateField(label='計測日', widget=forms.DateInput(attrs={'type': 'date'}))
     tank = forms.ModelChoiceField(
@@ -55,7 +55,6 @@ class IntervalWaterQualityForm(forms.ModelForm):
     Al = forms.FloatField(label='Al', min_value=0, max_value=300, required=False, widget=forms.NumberInput(attrs={'step': '1'}))
     Mg = forms.FloatField(label='Mg', min_value=0, max_value=1000, required=False, widget=forms.NumberInput(attrs={'step': '1'}))
     notes = forms.CharField(label='備考', widget=forms.Textarea(attrs={'rows': 4}), required=False)
-
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

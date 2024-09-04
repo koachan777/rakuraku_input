@@ -5,7 +5,6 @@ from django.contrib.auth.views import LoginView as BaseLoginView, LogoutView as 
 from django.views.generic import CreateView
 from django.contrib.auth import login, authenticate
 
-
 from rakuraku_apps.forms.common import LoginForm, SignUpForm
 
 

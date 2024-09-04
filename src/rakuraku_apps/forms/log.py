@@ -1,5 +1,5 @@
 from django import forms
-from rakuraku_apps.models import TankModel, WaterQualityModel
+from rakuraku_apps.models import WaterQualityModel
 
 
 class WaterQualityEditForm(forms.ModelForm):

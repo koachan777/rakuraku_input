@@ -1,11 +1,13 @@
 from django import forms
-from rakuraku_apps.models import ShrimpModel, User, WaterQualityThresholdModel
+from rakuraku_apps.models import ShrimpModel, User, TankModel
 from rakuraku_apps.models import TankModel
+
 
 class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['account_id']
+
 
 class TankForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

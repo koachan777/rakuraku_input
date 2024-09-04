@@ -1,22 +1,19 @@
-import datetime
-from django.views.generic import TemplateView
-from django.db.models import Q
-
-from rakuraku_apps.models import ShrimpModel, WaterQualityModel, TankModel
 import io
 import base64
+from datetime import datetime, timedelta
+
 from django.views.generic import TemplateView
 from django.db.models import Q
-from rakuraku_apps.models import WaterQualityModel, TankModel, ShrimpModel
-import matplotlib.pyplot as plt
-from matplotlib.dates import DateFormatter
-import japanize_matplotlib
-from matplotlib.dates import DateFormatter, DayLocator
-from django.shortcuts import get_object_or_404, redirect
-from django.shortcuts import render, redirect
-from rakuraku_apps.forms.log import WaterQualityEditForm
-import openpyxl
+from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
+
+from rakuraku_apps.models import ShrimpModel, WaterQualityModel, TankModel, ShrimpModel
+from rakuraku_apps.forms.log import WaterQualityEditForm
+
+import matplotlib.pyplot as plt
+from matplotlib.dates import DateFormatter, DayLocator
+import japanize_matplotlib
+import openpyxl
 from openpyxl.utils import get_column_letter
 
 
@@ -24,7 +21,6 @@ class TableOrGraphView(TemplateView):
     template_name = 'log/table_or_graph.html'
 
 
-from datetime import datetime, timedelta
 
 class TableView(TemplateView):
     template_name = 'log/table.html'
@@ -213,6 +209,8 @@ def export_to_excel(request):
     response['Content-Disposition'] = 'attachment; filename=water_quality_data.xlsx'
     wb.save(response)
     return response
+
+
 
 class GraphView(TemplateView):
     template_name = 'log/graph.html'

@@ -46,6 +46,8 @@ app_name = "rakuraku_apps"
 urlpatterns = [
     # ログイン画面
     path('', CustomLoginView.as_view(), name='login'),
+
+    # ログアウト
     path('logout/', LogoutView.as_view(), name="logout"),
 
     # ユーザー新規登録画面
@@ -95,8 +97,14 @@ urlpatterns = [
 
     # 過去のデータ　表
     path('table/', TableView.as_view(), name='table'),
+
+    # 過去のデータ　表　編集画面
     path('edit_water_quality/<int:pk>/', log.edit_water_quality, name='edit_water_quality'),
+
+    # 過去のデータ　表　削除
     path('delete_water_quality/<int:pk>/', log.delete_water_quality, name='delete_water_quality'),
+
+    # 過去のデータ　表　excel
     path('export_to_excel/', export_to_excel, name='export_to_excel'),
 
     # 過去のデータ　グラフ
@@ -107,13 +115,20 @@ urlpatterns = [
 
     # 管理者画面　ユーザー
     path('manage/user/', ManageUserView.as_view(), name='manage_user'),
+
+    # 管理者画面　ユーザー削除
     path('manage/user/<int:pk>/delete/', DeleteUserView.as_view(), name='delete_user'),
 
     # 管理者画面　水槽
     path('manage/tank/', ManageTankView.as_view(), name='manage_tank'),
+
+    # 管理者画面　水槽削除
     path('manage/tank/<int:pk>/delete/', DeleteTankView.as_view(), name='delete_tank'),
 
+    # 管理者画面　水槽作成
     path('manage/create_tank', CreateTankView.as_view(), name='create_tank'),
+
+    # 管理者画面　系統作成
     path('manage/create_shrimp', CreateShrimpView.as_view(), name='create_shrimp'),
 
     # 管理者画面　水質基準値
