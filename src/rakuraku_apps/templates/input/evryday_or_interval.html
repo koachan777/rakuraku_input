@@ -6,6 +6,7 @@
 {% endblock %}
 
 {% block title %}
+<h1 class="card-title text-center mt-3" style="font-size: 32px; margin-bottom: 16px;">データ入力</h1>
 {% endblock %}
 
 {% block content %}
@@ -15,7 +16,7 @@
     <div class="row justify-content-center"> 
         <div class="col-md-6"> 
             <div class="card-body"> 
-                    <h1 class="card-title text-center mb-4">データ入力</h1> 
+                    <!-- <h1 class="card-title text-center mb-4">データ入力</h1>  -->
                 <div class="d-grid gap-2"> 
                     <a href="{% url 'rakuraku_apps:everyday_first_input' %}" class="original-long-btn">日常測定</a> 
                     <a href="{% url 'rakuraku_apps:interval_first_input' %}" class="original-long-btn">定期測定</a> 

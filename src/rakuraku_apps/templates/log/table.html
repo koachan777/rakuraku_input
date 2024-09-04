@@ -7,14 +7,20 @@
 
 {% load custom_tags %}
 
+{% block title %}
+<h1 class="card-title text-center mt-3" style="font-size: 32px; margin-bottom: 16px;">過去のデータ</h1>
+<h2 class="text-center mb-4">水質データの表</h2>
+{% endblock %}
+
 {% block content %}
+
 <div class="container">
-    <h2 class="text-start ps-3 mb-4">水質データ（表）</h2>
+    <!-- <h2 class="text-start ps-3 mb-4">水質データ（表）</h2> -->
     <form method="GET" class="mb-4">
         <div class="row">
             <div class="col-md-4 mb-3">
                 <div class="form-group">
-                    <label for="date_range">期間:</label>
+                    <label for="date_range" style="float: left;">期間</label>
                     <div class="input-group">
                         <input type="date" class="form-control" id="start_date" name="start_date" value="{{ start_date }}">
                         <div class="input-group-append input-group-prepend d-flex align-items-center">
@@ -26,7 +32,7 @@
             </div>
             <div class="col-md-4 mb-3">
                 <div class="form-group">
-                    <label for="shrimp">系統:</label>
+                    <label for="shrimp" style="float: left;">系統</label>
                     <select class="form-control" id="shrimp" name="shrimp">
                         <option value="">全て</option>
                         {% for shrimp in shrimps %}
@@ -37,7 +43,7 @@
             </div>
             <div class="col-md-4 mb-3">
                 <div class="form-group">
-                    <label for="item">項目:</label>
+                    <label for="item" style="float: left;">項目</label>
                     <select class="form-control" id="item" name="item">
                         <option value="">全て</option>
                         <option value="water_temperature" {% if request.GET.item == "water_temperature" %}selected{% endif %}>水温</option>
