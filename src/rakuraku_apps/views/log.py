@@ -156,6 +156,22 @@ class GraphView(TemplateView):
 
         ax.grid(axis='y', linestyle='-', linewidth=0.5, color='gray', alpha=0.7)
 
+        # 単位を設定
+        unit = ''
+        if item == 'water_temperature':
+            unit = '°C'
+        elif item == 'DO':
+            unit = 'mg/L'
+        elif item == 'salinity':
+            unit = '%'
+        elif item in ['NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg']:
+            unit = 'mg/L'
+
+        # 単位がある場合のみ、グラフの枠の外の左上に表示
+        if unit:
+            plt.figtext(0.01, 0.925, f'({unit})', fontsize=12, bbox=dict(facecolor='white', alpha=0.8, edgecolor='none', pad=2))
+
+
         # グラフをbase64エンコードされた文字列に変換
         buffer = io.BytesIO()
         plt.savefig(buffer, format='png')
