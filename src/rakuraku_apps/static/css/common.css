@@ -140,6 +140,20 @@ body {
   color: #fff;
 }
 
+.original-long-btn-gray {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  width: 100%;
+  margin: auto;
+  padding: 16px 8px;
+  font-weight: bold;
+  border-radius: 0.3rem;
+  /* border-bottom: 7px solid #1B3C6F; */
+  background-color: rgba(112, 123, 141, 0.8);
+  color: #fff;
+}
+
 /* アラートメッセージのスタイル */
 .alert {
   font-size: 0.8rem; /* アラートメッセージのフォントサイズ */
