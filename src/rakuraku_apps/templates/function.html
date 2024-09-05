@@ -129,30 +129,8 @@
             </div>
         </div>
     </div>
-  
-
-    <button id="draw">おみくじを引く！</button>
-    <p id="start" class="start">
-    　<img id="rotate" src="{% static 'img/omikuji.png' %}" alt="おみくじ" style="width: 200px; height: auto;">
-    </p>
-    <p>
-    　<img src="" id="fortune" class="fortune">
-    </p>
 
     <script src="{% static 'js/function.js' %}"></script>
-    <script>
-        const results = [
-            "{% static 'img/1.png' %}",
-            "{% static 'img/2.png' %}",
-            "{% static 'img/2.png' %}",
-            "{% static 'img/3.png' %}",
-            "{% static 'img/3.png' %}",
-            "{% static 'img/3.png' %}",
-            "{% static 'img/4.png' %}",
-            "{% static 'img/4.png' %}",
-            "{% static 'img/5.png' %}"
-        ];
-    </script>
-    <script src="{% static 'js/omikuji.js' %}"></script>
+
 {% include 'footer.html' %}
 {% endblock %}
