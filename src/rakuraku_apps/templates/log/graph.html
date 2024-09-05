@@ -79,7 +79,10 @@
             <img src="data:image/png;base64,{{ last_year_graph }}" alt="Last Year Water Quality Graph" id="last-year-graph-image" class="img-fluid">
         </div>
         <div class="position-absolute top-0 end-0 mt-3 me-3 d-none d-lg-block">
-            <a href="#" class="original-btn" id="save-last-year-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">保存</a>
+            <a href="#" class="original-btn" id="save-last-year-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">
+                <i class="fa-solid fa-file-image"></i>
+                保存
+            </a>
         </div>
     </div>
     {% else %}
