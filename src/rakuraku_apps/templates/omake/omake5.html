@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+<link href="{% static '/css/omake5.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}
+<div class="text-center">
+    <div class="h1 mt-3">エビ★捕獲</div>
+</div>
+{% endblock %}
+
+
+{% block content %}
+
+<div id="gameArea">
+    <img id="shrimp" src="{% static 'img/fall_ebi.svg' %}" alt="海老" />
+</div>
+<p>スコア: <span id="score">0</span></p>
+<p>時間: <span id="timer">30</span>秒</p>
+
+<button id="startButton" class="original-long-btn">ゲーム開始</button>
+<script src="{% static 'js/omake5.js' %}"></script>
+
+    {% include 'footer.html' %}
+
+{% endblock %}
