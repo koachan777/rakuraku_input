@@ -1,24 +1,45 @@
-{% load static %} {% block PageCss %} 
-<link href="{% static '/css/button.css' %}"
-	rel="stylesheet">
-<link href="{% static '/css/omake1.css' %}"
-	rel="stylesheet">{% endblock %} {% block PageJs %} 
-<script src="https://cdn.jsdelivr.net/npm/matter-js@0.19.0/build/matter.min.js"></script>
-<script type="text/javascript" src="{% static 'js/omake1.js' %}"></script>{% endblock %} {% block content %} {% if user.is_authenticated %} 
-<div class="main">
-	<div class="container">
-		<div class="message">
-		</div>
-	</div>
-	<div class="score-container">
-		<p class="score">
-		</p>
-	</div>
-</div>{% include 'footer.html' %} {% else %} 
-<div class="text-center mt-5">
-	<p>データ入力機能を使用するにはログインが必要です。
-	</p>
-	<a href="{% url 'rakuraku_apps:login' %}"
-		class="btn btn-primary">ログイン
-	</a>
-</div>{% endif %} {% endblock %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block title %}
+<div class="text-center">
+    <div class="h1 mt-5">おみくじ</div>
+</div>
+{% endblock %}
+
+{% block content %}
+
+    <p id="start" class="start mt-5">
+    　<img id="rotate" src="{% static 'img/omikuji.png' %}" alt="おみくじ" style="width: 200px; height: auto;">
+    </p>
+    
+    <button id="draw" class="original-long-btn mb-2">おみくじを引く！</button>
+
+    <p>
+        　<img src="" id="fortune" class="fortune mt-5">
+    </p>
+    <a href="{% url 'rakuraku_apps:omake' %}" class="original-long-btn-gray">戻る</a>
+
+    <script>
+        const results = [
+            "{% static 'img/1.png' %}",
+            "{% static 'img/2.png' %}",
+            "{% static 'img/2.png' %}",
+            "{% static 'img/3.png' %}",
+            "{% static 'img/3.png' %}",
+            "{% static 'img/3.png' %}",
+            "{% static 'img/4.png' %}",
+            "{% static 'img/4.png' %}",
+            "{% static 'img/5.png' %}"
+        ];
+    </script>
+    <script src="{% static 'js/omikuji.js' %}"></script>
+
+    {% include 'footer.html' %}
+
+{% endblock %}

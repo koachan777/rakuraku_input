@@ -1,43 +1,30 @@
 {% extends 'base.html' %}
-{% load static %}
 
+{% load static %}
 {% block PageCss %}
 <link href="{% static '/css/button.css' %}" rel="stylesheet">
 
 {% endblock %}
-
 {% block title %}
-<div class="text-center">
-    <div class="h1 mt-5">おみくじ</div>
-</div>
-{% endblock %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>エビシューティングゲーム</title>
 
-{% block content %}
+    <link href="{% static '/css/omake2.css' %}" rel="stylesheet">
+    {% endblock %}
+    {% block content %}
+    <div id="game-container">
+        <img id="ebi" src="{% static 'img/fall_ebi.svg' %}" alt="エビ" />
+        <div id="enemies"></div>
+        <div id="bullets"></div>
+        <div id="score">スコア: 0</div>
+        <button id="restart-btn" style="display: none;">リスタート</button>
+    </div>
 
-    <p id="start" class="start mt-5">
-    　<img id="rotate" src="{% static 'img/omikuji.png' %}" alt="おみくじ" style="width: 200px; height: auto;">
-    </p>
-    
-    <button id="draw" class="original-long-btn">おみくじを引く！</button>
-
-    <p>
-        　<img src="" id="fortune" class="fortune mt-5">
-    </p>
-    <script>
-        const results = [
-            "{% static 'img/1.png' %}",
-            "{% static 'img/2.png' %}",
-            "{% static 'img/2.png' %}",
-            "{% static 'img/3.png' %}",
-            "{% static 'img/3.png' %}",
-            "{% static 'img/3.png' %}",
-            "{% static 'img/4.png' %}",
-            "{% static 'img/4.png' %}",
-            "{% static 'img/5.png' %}"
-        ];
-    </script>
-    <script src="{% static 'js/omikuji.js' %}"></script>
+    <script src="{% static 'js/omake2.js' %}"></script>
+    <a href="{% url 'rakuraku_apps:omake' %}" class="original-long-btn-gray">戻る</a>
 
     {% include 'footer.html' %}
 
 {% endblock %}
+
