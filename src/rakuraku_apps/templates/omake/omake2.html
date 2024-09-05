@@ -8,8 +8,15 @@
 
 {% block title %}
 <div class="text-center">
-    <div class="h1 mt-5">おみくじ</div>
+    <div class="logo">
+        <img src="{% static 'img/logo.svg' %}" alt="ロゴ" class="img-fluid" width="150" height="auto">
+    </div>
+    <div class="h1">おみくじ</div>
 </div>
+{% endblock %}
+
+{% block header %}
+<!-- Header部分を空にして非表示にする -->
 {% endblock %}
 
 {% block content %}
@@ -18,7 +25,8 @@
     　<img id="rotate" src="{% static 'img/omikuji.png' %}" alt="おみくじ" style="width: 200px; height: auto;">
     </p>
     
-    <button id="draw" class="original-long-btn">おみくじを引く！</button>
+    <button id="draw" class="original-long-btn mb-2">おみくじを引く！</button>
+    <a href="{% url 'rakuraku_apps:omake' %}" style="display: block; text-align: center; text-decoration: none; width: 100%; margin: auto; padding: 16px 8px; font-weight: bold; border-radius: 0.3rem; background-color: rgba(112, 123, 141, 0.8); color: #fff;">戻る</a>
 
     <p>
         　<img src="" id="fortune" class="fortune mt-5">
