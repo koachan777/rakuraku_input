@@ -4,6 +4,7 @@
 
 {% block PageCss %}
 <link href="{% static '/css/button.css' %}" rel="stylesheet">
+<link href="{% static '/css/test.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block title %}
@@ -28,9 +29,10 @@
         <a href="{% url 'rakuraku_apps:manage' %}" class="original-big-btn mb-4">管理者画面</a>
     </div>
     
-    <div class="function">
+    <div class="function hover-box">
         <a href="{% url 'rakuraku_apps:function' %}" class="function-btn">
             <img src="{% static 'img/fall_ebi.png' %}" alt="機能紹介">
+            <span class="hover-text">機能紹介</span>
         </a>
     </div>
 
