@@ -14,3 +14,5 @@ src/rakuraku_apps/migrations/0007_waterqualitymodel_notify_line.py
 src/rakuraku_apps/migrations/0008_alter_waterqualitymodel_al_and_more.py
 src/rakuraku_apps/migrations/0002_delete_standardvaluemodel_and_more.py
 src/rakuraku_apps/migrations/0009_alter_waterqualitymodel_tank.py
+src/rakuraku_apps/migrations/0010_growthmodel.py
+src/rakuraku_apps/migrations/0011_alter_growthmodel_pl.py
