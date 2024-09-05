@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('container');
-    const imageUrl = "/static/img/fall_ebi.png";
+    const imageUrl = "/static/img/fall_ebi.svg";
 
     function createObject(x, y) {
         const newObject = document.createElement('img'); // img要素を作成
