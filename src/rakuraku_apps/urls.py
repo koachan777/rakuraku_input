@@ -3,6 +3,7 @@ from .views import log
 
 from rakuraku_apps.views.common import (
     CustomLoginView,
+    FunctionView,
     HomeView, 
     CustomLoginView,
     LogoutView, 
@@ -133,5 +134,8 @@ urlpatterns = [
 
     # 管理者画面　水質基準値
     path('manage/value/', ManageValueView.as_view(), name='manage_value'),
+
+    # 機能紹介
+    path('function', FunctionView.as_view(), name='function'),
 
 ]

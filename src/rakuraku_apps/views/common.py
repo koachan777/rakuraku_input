@@ -20,7 +20,6 @@ class HomeView(TemplateView):
 class CustomLoginView(BaseLoginView):
     template_name = 'login.html'    
     form_class = LoginForm
-    template_name = "login.html"
 
 
 
@@ -45,3 +44,6 @@ class LogoutView(BaseLogoutView):
 
 class EverydayOrIntervalView(TemplateView):
     template_name = 'input/evryday_or_interval.html'
+
+class FunctionView(TemplateView):
+    template_name = 'function.html'
