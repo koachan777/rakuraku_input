@@ -6,6 +6,16 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<style>
+  .btn-danger-muted {
+    background-color: rgba(200, 86, 86, 0.8);
+    border-color: rgba(200, 86, 86, 0.8);
+  }
+  .btn-danger-muted:hover {
+    background-color: rgba(163, 70, 70, 0.8);
+    border-color: rgba(163, 70, 70, 0.8);
+  }
+  </style>
 {% endblock %}
 
 {% block title %}
@@ -23,7 +33,7 @@
           <li class="list-group-item d-flex justify-content-center align-items-center position-relative">
             <span class="text-center" style="width: calc(100% - 2rem);">{{ user.account_id }}</span>
             {% if user != request.user %}
-              <button type="button" class="btn btn-danger btn-sm position-absolute" style="right: 0.5rem;" data-toggle="modal" data-target="#deleteUserModal{{ user.id }}">
+              <button type="button" class="btn btn-danger-muted btn-sm position-absolute" style="right: 0.5rem;" data-toggle="modal" data-target="#deleteUserModal{{ user.id }}">
                 <i class="fas fa-user-minus"></i>
               </button>
             {% endif %}
