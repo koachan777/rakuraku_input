@@ -8,8 +8,15 @@
 
 {% block title %}
 <div class="text-center">
-    <div class="h1 mt-3">エビ★捕獲</div>
+    <div class="logo">
+        <img src="{% static 'img/logo.svg' %}" alt="ロゴ" class="img-fluid" width="150" height="auto">
+    </div>
+    <div class="h1">エビ★捕獲</div>
 </div>
+{% endblock %}
+
+{% block header %}
+<!-- Header部分を空にして非表示にする -->
 {% endblock %}
 
 
@@ -18,12 +25,11 @@
 <div id="gameArea">
     <img id="shrimp" src="{% static 'img/fall_ebi.svg' %}" alt="海老" />
 </div>
-<p>スコア: <span id="score">0</span></p>
-<p>時間: <span id="timer">30</span>秒</p>
+<p>___スコア: <span id="score">0</span>___時間: <span id="timer">30</span>秒___</p>
 
-<button id="startButton" class="original-long-btn">ゲーム開始</button>
+<button id="startButton" class="original-long-btn mb-3">ゲーム開始</button>
 <script src="{% static 'js/omake5.js' %}"></script>
-
+<a href="{% url 'rakuraku_apps:omake' %}" style="display: block; text-align: center; text-decoration: none; width: 100%; margin: auto; padding: 16px 8px; font-weight: bold; border-radius: 0.3rem; background-color: rgba(112, 123, 141, 0.8); color: #fff;">戻る</a>
     {% include 'footer.html' %}
 
 {% endblock %}
