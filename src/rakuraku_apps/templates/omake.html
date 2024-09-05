@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}
+{% if user.is_authenticated %}
+    
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <div class="list-group">
+        <a href="{% url 'rakuraku_apps:omake1' %}" class="original-big-btn mb-4">おまけ１</a>
+    
+        <a href="{% url 'rakuraku_apps:omake2' %}" class="original-big-btn mb-4">おまけ２</a>
+    
+        <a href="{% url 'rakuraku_apps:omake3' %}" class="original-big-btn mb-4">おまけ３</a>
+
+    </div>
+
+
+{% else %} 
+    <div class="d-grid gap-2"> 
+        <a href="{% url 'rakuraku_apps:login' %}" class="original-btn">ログイン</a> 
+    </div> 
+{% endif %} 
+{% endblock %}
