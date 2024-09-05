@@ -25,12 +25,13 @@
     　<img id="rotate" src="{% static 'img/omikuji.png' %}" alt="おみくじ" style="width: 200px; height: auto;">
     </p>
     
-    <button id="draw" class="original-long-btn mb-2">おみくじを引く！</button>
-    <a href="{% url 'rakuraku_apps:omake' %}" style="display: block; text-align: center; text-decoration: none; width: 100%; margin: auto; padding: 16px 8px; font-weight: bold; border-radius: 0.3rem; background-color: rgba(112, 123, 141, 0.8); color: #fff;">戻る</a>
-
     <p>
         　<img src="" id="fortune" class="fortune mt-5">
     </p>
+
+    <button id="draw" class="original-long-btn">おみくじを引く！</button>
+    <a href="{% url 'rakuraku_apps:omake' %}" style="display: block; text-align: center; text-decoration: none; width: 100%; margin: auto; padding: 16px 8px; font-weight: bold; border-radius: 0.3rem; background-color: rgba(112, 123, 141, 0.8); color: #fff;">戻る</a>
+
     <script>
         const results = [
             "{% static 'img/1.png' %}",
