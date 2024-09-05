@@ -1,12 +1,154 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+<style>
+    .form-label {
+        font-weight: bold;
+    }
+    .form-control, .form-select {
+        width: 100%;
+        height: 60px;
+        font-size: 18px;
+    }
+    textarea.form-control {
+        height: 120px;
+        resize: none;
+    }
+    .form-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+    .form-row .form-group {
+        width: 100%;
+    }
+    .form-row .form-group label {
+        width: 120px;
+    }
+    .form-row .form-group input,
+    .form-row .form-group select {
+        width: calc(100% - 140px);
+    }
+    .form-row .form-group textarea {
+        width: 100%;
+    }
+    @media (max-width: 576px) {
+        .form-row .form-group label {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+        .form-row .form-group input,
+        .form-row .form-group select,
+        .form-row .form-group textarea {
+            width: 100%;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block title %}
+<h1 class="card-title text-center mt-3" style="font-size: 32px; margin-bottom: 16px;">水質データの編集</h1>
+{% endblock %}
 
 {% block content %}
+{% if user.is_authenticated %}
 <div class="container">
-    <h2>水質データの編集</h2>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">更新</button>
-    </form>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.date.id_for_label }}" class="form-label">{{ form.date.label }}</label>
+                        {{ form.date }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.room_temperature.id_for_label }}" class="form-label">{{ form.room_temperature.label }}</label>
+                        {{ form.room_temperature }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.water_temperature.id_for_label }}" class="form-label">{{ form.water_temperature.label }}</label>
+                        {{ form.water_temperature }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.pH.id_for_label }}" class="form-label">{{ form.pH.label }}</label>
+                        {{ form.pH }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.DO.id_for_label }}" class="form-label">{{ form.DO.label }}</label>
+                        {{ form.DO }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.salinity.id_for_label }}" class="form-label">{{ form.salinity.label }}</label>
+                        {{ form.salinity }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.NH4.id_for_label }}" class="form-label">{{ form.NH4.label }}</label>
+                        {{ form.NH4 }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.NO2.id_for_label }}" class="form-label">{{ form.NO2.label }}</label>
+                        {{ form.NO2 }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.NO3.id_for_label }}" class="form-label">{{ form.NO3.label }}</label>
+                        {{ form.NO3 }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.Ca.id_for_label }}" class="form-label">{{ form.Ca.label }}</label>
+                        {{ form.Ca }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.Al.id_for_label }}" class="form-label">{{ form.Al.label }}</label>
+                        {{ form.Al }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.Mg.id_for_label }}" class="form-label">{{ form.Mg.label }}</label>
+                        {{ form.Mg }}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="{{ form.notes.id_for_label }}" class="form-label">{{ form.notes.label }}</label>
+                        {{ form.notes }}
+                    </div>
+                </div>
+                <div class="d-grid gap-2 mt-4">
+                    <button type="submit" class="original-long-btn">更新</button>
+                    <a href="{% url 'rakuraku_apps:table' %}" class="original-long-btn-gray">戻る</a>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
+{% else %}
+<div class="text-center mt-5">
+    <p>編集ページにアクセスするにはログインが必要です。</p>
+    <a href="{% url 'rakuraku_apps:login' %}" class="btn btn-primary">ログイン</a>
+</div>
+{% endif %}
 {% endblock %}

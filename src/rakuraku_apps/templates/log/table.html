@@ -6,6 +6,24 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<style>
+    .btn-primary-muted {
+        background-color: rgba(86, 178, 200, 0.8);
+        border-color: rgba(86, 178, 200, 0.8);
+    }
+    .btn-primary-muted:hover {
+        background-color: rgba(70, 145, 163, 0.8);
+        border-color: rgba(70, 145, 163, 0.8);
+    }
+    .btn-danger-muted {
+        background-color: rgba(200, 86, 86, 0.8);
+        border-color: rgba(200, 86, 86, 0.8);
+    }
+    .btn-danger-muted:hover {
+        background-color: rgba(163, 70, 70, 0.8);
+        border-color: rgba(163, 70, 70, 0.8);
+    }
+</style>
 {% endblock %}
 
 {% load custom_tags %}
@@ -151,10 +169,10 @@
                     <td><nobr>{{ data.Mg|default:"-" }}</nobr></td>
                     <td><nobr>{{ data.notes|default:"-" }}</nobr></td>
                     <td>
-                        <a href="{% url 'rakuraku_apps:edit_water_quality' data.id %}" class="btn btn-sm btn-primary">
+                        <a href="{% url 'rakuraku_apps:edit_water_quality' data.id %}" class="btn btn-sm btn-primary-muted">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ data.id }}">
+                        <button type="button" class="btn btn-sm btn-danger-muted" data-bs-toggle="modal" data-bs-target="#deleteModal{{ data.id }}">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </td>
