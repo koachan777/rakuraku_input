@@ -1,52 +1,30 @@
 {% extends 'base.html' %}
-{% load static %}
 
+{% load static %}
 {% block PageCss %}
 <link href="{% static '/css/button.css' %}" rel="stylesheet">
 
 {% endblock %}
-
 {% block title %}
-<div class="text-center">
-    <div class="logo">
-        <img src="{% static 'img/logo.svg' %}" alt="ロゴ" class="img-fluid" width="150" height="auto">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>エビシューティングゲーム</title>
+
+    <link href="{% static '/css/omake2.css' %}" rel="stylesheet">
+    {% endblock %}
+    {% block content %}
+    <div id="game-container">
+        <img id="ebi" src="{% static 'img/fall_ebi.svg' %}" alt="エビ" />
+        <div id="enemies"></div>
+        <div id="bullets"></div>
+        <div id="score">スコア: 0</div>
+        <button id="restart-btn" style="display: none;">リスタート</button>
     </div>
-    <div class="h1">おみくじ</div>
-</div>
-{% endblock %}
 
-{% block header %}
-<!-- Header部分を空にして非表示にする -->
-{% endblock %}
-
-{% block content %}
-
-    <p id="start" class="start mt-5">
-    　<img id="rotate" src="{% static 'img/omikuji.png' %}" alt="おみくじ" style="width: 200px; height: auto;">
-    </p>
-    
-    <p>
-        　<img src="" id="fortune" class="fortune mt-5">
-    </p>
-
-    <button id="draw" class="original-long-btn">おみくじを引く！</button>
-    <a href="{% url 'rakuraku_apps:omake' %}" style="display: block; text-align: center; text-decoration: none; width: 100%; margin: auto; padding: 16px 8px; font-weight: bold; border-radius: 0.3rem; background-color: rgba(112, 123, 141, 0.8); color: #fff;">戻る</a>
-
-    <script>
-        const results = [
-            "{% static 'img/1.png' %}",
-            "{% static 'img/2.png' %}",
-            "{% static 'img/2.png' %}",
-            "{% static 'img/3.png' %}",
-            "{% static 'img/3.png' %}",
-            "{% static 'img/3.png' %}",
-            "{% static 'img/4.png' %}",
-            "{% static 'img/4.png' %}",
-            "{% static 'img/5.png' %}"
-        ];
-    </script>
-    <script src="{% static 'js/omikuji.js' %}"></script>
+    <script src="{% static 'js/omake2.js' %}"></script>
+    <a href="{% url 'rakuraku_apps:omake' %}" class="original-long-btn-gray">戻る</a>
 
     {% include 'footer.html' %}
 
 {% endblock %}
+
