@@ -1,5 +1,11 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+{% endblock %}
+
 {% block title %}
 {% if user.is_authenticated %}
     
@@ -16,15 +22,15 @@
     </div> 
     <div class="list-group gap-2"> 
         
-        <a href="{% url 'rakuraku_apps:everyday_or_interval' %}" class="original-long-btn">データ入力</a> 
+        <a href="{% url 'rakuraku_apps:everyday_or_interval' %}" class="original-big-btn">データ入力</a> 
         
-        <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="original-long-btn">過去のデータ</a> 
+        <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="original-big-btn">過去のデータ</a> 
         
-        <a href="{% url 'rakuraku_apps:manage' %}" class="original-long-btn">管理者画面</a> 
+        <a href="{% url 'rakuraku_apps:manage' %}" class="original-big-btn">管理者画面</a> 
     </div> 
 {% else %} 
     <div class="d-grid gap-2"> 
-        <a href="{% url 'rakuraku_apps:login' %}" class="btn btn-primary">ログイン</a> 
+        <a href="{% url 'rakuraku_apps:login' %}" class="original-btn">ログイン</a> 
     </div> 
 {% endif %} 
 {% endblock %}

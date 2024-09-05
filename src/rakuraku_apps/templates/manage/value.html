@@ -1,23 +1,221 @@
-{% extends 'base.html' %} {% block content %} 
+{% extends 'base.html' %}
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}
+<h1 class="card-title text-center mt-3" style="font-size: 32px; margin-bottom: 16px;">管理者画面</h1>
+<h2 class="text-center mb-4">水質アラート設定</h2>
+{% endblock %}
+
+{% block content %}
+<!-- <h1 class="card-title text-center mt-3" style="font-size: 32px; margin-bottom: 16px;">管理者画面</h1> -->
+
 <div class="container">
-  <h1 class="text-center mb-4">管理者画面</h1>
-  <h2 class="text-center mb-4">水質</h2>
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <form method="post" class="p-4">{% csrf_token %} 
-        <table class="table">
-          <tbody>{% for field in form %} 
-            <tr>
-              <td>{{ field.label_tag }}</td>
-              <td>{{ field }}</td>
-            </tr>{% endfor %} 
-          </tbody>
-        </table>
-        <div class="text-center">
-          <a href="{% url 'rakuraku_apps:manage' %}" class="btn btn-secondary">戻る</a>
-          <button type="submit" class="btn btn-primary">保存</button>
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label">水温</label>
+      <div class="col-sm-8">
+        <div class="row">
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.water_temperature_min.id_for_label }}" name="{{ form.water_temperature_min.html_name }}" value="{{ form.water_temperature_min.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">基準下限値</small>
+          </div>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.water_temperature_max.id_for_label }}" name="{{ form.water_temperature_max.html_name }}" value="{{ form.water_temperature_max.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">基準上限値</small>
+          </div>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.water_temperature_diff.id_for_label }}" name="{{ form.water_temperature_diff.html_name }}" value="{{ form.water_temperature_diff.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">前日差異閾値</small>
+          </div>
         </div>
-      </form>
+      </div>
     </div>
-  </div>
-</div>{% include 'footer.html' %} {% endblock %}
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label">pH</label>
+      <div class="col-sm-8">
+        <div class="row">
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.pH_min.id_for_label }}" name="{{ form.pH_min.html_name }}" value="{{ form.pH_min.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">基準下限値</small>
+          </div>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.pH_max.id_for_label }}" name="{{ form.pH_max.html_name }}" value="{{ form.pH_max.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">基準上限値</small>
+          </div>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.pH_diff.id_for_label }}" name="{{ form.pH_diff.html_name }}" value="{{ form.pH_diff.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">前日差異閾値</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label">DO</label>
+      <div class="col-sm-8">
+        <div class="row">
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.DO_min.id_for_label }}" name="{{ form.DO_min.html_name }}" value="{{ form.DO_min.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">基準下限値</small>
+          </div>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.DO_max.id_for_label }}" name="{{ form.DO_max.html_name }}" value="{{ form.DO_max.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">基準上限値</small>
+          </div>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.DO_diff.id_for_label }}" name="{{ form.DO_diff.html_name }}" value="{{ form.DO_diff.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">前日差異閾値</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label">塩分濃度</label>
+      <div class="col-sm-8">
+        <div class="row">
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.salinity_min.id_for_label }}" name="{{ form.salinity_min.html_name }}" value="{{ form.salinity_min.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">基準下限値</small>
+          </div>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.salinity_max.id_for_label }}" name="{{ form.salinity_max.html_name }}" value="{{ form.salinity_max.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">基準上限値</small>
+          </div>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.salinity_diff.id_for_label }}" name="{{ form.salinity_diff.html_name }}" value="{{ form.salinity_diff.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">前日差異閾値</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label">NH4</label>
+      <div class="col-sm-8">
+        <div class="row">
+
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.NH4_min.id_for_label }}" name="{{ form.NH4_min.html_name }}" value="{{ form.NH4_min.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">基準下限値</small>
+          </div>
+
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.NH4_max.id_for_label }}" name="{{ form.NH4_max.html_name }}" value="{{ form.NH4_max.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">基準上限値</small>
+          </div>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.NH4_diff.id_for_label }}" name="{{ form.NH4_diff.html_name }}" value="{{ form.NH4_diff.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">前日差異閾値</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label">NO2</label>
+      <div class="col-sm-8">
+        <div class="row">
+
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.NO2_min.id_for_label }}" name="{{ form.NO2_min.html_name }}" value="{{ form.NO2_min.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">基準下限値</small>
+          </div>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.NO2_max.id_for_label }}" name="{{ form.NO2_max.html_name }}" value="{{ form.NO2_max.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">基準上限値</small>
+          </div>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.NO2_diff.id_for_label }}" name="{{ form.NO2_diff.html_name }}" value="{{ form.NO2_diff.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">前日差異閾値</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label">NO3</label>
+      <div class="col-sm-8">
+        <div class="row">
+
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.NO3_min.id_for_label }}" name="{{ form.NO3_min.html_name }}" value="{{ form.NO3_min.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">基準下限値</small>
+          </div>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.NO3_max.id_for_label }}" name="{{ form.NO3_max.html_name }}" value="{{ form.NO3_max.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">基準上限値</small>
+          </div>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.NO3_diff.id_for_label }}" name="{{ form.NO3_diff.html_name }}" value="{{ form.NO3_diff.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">前日差異閾値</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label">Ca</label>
+      <div class="col-sm-8">
+        <div class="row">
+
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.Ca_min.id_for_label }}" name="{{ form.Ca_min.html_name }}" value="{{ form.Ca_min.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">基準下限値</small>
+          </div>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.Ca_max.id_for_label }}" name="{{ form.Ca_max.html_name }}" value="{{ form.Ca_max.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">基準上限値</small>
+          </div>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.Ca_diff.id_for_label }}" name="{{ form.Ca_diff.html_name }}" value="{{ form.Ca_diff.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">前日差異閾値</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label">Al</label>
+      <div class="col-sm-8">
+        <div class="row">
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.Al_min.id_for_label }}" name="{{ form.Al_min.html_name }}" value="{{ form.Al_min.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">基準下限値</small>
+          </div>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.Al_max.id_for_label }}" name="{{ form.Al_max.html_name }}" value="{{ form.Al_max.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">基準上限値</small>
+          </div>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.Al_diff.id_for_label }}" name="{{ form.Al_diff.html_name }}" value="{{ form.Al_diff.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">前日差異閾値</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label">Mg</label>
+      <div class="col-sm-8">
+        <div class="row">
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.Mg_min.id_for_label }}" name="{{ form.Mg_min.html_name }}" value="{{ form.Mg_min.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">基準下限値</small>
+          </div>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.Mg_max.id_for_label }}" name="{{ form.Mg_max.html_name }}" value="{{ form.Mg_max.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">基準上限値</small>
+          </div>
+          <div class="col-sm-4">
+            <input type="number" class="form-control" id="{{ form.Mg_diff.id_for_label }}" name="{{ form.Mg_diff.html_name }}" value="{{ form.Mg_diff.value|default_if_none:'' }}" step="0.1">
+            <small class="form-text text-muted">前日差異閾値</small>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-grid gap-2">
+      <button type="submit" class="original-long-btn">保存</button>
+      <a href="{% url 'rakuraku_apps:manage' %}" class="original-long-btn-gray">戻る</a>
+    </div>
+  </form>
+</div>
+{% include 'footer.html' %}
+{% endblock %}

@@ -1,14 +1,29 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+{% endblock %}
+
 {% load custom_tags %}
 
+{% block title %}
+<h1 class="card-title text-center mt-3" style="font-size: 32px; margin-bottom: 16px;">過去のデータ</h1>
+<h2 class="text-center mb-4">水質データの表</h2>
+{% endblock %}
+
 {% block content %}
+
 <div class="container">
-    <h2 class="text-start ps-3 mb-4">水質データ（表）</h2>
+    <!-- <h2 class="text-start ps-3 mb-4">水質データ（表）</h2> -->
     <form method="GET" class="mb-4">
         <div class="row">
             <div class="col-md-4 mb-3">
                 <div class="form-group">
-                    <label for="date_range">期間:</label>
+                    <label for="date_range" style="float: left;">期間</label>
                     <div class="input-group">
                         <input type="date" class="form-control" id="start_date" name="start_date" value="{{ start_date }}">
                         <div class="input-group-append input-group-prepend d-flex align-items-center">
@@ -20,7 +35,7 @@
             </div>
             <div class="col-md-4 mb-3">
                 <div class="form-group">
-                    <label for="shrimp">系統:</label>
+                    <label for="shrimp" style="float: left;">系統</label>
                     <select class="form-control" id="shrimp" name="shrimp">
                         <option value="">全て</option>
                         {% for shrimp in shrimps %}
@@ -31,7 +46,7 @@
             </div>
             <div class="col-md-4 mb-3">
                 <div class="form-group">
-                    <label for="item">項目:</label>
+                    <label for="item" style="float: left;">項目</label>
                     <select class="form-control" id="item" name="item">
                         <option value="">全て</option>
                         <option value="water_temperature" {% if request.GET.item == "water_temperature" %}selected{% endif %}>水温</option>
@@ -48,8 +63,11 @@
                 </div>
             </div>
         </div>
-        <div class="text-center mt-4">
-            <button type="submit" class="btn btn-primary btn-lg">表示</button>
+        <div class="d-grid gap-2">
+            <button type="submit" class="original-long-btn">表示</button>
+        </div>
+        <div class="d-grid gap-2  my-3">
+            <a href="{% url 'rakuraku_apps:export_to_excel' %}?start_date={{ start_date }}&end_date={{ end_date }}&shrimp={{ request.GET.shrimp }}&item={{ request.GET.item }}" class="original-long-btn-excel">Excelエクスポート</a>
         </div>
     </form>
     <hr>
@@ -110,6 +128,7 @@
                     <th><nobr>Al</nobr></th>
                     <th><nobr>Mg</nobr></th>
                     <th><nobr>備考</nobr></th>
+                    <th><nobr>編集/削除</nobr></th>
                 </tr>
             </thead>
             <tbody>
@@ -128,7 +147,36 @@
                     <td><nobr>{{ data.Al|default:"-" }}</nobr></td>
                     <td><nobr>{{ data.Mg|default:"-" }}</nobr></td>
                     <td><nobr>{{ data.notes|default:"-" }}</nobr></td>
+                    <td>
+                        <a href="{% url 'rakuraku_apps:edit_water_quality' data.id %}" class="btn btn-sm btn-primary">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ data.id }}">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
                 </tr>
+<!-- 削除確認モーダル -->
+<div class="modal fade" id="deleteModal{{ data.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{ data.id }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel{{ data.id }}">データの削除</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                本当にこのデータを削除しますか？
+            </div>
+            <div class="modal-footer">
+                <form action="{% url 'rakuraku_apps:delete_water_quality' data.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">キャンセル</button>
+                    <button type="submit" class="btn btn-danger">削除</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
                 {% endfor %}
             </tbody>
         </table>
@@ -137,8 +185,8 @@
     {% endif %}
 </div>
 
-<div class="text-center mb-4">
-    <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="btn btn-secondary btn-lg">戻る</a>
+<div class="d-grid gap-2">
+    <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="original-long-btn-gray">戻る</a>
 </div>
 
 {% include 'footer.html' %}

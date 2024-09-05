@@ -1,8 +1,19 @@
-
 {% extends 'base.html' %}
 {% load static %}
 
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+
+{% block title %}
+<h1 class="card-title text-center mt-3" style="font-size: 32px; margin-bottom: 16px;">過去のデータ</h1>
+{% endblock %}
+
+
 {% block content %}
+
 {% if user.is_authenticated %}
 
 <div class="container"> 
@@ -10,15 +21,14 @@
         <div class="col-md-6"> 
             <div class="card mt-5 border-0"> 
                 <div class="card-body"> 
-                    <h1 class="card-title text-start mb-4">過去のデータ</h1> 
                     <div class="d-grid gap-3"> 
-                        <a href="{% url 'rakuraku_apps:table' %}" class="btn btn-primary btn-lg py-3"> 
+                        <a href="{% url 'rakuraku_apps:table' %}" class="original-big-btn"> 
                             <div class="d-flex align-items-center justify-content-center"> 
                                 <i class="fas fa-table fa-lg me-3"></i> 
                                 <span class="fs-5">表</span> 
                             </div> 
                         </a> 
-                        <a href="{% url 'rakuraku_apps:graph' %}" class="btn btn-primary btn-lg py-3"> 
+                        <a href="{% url 'rakuraku_apps:graph' %}" class="original-big-btn"> 
                             <div class="d-flex align-items-center justify-content-center"> 
                                 <i class="fas fa-chart-line fa-lg me-3"></i> 
                                 <span class="fs-5">グラフ</span> 
@@ -36,7 +46,7 @@
 {% else %} 
 <div class="text-center mt-5"> 
     <p>過去のデータを閲覧するにはログインが必要です。</p> 
-    <a href="{% url 'rakuraku_apps:login' %}" class="btn btn-primary">ログイン</a> 
+    <a href="{% url 'rakuraku_apps:login' %}" class="original-long-btn">ログイン</a> 
 </div> 
 {% endif %} 
 {% endblock %}

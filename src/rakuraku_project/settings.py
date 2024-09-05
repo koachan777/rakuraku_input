@@ -136,4 +136,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "rakuraku_apps.User"
 LOGIN_REDIRECT_URL = "rakuraku_apps:home"
 LOGOUT_REDIRECT_URL = "rakuraku_apps:login"
+LINE_NOTIFY_ACCESS_TOKEN = 'vNZZ7HVIpQCeGLbmJHBKcVPvqj2aZnEEMS6YTnQxGnQ'
+
 

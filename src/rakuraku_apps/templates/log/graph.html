@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -46,34 +51,55 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-4 mb-3">
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" id="compare_last_year" name="compare_last_year" {% if request.GET.compare_last_year %}checked{% endif %}>
+                    <label class="form-check-label" for="compare_last_year">昨年のデータと比較する</label>
+                </div>
+            </div>
+        </div>
         <div class="text-center mt-4">
-            <button type="submit" class="btn btn-primary btn-lg">表示</button>
+            <button type="submit" class="original-long-btn">表示</button>
         </div>
     </form>
     <hr>
     <div class="position-relative">
         <div class="text-center">
-            <img src="data:image/png;base64,{{ graph }}" alt="Water Quality Graph" id="graph-image" class="img-fluid">
+            <img src="data:image/png;base64,{{ current_graph }}" alt="Current Water Quality Graph" id="current-graph-image" class="img-fluid">
         </div>
         <div class="position-absolute top-0 end-0 mt-3 me-3 d-none d-lg-block">
-            <a href="#" class="btn btn-primary" id="save-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">保存</a>
+            <a href="#" class="original-btn" id="save-current-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">保存</a>
         </div>
     </div>
-    <div class="text-center mt-3 d-lg-none">
-        <a href="#" class="btn btn-primary" id="save-graph-mobile" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">保存</a>
+
+    {% if compare_last_year %}
+    {% if last_year_data_exists %}
+    <div class="position-relative mt-5">
+        <div class="text-center">
+            <img src="data:image/png;base64,{{ last_year_graph }}" alt="Last Year Water Quality Graph" id="last-year-graph-image" class="img-fluid">
+        </div>
+        <div class="position-absolute top-0 end-0 mt-3 me-3 d-none d-lg-block">
+            <a href="#" class="original-btn" id="save-last-year-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">保存</a>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info mt-4" role="alert">
+        昨年のデータが存在しません。
+    </div>
+    {% endif %}
+{% endif %}
+
+    <div class="text-center my-4">
+        <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="original-long-btn-gray">戻る</a>
     </div>
 </div>
-
-<div class="text-center my-4">
-    <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="btn btn-secondary btn-lg">戻る</a>
-</div>
-
 
 {% include 'footer.html' %} 
 
 <script>
-    document.getElementById('save-graph').addEventListener('click', function(event) {
-        var imgElement = document.getElementById('graph-image');
+    document.getElementById('save-current-graph').addEventListener('click', function(event) {
+        var imgElement = document.getElementById('current-graph-image');
         var imgSrc = imgElement.src;
         var item = event.target.getAttribute('data-item');
         var startDate = event.target.getAttribute('data-start-date');
@@ -87,13 +113,14 @@
         link.click();
     });
 
-    document.getElementById('save-graph-mobile').addEventListener('click', function(event) {
-        var imgElement = document.getElementById('graph-image');
+    {% if last_year_graph %}
+    document.getElementById('save-last-year-graph').addEventListener('click', function(event) {
+        var imgElement = document.getElementById('last-year-graph-image');
         var imgSrc = imgElement.src;
         var item = event.target.getAttribute('data-item');
         var startDate = event.target.getAttribute('data-start-date');
         var endDate = event.target.getAttribute('data-end-date');
-        var fileName = item + '_' + startDate + '-' + endDate + '.png';
+        var fileName = item + '_' + startDate + '-' + endDate + '_last_year.png';
 
         var link = document.createElement('a');
         link.download = fileName;
@@ -101,6 +128,7 @@
 
         link.click();
     });
+    {% endif %}
 </script>
 
 {% endblock %}

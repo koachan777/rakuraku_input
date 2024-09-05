@@ -1,86 +1,153 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+{% endblock %}
+
 
 {% block title %}
-<h1 class="card-title text-center mt-3">水質データ入力 - 確認</h1>
+<h1 class="card-title text-center mt-3" style="font-size: 32px; margin-bottom: 16px;">データ入力</h1> 
+<h2 class="text-center mb-4">定期測定 入力データの確認</h2>
 {% endblock %}
 
 {% block content %}
 {% if user.is_authenticated %}
-
 <div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card-body">
-                <h2 class="card-title text-center mb-4">入力内容の確認</h2>
-                <div class="text-center">
-                    <div class="d-inline-block text-start">
-                        <p><strong>計測日:</strong> {{ form_data.date }}</p>
-                        <p><strong>水槽:</strong> {{ form_data.tank }}</p>
-                        <p><strong>室温:</strong> {{ form_data.room_temperature }}</p>
-                        {% if 'NH4' in alerts %}
-                        <p><strong>NH4:</strong> <span class="alert-highlight">{{ form_data.NH4 }}</span></p>
-                        <p class="alert-small">{{ alerts.NH4 }}</p>
-                        {% else %}
-                        <p><strong>NH4:</strong> {{ form_data.NH4 }}</p>
-                        {% endif %}
-
-                        {% if 'NO2' in alerts %}
-                        <p><strong>NO2:</strong> <span class="alert-highlight">{{ form_data.NO2 }}</span></p>
-                        <p class="alert-small">{{ alerts.NO2 }}</p>
-                        {% else %}
-                        <p><strong>NO2:</strong> {{ form_data.NO2 }}</p>
-                        {% endif %}
-
-                        {% if 'NO3' in alerts %}
-                        <p><strong>NO3:</strong> <span class="alert-highlight">{{ form_data.NO3 }}</span></p>
-                        <p class="alert-small">{{ alerts.NO3 }}</p>
-                        {% else %}
-                        <p><strong>NO3:</strong> {{ form_data.NO3 }}</p>
-                        {% endif %}
-
-                        {% if 'Ca' in alerts %}
-                        <p><strong>Ca:</strong> <span class="alert-highlight">{{ form_data.Ca }}</span></p>
-                        <p class="alert-small">{{ alerts.Ca }}</p>
-                        {% else %}
-                        <p><strong>Ca:</strong> {{ form_data.Ca }}</p>
-                        {% endif %}
-
-                        {% if 'Al' in alerts %}
-                        <p><strong>Al:</strong> <span class="alert-highlight">{{ form_data.Al }}</span></p>
-                        <p class="alert-small">{{ alerts.Al }}</p>
-                        {% else %}
-                        <p><strong>Al:</strong> {{ form_data.Al }}</p>
-                        {% endif %}
-
-                        {% if 'Mg' in alerts %}
-                        <p><strong>Mg:</strong> <span class="alert-highlight">{{ form_data.Mg }}</span></p>
-                        <p class="alert-small">{{ alerts.Mg }}</p>
-                        {% else %}
-                        <p><strong>Mg:</strong> {{ form_data.Mg }}</p>
-                        {% endif %}
-
-                        <p><strong>備考:</strong> {{ form_data.notes }}</p>
-                    </div>
-                </div>
-                <form method="post" class="mt-4">
-                    {% csrf_token %}
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg">保存</button>
-                        <a href="{% url 'rakuraku_apps:interval_edit' %}" class="btn btn-warning btn-lg">編集</a>
-                        <a href="{% url 'rakuraku_apps:interval_comment' %}" class="btn btn-secondary btn-lg">戻る</a>
-                    </div>
-                </form>
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card-body">
+        <!-- <h2 class="card-title text-center mb-4">入力内容の確認</h2> -->
+        <div class="d-inline-block text-start">
+          <p>
+            <strong>計測日:</strong>{{ form_data.date }}
+          </p>
+          <p>
+            <strong>水槽:</strong>{{ form_data.tank }}
+          </p>
+          <p>
+            <strong>室温:</strong>{{ form_data.room_temperature }} ℃
+          </p>
+          <table class="table">
+            <thead>
+              <tr>
+                <th></th>
+                <th class="text-nowrap text-center align-middle">今回</th>
+                <th class="text-nowrap text-center align-middle">昨日</th>
+                <th class="text-nowrap text-center align-middle">一昨日</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="align-middle"><strong>NH4</strong></td>
+                <td class="text-nowrap text-center align-middle {% if 'NH4' in bg_colors %}{{ bg_colors.NH4 }}{% endif %}">
+                  {{ form_data.NH4 }}mg/L<br>
+                  {% if 'NH4' in alerts %}
+                    {% for message in alerts.NH4 %}
+                      <span class="text-danger small d-block">{{ message }}</span>
+                    {% endfor %}
+                  {% endif %}
+                </td>
+                <td class="text-nowrap text-center align-middle">{% if previous_values.1.NH4 %}{{ previous_values.1.NH4 }}℃{% endif %}</td>
+                <td class="text-nowrap text-center align-middle">{% if previous_values.2.NH4 %}{{ previous_values.2.NH4 }}℃{% endif %}</td>
+              </tr>
+              <tr>
+                <td class="align-middle"><strong>NO2</strong></td>
+                <td class="text-nowrap text-center align-middle {% if 'NO2' in bg_colors %}{{ bg_colors.NO2 }}{% endif %}">
+                  {{ form_data.NO2 }}mg/L<br>
+                  {% if 'NO2' in alerts %}
+                    {% for message in alerts.NO2 %}
+                      <span class="text-danger small d-block">{{ message }}</span>
+                    {% endfor %}
+                  {% endif %}
+                </td>
+                <td class="text-nowrap text-center align-middle">{% if previous_values.1.NO2 %}{{ previous_values.1.NO2 }}{% endif %}</td>
+                <td class="text-nowrap text-center align-middle">{% if previous_values.2.NO2 %}{{ previous_values.2.NO2 }}{% endif %}</td>
+              </tr>
+              <tr>
+                <td class="align-middle"><strong>NO3</strong></td>
+                <td class="text-nowrap text-center align-middle {% if 'NO3' in bg_colors %}{{ bg_colors.NO3 }}{% endif %}">
+                  {{ form_data.NO3 }}mg/L<br>
+                  {% if 'NO3' in alerts %}
+                    {% for message in alerts.NO3 %}
+                      <span class="text-danger small d-block">{{ message }}</span>
+                    {% endfor %}
+                  {% endif %}
+                </td>
+                <td class="text-nowrap text-center align-middle">{% if previous_values.1.NO3 %}{{ previous_values.1.NO3 }}{% endif %}</td>
+                <td class="text-nowrap text-center align-middle">{% if previous_values.2.NO3 %}{{ previous_values.2.NO3 }}{% endif %}</td>
+              </tr>
+              <tr>
+                <td class="align-middle"><strong>Ca</strong></td>
+                <td class="text-nowrap text-center align-middle {% if 'Ca' in bg_colors %}{{ bg_colors.Ca }}{% endif %}">
+                  {{ form_data.Ca }}mg/L<br>
+                  {% if 'Ca' in alerts %}
+                    {% for message in alerts.Ca %}
+                      <span class="text-danger small d-block">{{ message }}</span>
+                    {% endfor %}
+                  {% endif %}
+                </td>
+                <td class="text-nowrap text-center align-middle">{% if previous_values.1.Ca %}{{ previous_values.1.Ca }}{% endif %}</td>
+                <td class="text-nowrap text-center align-middle">{% if previous_values.2.Ca %}{{ previous_values.2.Ca }}{% endif %}</td>
+              </tr>
+              <tr>
+                <td class="align-middle"><strong>Al</strong></td>
+                <td class="text-nowrap text-center align-middle {% if 'Al' in bg_colors %}{{ bg_colors.Al }}{% endif %}">
+                  {{ form_data.Al }}mg/L<br>
+                  {% if 'Al' in alerts %}
+                    {% for message in alerts.Al %}
+                      <span class="text-danger small d-block">{{ message }}</span>
+                    {% endfor %}
+                  {% endif %}
+                </td>
+                <td class="text-nowrap text-center align-middle">{% if previous_values.1.Al %}{{ previous_values.1.Al }}{% endif %}</td>
+                <td class="text-nowrap text-center align-middle">{% if previous_values.2.Al %}{{ previous_values.2.Al }}{% endif %}</td>
+              </tr>
+              <tr>
+                <td class="align-middle"><strong>Mg</strong></td>
+                <td class="text-nowrap text-center align-middle {% if 'Mg' in bg_colors %}{{ bg_colors.Mg }}{% endif %}">
+                  {{ form_data.Mg }}mg/L<br>
+                  {% if 'Mg' in alerts %}
+                    {% for message in alerts.Mg %}
+                      <span class="text-danger small d-block">{{ message }}</span>
+                    {% endfor %}
+                  {% endif %}
+                </td>
+                <td class="text-nowrap text-center align-middle">{% if previous_values.1.Mg %}{{ previous_values.1.Mg }}{% endif %}</td>
+                <td class="text-nowrap text-center align-middle">{% if previous_values.2.Mg %}{{ previous_values.2.Mg }}{% endif %}</td>
+              </tr>
+            </tbody>
+          </table>
+          <p>
+            <strong>備考:</strong>{{ form_data.notes }}
+          </p>
+        </div>
+      </div>
+      <form method="post" class="mt-4">
+        {% csrf_token %}
+        <div class="form-check mb-3 text-center">
+            <div class="d-inline-block">
+                <input class="form-check-input" type="checkbox" name="notify_line" id="notify_line" {% if notify_line %}checked{% endif %}>
+                <label class="form-check-label" for="notify_line">
+                    アラートをLINEに通知する
+                </label>
             </div>
         </div>
+        <div class="d-grid gap-2">
+          <button type="submit" class="original-long-btn">保存</button>
+          <a href="{% url 'rakuraku_apps:interval_edit' %}" class="original-long-btn-green">編集</a>
+          <a href="{% url 'rakuraku_apps:interval_comment' %}" class="original-long-btn-gray">戻る</a>
+        </div>
+      </form>
+    
     </div>
+  </div>
 </div>
-
 {% include 'footer.html' %}
-
 {% else %}
 <div class="text-center mt-5">
-    <p>確認ページにアクセスするにはログインが必要です。</p>
-    <a href="{% url 'rakuraku_apps:login' %}" class="btn btn-primary">ログイン</a>
+  <p>確認ページにアクセスするにはログインが必要です。</p>
+  <a href="{% url 'rakuraku_apps:login' %}" class="btn btn-primary">ログイン</a>
 </div>
 {% endif %}
 {% endblock %}

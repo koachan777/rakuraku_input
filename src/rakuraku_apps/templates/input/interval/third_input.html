@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block title %}
-<h1 class="card-title text-center mt-3">水質データ入力 - Step3</h1> 
+<h1 class="card-title text-center mt-3" style="font-size: 32px; margin-bottom: 16px;">データ入力</h1> 
+<h2 class="text-center mb-4">定期測定 Step3</h2>
 {% endblock %}
 
 {% block content %}
@@ -17,19 +23,19 @@
 
                         <div class="mb-3">
                             <label for="Ca" class="form-label">Ca</label>
-                            <input type="number" name="Ca" class="form-control" min="0" max="14" step="0.1" value="{{ form_data.Ca }}" required>
+                            <input type="number" name="Ca" class="form-control form-control-lg" min="0" max="500" step="1" value="{{ form_data.Ca }}">
                         </div>
                         <div class="mb-3">
                             <label for="Al" class="form-label">Al</label>
-                            <input type="number" name="Al" class="form-control" min="0" max="100" step="0.1" value="{{ form_data.Al }}" required>
+                            <input type="number" name="Al" class="form-control form-control-lg" min="0" max="300" step="1" value="{{ form_data.Al }}">
                         </div>
                         <div class="mb-3">
                             <label for="Mg" class="form-label">Mg</label>
-                            <input type="number" name="Mg" class="form-control" min="0" max="100" step="0.1" value="{{ form_data.Mg }}" required>
+                            <input type="number" name="Mg" class="form-control form-control-lg" min="0" max="1000" step="1" value="{{ form_data.Mg }}">
                         </div>
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">次へ</button>
-                            <a href="{% url 'rakuraku_apps:interval_second_input' %}" class="btn btn-secondary btn-lg">戻る</a>
+                            <button type="submit" class="original-long-btn">次へ</button>
+                            <a href="{% url 'rakuraku_apps:interval_second_input' %}" class="original-long-btn-gray">戻る</a>
                         </div>
                     </form>
                 </div> 
@@ -37,7 +43,6 @@
     </div> 
 </div> 
 
-{% include 'footer.html' %}
 
 {% else %} 
 <div class="text-center mt-5"> 

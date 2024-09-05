@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block title %}
-<h1 class="card-title text-center mt-3">水質データ入力 - Step3</h1>
+<h1 class="card-title text-center mt-3" style="font-size: 32px; margin-bottom: 16px;">データ入力</h1> 
+<h2 class="text-center mb-4">日常測定 Step3</h2>
 {% endblock %}
 
 {% block content %}
@@ -19,16 +25,14 @@
                             <textarea name="notes" class="form-control" rows="4">{{ form_data.notes }}</textarea>
                         </div>
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">次へ</button>
-                            <a href="{% url 'rakuraku_apps:everyday_second_input' %}" class="btn btn-secondary btn-lg">戻る</a>
+                            <button type="submit" class="original-long-btn" style="border: none;">次へ</button>
+                            <a href="{% url 'rakuraku_apps:everyday_second_input' %}" style="display: block; text-align: center; text-decoration: none; width: 100%; margin: auto; padding: 16px 8px; font-weight: bold; border-radius: 0.3rem; background-color: rgba(112, 123, 141, 0.8); color: #fff;">戻る</a>
                         </div>
                     </form>
                 </div>  
         </div> 
     </div> 
 </div> 
-
-{% include 'footer.html' %}
 
 {% else %} 
 <div class="text-center mt-5"> 

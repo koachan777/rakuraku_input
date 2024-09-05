@@ -3,3 +3,4 @@ mysqlclient
 matplotlib
 japanize_matplotlib
 requests
+pandas

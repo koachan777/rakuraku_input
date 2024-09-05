@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block title %}
-<h1 class="card-title text-center mt-3">水質データ入力 - Step1</h1> 
+<h1 class="card-title text-center mt-3" style="font-size: 32px; margin-bottom: 16px;">データ入力</h1> 
+<h2 class="text-center mb-4">定期測定 Step1</h2>
 {% endblock %}
 
 {% block content %}
@@ -16,11 +22,11 @@
                         {% csrf_token %}
                         <div class="mb-3">
                             <label for="date" class="form-label">計測日</label>
-                            <input type="date" name="date" class="form-control" value="{{ today }}" required>
+                            <input type="date" name="date" class="form-control form-control-lg" value="{{ today }}" required>
                         </div>
                         <div class="mb-3">
                             <label for="tank" class="form-label">水槽</label>
-                            <select name="tank" class="form-select" required>
+                            <select name="tank" class="form-select form-select-lg" required>
                                 {% for tank in tanks %}
                                     <option value="{{ tank.id }}">{{ tank.name }}</option>
                                 {% endfor %}
@@ -28,18 +34,16 @@
                         </div>
                         <div class="mb-3">
                             <label for="room_temperature" class="form-label">室温</label>
-                            <input type="number" name="room_temperature" class="form-control" min="0" max="100" required>
+                            <input type="number" name="room_temperature" class="form-control form-control-lg" min="0" max="100" step="0.1">
                         </div>
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">次へ</button>
+                            <button type="submit" class="original-long-btn">次へ</button>
                         </div>
                     </form>
                 </div> 
         </div> 
     </div> 
 </div> 
-
-{% include 'footer.html' %}
 
 {% else %} 
 <div class="text-center mt-5"> 

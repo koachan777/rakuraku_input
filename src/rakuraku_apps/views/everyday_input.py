@@ -1,18 +1,31 @@
-from datetime import date, datetime
+import requests
+
+from datetime import date, datetime, timedelta
 
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
-from rakuraku_apps.models import StandardValueModel, TankModel, WaterQualityModel, WaterQualityThresholdModel
+from django.conf import settings
+
+from rakuraku_apps.models import TankModel, WaterQualityModel, WaterQualityThresholdModel
 from rakuraku_apps.forms.input import WaterQualityForm
-from django.views.generic import TemplateView
-from django.shortcuts import redirect
-from rakuraku_apps.models import StandardValueModel, TankModel, WaterQualityModel, WaterQualityThresholdModel
-from rakuraku_apps.forms.input import WaterQualityForm
-# import requests
+
 
 
 class EverydayOrIntervalView(TemplateView):
     template_name = 'input/evryday_or_interval.html'
+    def get(self, request, *args, **kwargs):
+        request.session.pop('water_quality_id', None)
+        request.session.pop('date', None)
+        request.session.pop('tank', None)
+        request.session.pop('room_temperature', None)
+        request.session.pop('NH4', None)
+        request.session.pop('NO2', None)
+        request.session.pop('NO3', None)
+        request.session.pop('Ca', None)
+        request.session.pop('Al', None)
+        request.session.pop('Mg', None)
+        request.session.pop('notes', None)
+        return super().get(request, *args, **kwargs)
 
 
 
@@ -27,7 +40,6 @@ class EverydayFirstInputView(TemplateView):
         context['tanks'] = TankModel.objects.all()
         today = date.today()
         context['today'] = today.strftime('%Y-%m-%d')
-        # context['amedama'] = 'amedamaとは？'
 
         # その日の日付のデータがすでに存在する場合は、そのデータを初期値として設定
         water_qualities = WaterQualityModel.objects.filter(date=today)
@@ -80,6 +92,8 @@ class EverydayFirstInputView(TemplateView):
             request.session['notes'] = ''
         return redirect('/everyday/second_input/')
 
+
+
 class EverydaySecondInputView(TemplateView):
     template_name = 'input/everyday/second_input.html'
 
@@ -117,6 +131,7 @@ class EverydayCommentInputView(TemplateView):
         return redirect('/everyday/confirm/')
 
 
+
 class EverydayConfirmInputView(TemplateView):
     template_name = 'input/everyday/confirm.html'
 
@@ -124,8 +139,10 @@ class EverydayConfirmInputView(TemplateView):
         context = super().get_context_data(**kwargs)
         tank_id = self.request.session.get('tank', '')
         tank = TankModel.objects.get(pk=tank_id)
-        context['form_data'] = {
-            'date': self.request.session.get('date', ''),
+        date = self.request.session.get('date', '')
+        
+        form_data = {
+            'date': date,
             'tank': tank.name,
             'room_temperature': self.request.session.get('room_temperature', ''),
             'water_temperature': self.request.session.get('water_temperature', ''),
@@ -134,26 +151,67 @@ class EverydayConfirmInputView(TemplateView):
             'salinity': self.request.session.get('salinity', ''),
             'notes': self.request.session.get('notes', ''),
         }
-
-        # 基準値を取得
-        standard_value = StandardValueModel.get_or_create()
-
-        # 閾値を取得
-        thresholds = {t.parameter: t for t in WaterQualityThresholdModel.objects.all()}
-
-        # アラートメッセージを格納する辞書
-        context['alerts'] = {}
-
-        # 各パラメーターについて基準値と比較
-        for param in ['water_temperature', 'pH', 'DO', 'salinity', 'NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg']:
-            input_value = self.request.session.get(param)
-            if input_value:
-                standard_value_param = getattr(standard_value, param)
-                threshold = thresholds.get(param)
-                if standard_value_param and threshold:
-                    diff = abs(float(input_value) - standard_value_param)
-                    if diff > threshold.reference_value_threshold:
-                        context['alerts'][param] = "基準値の範囲を超えています"
+        context['form_data'] = form_data
+        
+        # アラートメッセージと背景色を格納する辞書を初期化
+        alerts = {}
+        bg_colors = {}
+        
+        # 基準値の範囲内にあるかどうかを確認
+        for param in ['water_temperature', 'pH', 'DO', 'salinity']:
+            threshold = WaterQualityThresholdModel.objects.filter(parameter=param).first()
+            if threshold:
+                value = form_data.get(param)
+                if value:
+                    if threshold.reference_value_threshold_min and float(value) < threshold.reference_value_threshold_min:
+                        diff = threshold.reference_value_threshold_min - float(value)
+                        alerts.setdefault(param, []).append(f"基準値より{diff:.1f}↓")
+                        bg_colors[param] = 'table-warning'
+                    elif threshold.reference_value_threshold_max and float(value) > threshold.reference_value_threshold_max:
+                        diff = float(value) - threshold.reference_value_threshold_max
+                        alerts.setdefault(param, []).append(f"基準値より{diff:.1f}↑")
+                        bg_colors[param] = 'table-warning'
+        
+        # 前日の値から大きく離れているかどうかを確認
+        previous_day = datetime.strptime(date, '%Y-%m-%d').date() - timedelta(days=1)
+        previous_water_quality = WaterQualityModel.objects.filter(date=previous_day, tank=tank).first()
+        if previous_water_quality:
+            for param in ['water_temperature', 'pH', 'DO', 'salinity']:
+                threshold = WaterQualityThresholdModel.objects.filter(parameter=param).first()
+                if threshold and threshold.previous_day_threshold:
+                    current_value = form_data.get(param)
+                    previous_value = getattr(previous_water_quality, param)
+                    if current_value and previous_value:
+                        diff = float(current_value) - previous_value
+                        if abs(diff) > threshold.previous_day_threshold:
+                            if diff > 0:
+                                alerts.setdefault(param, []).append(f"前日より{diff:.1f}↑")
+                            else:
+                                alerts.setdefault(param, []).append(f"前日より{abs(diff):.1f}↓")
+                            if param in bg_colors:
+                                bg_colors[param] = 'table-danger'
+                            else:
+                                bg_colors[param] = 'table-warning'
+        
+        context['alerts'] = alerts
+        context['bg_colors'] = bg_colors
+        
+        # 昨日、一昨日、一週間前の値を取得
+        context['previous_values'] = {}
+        for days in [1, 2]:
+            previous_date = datetime.strptime(date, '%Y-%m-%d').date() - timedelta(days=days)
+            previous_water_quality = WaterQualityModel.objects.filter(date=previous_date, tank=tank).first()
+            if previous_water_quality:
+                context['previous_values'][days] = {
+                    'water_temperature': previous_water_quality.water_temperature,
+                    'pH': previous_water_quality.pH,
+                    'DO': previous_water_quality.DO,
+                    'salinity': previous_water_quality.salinity,
+                }
+        
+        # alertsをrequest.sessionに保存
+        self.request.session['alerts'] = alerts
+        context['notify_line'] = True
 
         return context
 
@@ -167,69 +225,51 @@ class EverydayConfirmInputView(TemplateView):
             'DO': request.session['DO'],
             'salinity': request.session['salinity'],
             'notes': request.session['notes'],
+            'notify_line': request.POST.get('notify_line', '') == 'on',
         }
-
         water_quality_id = request.session.get('water_quality_id')
         if water_quality_id:
             water_quality = WaterQualityModel.objects.get(id=water_quality_id)
             form = WaterQualityForm(form_data, instance=water_quality)
         else:
             form = WaterQualityForm(form_data)
-
         if form.is_valid():
-            form.save()
-
-            #ライン通知する際はコメントアウトを外す
-            # アラートが発生していた場合、LINEグループに通知を送信
-            # context = self.get_context_data()
-            # if context['alerts']:
-            #     self.send_line_notify(context['alerts'], context['form_data'])
-
-            request.session.pop('water_quality_id', None)
-            request.session.pop('date', None)
-            request.session.pop('tank', None)
-            request.session.pop('room_temperature', None)
-            request.session.pop('water_temperature', None)
-            request.session.pop('pH', None)
-            request.session.pop('DO', None)
-            request.session.pop('salinity', None)
-            request.session.pop('notes', None)
+            water_quality = form.save()
             request.session['success_message'] = '測定結果を保存しました'
+            water_quality.notify_line = form_data['notify_line']
+
+            
+            # アラートがある場合にLINEに通知する
+            if water_quality.notify_line and any(request.session['alerts'].values()):
+                self.send_line_notification(request.session['alerts'], form_data)
+
             return redirect('/home/')
         else:
             return redirect('/everyday/edit/')
 
+    def send_line_notification(self, alerts, form_data):
+        # フィールド名を日本語に変換するための辞書
+        field_name_dict = {
+            'water_temperature': '水温',
+            'pH': 'pH',
+            'DO': 'DO',
+            'salinity': '塩分濃度',
+        }
 
-    #ライン通知する際はコメントアウトを外す
-    # def send_line_notify(self, alerts, form_data):
-    #     line_notify_token = ''  # LINEグループ用のアクセストークンを設定
-    #     line_notify_api = 'https://notify-api.line.me/api/notify'
+        message = "測定結果\n"
+        for param, alert_messages in alerts.items():
+            # フィールド名を日本語に変換
+            param_name = field_name_dict.get(param, param)
+            message += f"\n{param_name} : {form_data[param]}\n"
+            for alert in alert_messages:
+                message += f"- {alert}\n"
 
-    #     # 文字列から日付型に変換する
-    #     date_obj = datetime.strptime(form_data['date'], '%Y-%m-%d')
-    #     date_str = date_obj.strftime('%Y年%m月%d日')
-    #     alert_message = f"{date_str}\n\n"
+        url = 'https://notify-api.line.me/api/notify'
+        headers = {'Authorization': f'Bearer {settings.LINE_NOTIFY_ACCESS_TOKEN}'}
+        data = {'message': message}
+        requests.post(url, headers=headers, data=data)
 
-    #     if 'water_temperature' in alerts:
-    #         alert_message += f"水温: {form_data['water_temperature']}℃\n"
-    #         alert_message += f"{alerts['water_temperature']}\n\n"
 
-    #     if 'pH' in alerts:
-    #         alert_message += f"pH: {form_data['pH']}\n"
-    #         alert_message += f"{alerts['pH']}\n\n"
-
-    #     if 'DO' in alerts:
-    #         alert_message += f"DO: {form_data['DO']} mg/L\n"
-    #         alert_message += f"{alerts['DO']}\n\n"
-
-    #     if 'salinity' in alerts:
-    #         alert_message += f"塩分濃度: {form_data['salinity']} %\n"
-    #         alert_message += f"{alerts['salinity']}\n\n"
-
-    #     payload = {'message': alert_message.strip()}
-    #     headers = {'Authorization': f'Bearer {line_notify_token}'}
-
-    #     requests.post(line_notify_api, data=payload, headers=headers)
 
 class EverydayEditView(TemplateView):
     template_name = 'input/everyday/edit.html'
@@ -252,7 +292,7 @@ class EverydayEditView(TemplateView):
         form = WaterQualityForm(request.POST)
         if form.is_valid():
             request.session['date'] = form.cleaned_data['date'].strftime('%Y-%m-%d')
-            request.session['tank'] = form.cleaned_data['tank'].pk  # 変更
+            request.session['tank'] = form.cleaned_data['tank'].pk
             request.session['room_temperature'] = form.cleaned_data['room_temperature']
             request.session['water_temperature'] = form.cleaned_data['water_temperature']
             request.session['pH'] = form.cleaned_data['pH']

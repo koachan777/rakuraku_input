@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+{% endblock %}
+
 
 {% block title %}
-<h1 class="card-title text-center mt-3">水質データ入力 - Step2</h1> 
+<h1 class="card-title text-center mt-3" style="font-size: 32px; margin-bottom: 16px;">データ入力</h1> 
+<h2 class="text-center mb-4">日常測定 Step2</h2>
 {% endblock %}
 
 {% block content %}
@@ -16,30 +23,28 @@
                         {% csrf_token %}
                         <div class="mb-3">
                             <label for="water_temperature" class="form-label">水温</label>
-                            <input type="number" name="water_temperature" class="form-control" min="0" max="100" step="0.1" value="{{ form_data.water_temperature }}" required>
+                            <input type="number" name="water_temperature" class="form-control form-control-lg" min="0" max="100" step="0.1" value="{{ form_data.water_temperature }}">
                         </div>
                         <div class="mb-3">
                             <label for="pH" class="form-label">pH</label>
-                            <input type="number" name="pH" class="form-control" min="0" max="14" step="0.1" value="{{ form_data.pH }}" required>
+                            <input type="number" name="pH" class="form-control form-control-lg" min="0" max="14" step="0.01" value="{{ form_data.pH }}">
                         </div>
                         <div class="mb-3">
                             <label for="DO" class="form-label">DO</label>
-                            <input type="number" name="DO" class="form-control" min="0" max="100" step="0.1" value="{{ form_data.DO }}" required>
+                            <input type="number" name="DO" class="form-control form-control-lg" min="0" max="100" step="0.1" value="{{ form_data.DO }}">
                         </div>
                         <div class="mb-3">
                             <label for="salinity" class="form-label">塩分濃度</label>
-                            <input type="number" name="salinity" class="form-control" min="0" max="100" step="0.1" value="{{ form_data.salinity }}" required>
+                            <input type="number" name="salinity" class="form-control form-control-lg" min="0" max="100" step="0.01" value="{{ form_data.salinity }}">
                         </div>
                         <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">次へ</button>
+                            <button type="submit" class="original-long-btn" style="border: none;">次へ</button>
                         </div>
                     </form>
                 </div> 
         </div> 
     </div> 
 </div> 
-
-{% include 'footer.html' %}
 
 {% else %} 
 <div class="text-center mt-5"> 

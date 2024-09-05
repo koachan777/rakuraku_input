@@ -1,16 +1,28 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}
+<h1 class="card-title text-center mt-3" style="font-size: 32px; margin-bottom: 16px;">管理者画面</h1>
+<h2 class="text-center mb-4">系統を追加</h2>
+{% endblock %}
 
 {% block content %}
+<!-- <h1 class="card-title text-center mt-3" style="font-size: 32px; margin-bottom: 16px;">系統を追加する</h1> -->
+
 <div class="container">
-    <h1 class="text-center mb-4">系統を追加する</h1>
+    <!-- <h1 class="text-center mb-4">系統を追加する</h1> -->
     <div class="row justify-content-center">
         <div class="col-md-6">
             <form method="post" class="p-4">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <div class="text-center">
-                    <a href="{% url 'rakuraku_apps:manage_tank' %}" class="btn btn-secondary">戻る</a>
-                    <button type="submit" class="btn btn-primary">保存</button>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="original-long-btn">保存</button>
+                    <a href="{% url 'rakuraku_apps:manage_tank' %}" class="original-long-btn-gray">戻る</a>
                 </div>
             </form>
         </div>
