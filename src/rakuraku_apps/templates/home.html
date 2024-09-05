@@ -4,6 +4,7 @@
 
 {% block PageCss %}
 <link href="{% static '/css/button.css' %}" rel="stylesheet">
+<link href="{% static '/css/hover_text.css' %}" rel="stylesheet">
 {% endblock %}
 
 {% block title %}
@@ -27,7 +28,21 @@
     
         <a href="{% url 'rakuraku_apps:manage' %}" class="original-big-btn mb-4">管理者画面</a>
     </div>
-    <a href="{% url 'rakuraku_apps:function' %}" class="original-big-btn mb-4">機能紹介</a>
+    
+    <div class="function">
+        <div class="hover-box">
+            <a href="{% url 'rakuraku_apps:function' %}" class="function-btn">
+                <img src="{% static 'img/fall_ebi.svg' %}" alt="機能紹介">
+                <span class="hover-text">機能紹介</span>
+            </a>
+        </div>
+        <div class="hover-box">
+            <a href="{% url 'rakuraku_apps:omake' %}" class="function-btn">
+                <img src="{% static 'img/fall_ebi.svg' %}" alt="機能紹介">
+                <span class="hover-text">おまけ🦐</span>
+            </a>
+        </div>
+    </div>
 
 {% else %} 
     <div class="d-grid gap-2"> 
