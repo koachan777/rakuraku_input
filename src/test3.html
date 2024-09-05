@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>温度ピッカー</title>
+    <!-- jQueryを読み込む -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Pickerライブラリを正しく読み込む -->
+    <script src="https://cdn.jsdelivr.net/npm/pickerjs@1.2.1/dist/picker.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pickerjs@1.2.1/dist/picker.min.css">
+</head>
+<body>
+    <h1>温度を選択してください (0〜100度)</h1>
+    <div class="temperature" id="temp1">温度を選択</div>
+
+    <script>
+        $(document).ready(function() {
+            function TemperaturePicker() {
+                var target = '.temperature';
+
+                $(target).each(function(){
+                    var self = this;
+                    var id = $(self).attr('id');
+
+                    var picker = new Picker(document.getElementById(id), {
+                        format: 'SSS', // 0〜100の数値を表す形式
+                        controls: true,
+                        headers: true,
+                        text: {
+                            title: '<span>温度を選択してください</span>'
+                        },
+                        increment: {
+                            minute: 1  // 1度単位で増加
+                        },
+                        // カスタムで温度範囲（0〜100度）を設定
+                        date: new Date(2000, 0, 1, 0, 0),  // デフォルトの時間
+                        pick(event) {
+                            // 選択した温度値を取得する (0〜100)
+                            var temp = picker.getDate().getMilliseconds(); // 分を温度に使用
+
+                            // 0〜100度の範囲外なら再設定
+                            if (temp > 100) temp = 100;
+                            if (temp < 0) temp = 0;
+
+                            console.log(temp + "度");
+
+                            // 選択した温度を表示
+                            $(self).text(temp + "度");
+                        }
+                    });
+                });
+            }
+
+            new TemperaturePicker();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>温度ピッカー</title>
+    <style>
+        .number-picker {
+            width: 100px;
+            height: 30px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>温度を選択してください (0〜100度)</h1>
+    <select class="number-picker" id="integer-picker">
+        <!-- 0〜100の整数部分を自動生成 -->
+        <script>
+            for (let i = 0; i <= 100; i++) {
+                document.write('<option value="' + i + '">' + i + '</option>');
+            }
+        </script>
+    </select>
+    <select class="number-picker" id="decimal-picker">
+        <!-- 0.00〜0.99の小数部分を自動生成 -->
+        <script>
+            for (let i = 0; i < 100; i++) {
+                let decimal = (i < 10) ? '0' + i : i;
+                document.write('<option value=".' + decimal + '">.' + decimal + '</option>');
+            }
+        </script>
+    </select>
+
+    <p id="selected-temp">選択された温度: </p>
+
+    <script>
+        const integerPicker = document.getElementById('integer-picker');
+        const decimalPicker = document.getElementById('decimal-picker');
+        const selectedTempDisplay = document.getElementById('selected-temp');
+
+        function updateTemperature() {
+            const selectedTemp = integerPicker.value + decimalPicker.value;
+            selectedTempDisplay.textContent = '選択された温度: ' + selectedTemp + '度';
+        }
+
+        integerPicker.addEventListener('change', updateTemperature);
+        decimalPicker.addEventListener('change', updateTemperature);
+    </script>
+</body>
+</html>

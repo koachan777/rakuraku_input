@@ -26,10 +26,48 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <div class="mb-3">
+                    <!-- <div class="mb-3">
                         <label for="room_temperature" class="form-label">室温</label>
                         <input type="number" name="room_temperature" class="form-control" min="0" max="100" step="0.1">
+                    </div> -->
+                    <div class="mb-3">
+                        <label for="integer-picker" class="form-label">室温</label>
+                        <div class="d-flex">
+                            <select class="form-select number-picker" name="room_temperature_integer" id="integer-picker" required>
+                                <!-- 0〜100の整数部分を自動生成 -->
+                                <script>
+                                    for (let i = 0; i <= 100; i++) {
+                                        document.write('<option value="' + i + '">' + i + '</option>');
+                                    }
+                                </script>
+                            </select>
+                            <select class="form-select number-picker" name="room_temperature_decimal" id="decimal-picker" required>
+                                <!-- 0.00〜0.99の小数部分を自動生成 -->
+                                <script>
+                                    for (let i = 0; i < 100; i++) {
+                                        let decimal = (i < 10) ? '0' + i : i;
+                                        document.write('<option value=".' + decimal + '">.' + decimal + '</option>');
+                                    }
+                                </script>
+                            </select>
+                        </div>
+                        <input type="hidden" name="room_temperature" id="room_temperature">
                     </div>
+                    <script>
+                        const integerPicker = document.getElementById('integer-picker');
+                        const decimalPicker = document.getElementById('decimal-picker');
+                        const roomTemperatureInput = document.getElementById('room_temperature');
+
+                        function updateRoomTemperature() {
+                            roomTemperatureInput.value = integerPicker.value + decimalPicker.value;
+                        }
+
+                        integerPicker.addEventListener('change', updateRoomTemperature);
+                        decimalPicker.addEventListener('change', updateRoomTemperature);
+
+                        // 初期値を設定
+                        updateRoomTemperature();
+                    </script>
                     <button type="submit" class="original-long-btn" style="border: none;">次へ</button>
                 </form>
             </div> 

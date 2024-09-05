@@ -12,28 +12,253 @@
         <div class="col-md-6"> 
                 <div class="card-body"> 
                     
-                    <form method="post">
+                    <form method="post" id = "data-form">
                         {% csrf_token %}
-                        <div class="mb-3">
+                        <!-- <div class="mb-3">
                             <label for="water_temperature" class="form-label">水温</label>
                             <input type="number" name="water_temperature" class="form-control" min="0" max="100" step="0.1" value="{{ form_data.water_temperature }}">
-                        </div>
+                        </div> -->
                         <div class="mb-3">
+                            <label for="water_temperature-picker" class="form-label">水温</label>
+                            <!-- <input type="text" id="water_temperature" name="water_temperature" class="form-control" value="{{ form_data.water_temperature }}" readonly required> -->
+                            <select id="water_temperature-picker" class="form-select number-picker" name="water_temperature">
+                                <script>
+                                    for (let i = 0; i <= 1000; i++) {
+                                        let value = (i / 10).toFixed(1);
+                                        document.write('<option value="' + value + '">' + value + '</option>');
+                                    }
+                                </script>
+                            </select>
+                            <script>
+                                   const water_temperaturePicker = document.getElementById('water_temperature-picker');
+    
+                                // クリック時に表示するメニューの数を3つに設定
+                                water_temperaturePicker.addEventListener('focus', () => {
+                                    water_temperaturePicker.size = 5;
+                                });
+                                water_temperaturePicker.addEventListener('blur', () => {
+                                    water_temperaturePicker.size = 1;
+                                });
+                            </script>
+                        </div>
+                        <!-- <div class="mb-3">
                             <label for="pH" class="form-label">pH</label>
                             <input type="number" name="pH" class="form-control" min="0" max="14" step="0.1" value="{{ form_data.pH }}">
-                        </div>
+                        </div> -->
                         <div class="mb-3">
+                            <label for="pH" class="form-label">pH</label>
+                            <div class="d-flex">
+                                <select class="form-select number-picker" name="pH_integer" id="integer-picker-pH" required>
+                                    <!-- 0〜100の整数部分を自動生成 -->
+                                    <script>
+                                        for (let i = 0; i <= 14; i++) {
+                                            if (i === 2) {
+                                                document.write('<option value="' + i + '" selected>' + i + '</option>');
+                                            } else {
+                                                document.write('<option value="' + i + '">' + i + '</option>');
+                                            }
+                                        }
+                                    </script>
+                                </select>
+                                <select class="form-select number-picker" name="pH_decimal" id="decimal-picker-pH" required>
+                                    <!-- 0.00〜0.99の小数部分を自動生成 -->
+                                    <script>
+                                        for (let i = 0; i < 100; i++) {
+                                            let decimal = (i < 10) ? '0' + i : i;
+                                            if (i === 0) {
+                                                document.write('<option value=".' + decimal + '" selected>.' + decimal + '</option>');
+                                            } else {
+                                                document.write('<option value=".' + decimal + '">.' + decimal + '</option>');
+                                            }
+                                        }
+                                    </script>
+                                </select>
+                            </div>
+                            <script>
+                                const decimalPickerPH = document.getElementById('decimal-picker-pH');
+                                decimalPickerPH.addEventListener('wheel', (event) => {
+                                    if (event.deltaY > 0 && decimalPickerPH.selectedIndex === decimalPickerPH.options.length - 1) {
+                                        decimalPickerPH.selectedIndex = 0;
+                                        event.preventDefault();
+                                    } else if (event.deltaY < 0 && decimalPickerPH.selectedIndex === 0) {
+                                        decimalPickerPH.selectedIndex = decimalPickerPH.options.length - 1;
+                                        event.preventDefault();
+                                    }
+                                });
+
+                                // タッチスクロール対応
+                                let touchStartY = 0;
+                                decimalPickerPH.addEventListener('touchstart', (event) => {
+                                    touchStartY = event.touches[0].clientY;
+                                });
+
+                                decimalPickerPH.addEventListener('touchmove', (event) => {
+                                    const touchEndY = event.touches[0].clientY;
+                                    if (touchStartY > touchEndY && decimalPickerPH.selectedIndex === decimalPickerPH.options.length - 1) {
+                                        decimalPickerPH.selectedIndex = 0;
+                                        event.preventDefault();
+                                    } else if (touchStartY < touchEndY && decimalPickerPH.selectedIndex === 0) {
+                                        decimalPickerPH.selectedIndex = decimalPickerPH.options.length - 1;
+                                        event.preventDefault();
+                                    }
+                                });
+                            </script>
+                            <input type="hidden" name="pH" id="pH-hidden">
+                        </div>
+                        <!-- <div class="mb-3">
                             <label for="DO" class="form-label">DO</label>
                             <input type="number" name="DO" class="form-control" min="0" max="100" step="0.1" value="{{ form_data.DO }}">
-                        </div>
+                        </div> -->
                         <div class="mb-3">
+                            <label for="DO-picker" class="form-label">DO</label>
+                            <select class="form-select number-picker" name="DO" id="DO-picker" required>
+                                <script>
+                                    for (let i = 0; i <= 1000; i++) {
+                                        let value = (i / 10).toFixed(1);
+                                        if (value === "6.0") {
+                                            document.write('<option value="' + value + '" selected>' + value + '</option>');
+                                        } else {
+                                            document.write('<option value="' + value + '">' + value + '</option>');
+                                        }
+                                    }
+                                </script>
+                            </select>
+                            <script>
+                                const doPicker = document.getElementById('DO-picker');
+    
+                                // クリック時に表示するメニューの数を3つに設定
+                                doPicker.addEventListener('focus', () => {
+                                    doPicker.size = 5;
+                                });
+                                doPicker.addEventListener('blur', () => {
+                                    doPicker.size = 1;
+                                });
+
+                            </script>
+                        </div>
+                        <!-- <div class="mb-3">
                             <label for="salinity" class="form-label">塩分濃度</label>
                             <input type="number" name="salinity" class="form-control" min="0" max="100" step="0.1" value="{{ form_data.salinity }}">
+                        </div> -->
+                        <div class="mb-3">
+                            <label for="salinity" class="form-label">塩分濃度</label>
+                            <div class="d-flex">
+                                <select class="form-select number-picker" name="salinity_integer" id="integer-picker-salinity" required>
+                                    <!-- 0〜100の整数部分を自動生成 -->
+                                    <script>
+                                        for (let i = 0; i <= 100; i++) {
+                                            if (i === 2) {
+                                                document.write('<option value="' + i + '" selected>' + i + '</option>');
+                                            } else {
+                                                document.write('<option value="' + i + '">' + i + '</option>');
+                                            }
+                                        }
+                                    </script>
+                                </select>
+                                <select class="form-select number-picker" name="salinity_decimal" id="decimal-picker-salinity" required>
+                                    <!-- 0.00〜0.99の小数部分を自動生成 -->
+                                    <script>
+                                        for (let i = 0; i < 100; i++) {
+                                            let decimal = (i < 10) ? '0' + i : i;
+                                            if (i === 0) {
+                                                document.write('<option value=".' + decimal + '" selected>.' + decimal + '</option>');
+                                            } else {
+                                                document.write('<option value=".' + decimal + '">.' + decimal + '</option>');
+                                            }
+                                        }
+                                    </script>
+                                </select>
+                            </div>
+                            <input type="hidden" name="salinity" id="salinity-hidden">
                         </div>
+                        <script>
+                            const decimalPickerSalinity = document.getElementById('decimal-picker-salinity');
+                            
+                            // ホイールスクロール対応
+                            decimalPickerSalinity.addEventListener('wheel', (event) => {
+                                if (event.deltaY > 0 && decimalPickerSalinity.selectedIndex >= decimalPickerSalinity.options.length - 4) {
+                                    decimalPickerSalinity.selectedIndex = 3;
+                                    event.preventDefault();
+                                } else if (event.deltaY < 0 && decimalPickerSalinity.selectedIndex <= 3) {
+                                    decimalPickerSalinity.selectedIndex = decimalPickerSalinity.options.length - 4;
+                                    event.preventDefault();
+                                }
+                            });
+
+                            // タッチスクロール対応
+                            let salinity_touchStartY = 0;
+                            decimalPickerSalinity.addEventListener('touchstart', (event) => {
+                                salinity_touchStartY = event.touches[0].clientY;
+                            });
+
+                            decimalPickerSalinity.addEventListener('touchmove', (event) => {
+                                const touchEndY = event.touches[0].clientY;
+                                if (salinity_touchStartY > touchEndY && decimalPickerSalinity.selectedIndex >= decimalPickerSalinity.options.length - 4) {
+                                    decimalPickerSalinity.selectedIndex = 3;
+                                    event.preventDefault();
+                                } else if (salinity_touchStartY < touchEndY && decimalPickerSalinity.selectedIndex <= 3) {
+                                    decimalPickerSalinity.selectedIndex = decimalPickerSalinity.options.length - 4;
+                                    event.preventDefault();
+                                }
+                            });
+                        </script>
                         <div class="d-grid gap-2">
                             <button type="submit" class="original-long-btn" style="border: none;">次へ</button>
                         </div>
                     </form>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', () => {
+                            const integerPickerPH = document.getElementById('integer-picker-pH');
+                            const decimalPickerPH = document.getElementById('decimal-picker-pH');
+                            const pHHidden = document.getElementById('pH-hidden');
+                            const integerPickerSalinity = document.getElementById('integer-picker-salinity');
+                            const decimalPickerSalinity = document.getElementById('decimal-picker-salinity');
+                            const salinityHidden = document.getElementById('salinity-hidden');
+                            const form = document.getElementById('data-form');
+                    
+                            if (integerPickerPH && decimalPickerPH && pHHidden) {
+                                integerPickerPH.addEventListener('focus', () => {
+                                    integerPickerPH.size = 5;
+                                });
+                                integerPickerPH.addEventListener('blur', () => {
+                                    integerPickerPH.size = 1;
+                                });
+                    
+                                decimalPickerPH.addEventListener('focus', () => {
+                                    decimalPickerPH.size = 5;
+                                });
+                                decimalPickerPH.addEventListener('blur', () => {
+                                    decimalPickerPH.size = 1;
+                                });
+                    
+                                form.addEventListener('submit', (event) => {
+                                    pHHidden.value = integerPickerPH.value + decimalPickerPH.value;
+                                    console.log('pH:', pHHidden.value); // デバッグ用
+                                });
+                            }
+                    
+                            if (integerPickerSalinity && decimalPickerSalinity && salinityHidden) {
+                                integerPickerSalinity.addEventListener('focus', () => {
+                                    integerPickerSalinity.size = 5;
+                                });
+                                integerPickerSalinity.addEventListener('blur', () => {
+                                    integerPickerSalinity.size = 1;
+                                });
+                    
+                                decimalPickerSalinity.addEventListener('focus', () => {
+                                    decimalPickerSalinity.size = 5;
+                                });
+                                decimalPickerSalinity.addEventListener('blur', () => {
+                                    decimalPickerSalinity.size = 1;
+                                });
+                    
+                                form.addEventListener('submit', (event) => {
+                                    salinityHidden.value = integerPickerSalinity.value + decimalPickerSalinity.value;
+                                    console.log('Salinity:', salinityHidden.value); // デバッグ用
+                                });
+                            }
+                        });
+                    </script>
                 </div> 
         </div> 
     </div> 

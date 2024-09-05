@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数値ピッカー</title>
+    <!-- jQueryを読み込む -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Pickerライブラリを正しく読み込む -->
+    <script src="https://cdn.jsdelivr.net/npm/pickerjs@1.2.1/dist/picker.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pickerjs@1.2.1/dist/picker.min.css">
+</head>
+<body>
+    <h1><a href="https://qiita.com/qwe001/items/6e5048aa72b4562ad6d1" target="_blank">ドラムロールの数値ピッカー</a></h1>
+    <div class="number" id="num1">Click me 1</div>
+    <div class="number" id="num2">Click me 2</div>
+
+    <script>
+        $(document).ready(function() {
+            function NumberPicker() {
+                var target = '.number';
+
+                $(target).each(function(){
+                    var self = this;
+                    var id = $(self).attr('id');
+
+                    var picker = new Picker(document.getElementById(id), {
+                        controls: true,
+                        headers: true,
+                        increment: {
+                            minute : 1  // 数値の単位を変更
+                        },
+                        text: {
+                            title: '<span>数値を選択してください</span>'
+                        },
+                        pick(event) {
+                            // 数値を取得する
+                            var number = picker.getDate().getMinutes(); // 1～59の範囲を取得（例）
+
+                            console.log(number);
+
+                            $(self).text(number);
+                        }
+                    });
+                });
+            }
+
+            new NumberPicker();
+        });
+    </script>
+</body>
+</html>

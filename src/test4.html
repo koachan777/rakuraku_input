@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>温度ピッカー</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pickerjs@1.2.1/dist/picker.min.css">
+</head>
+<body>
+    <div class="mb-3">
+        <label for="room_temperature" class="form-label">室温</label>
+        <input type="number" id="room_temperature" name="room_temperature" class="form-control" min="0" max="100" step="0.1">
+    </div>
+    <script src="./number_picker.js"></script>
+</body>
+</html>
+    <h1>温度を選択してください (0〜100度)</h1>
+    <div class="temperature" id="temp1">温度を選択</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var input = document.getElementById('room_temperature');
+            if (!input) {
+                console.error('room_temperature要素が見つかりません');
+                return;
+            }
+            var picker = new Picker(input, {
+                format: 'ss.d', // 秒とミリ秒を表す形式
+                controls: true,
+                headers: true,
+                text: {
+                    title: '<span>温度を選択してください</span>'
+                },
+                increment: {
+                    second: 1,  // 1秒単位で増加
+                    millisecond: 1  // 100ミリ秒単位で増加
+                },
+                // カスタムで温度範囲（0〜100度）を設定
+                date: new Date(2000, 0, 1, 0, 0, 0, 0),  // デフォルトの時間
+                pick(event) {
+                    // 選択した温度値を取得する (0〜100)
+                    var seconds = picker.getDate().getSeconds();
+                    var milliseconds = picker.getDate().getMilliseconds();
+                    var temp = seconds + milliseconds / 1000; // 秒とミリ秒を組み合わせて温度に使用
+        
+                    // 0〜100度の範囲外なら再設定
+                    if (temp > 100) temp = 100;
+                    if (temp < 0) temp = 0;
+        
+                    console.log(temp + "度");
+        
+                    // 選択した温度を表示
+                    input.value = temp;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
