@@ -50,3 +50,24 @@ class Omake2View(TemplateView):
 
 class Omake3View(TemplateView):
     template_name = 'omake/omake3.html'
+
+class Omake4View(TemplateView):
+    template_name = 'omake/omake4.html'
+
+class Omake5View(TemplateView):
+    template_name = 'omake/omake5.html'
+
+class Omake6View(TemplateView):
+    template_name = 'omake/omake6.html'
+
+class Omake7View(TemplateView):
+    template_name = 'omake/omake7.html'
+
+class Omake8View(TemplateView):
+    template_name = 'omake/omake8.html'
+
+class Omake9View(TemplateView):
+    template_name = 'omake/omake9.html'
+
+class Omake10View(TemplateView):
+    template_name = 'omake/omake10.html'

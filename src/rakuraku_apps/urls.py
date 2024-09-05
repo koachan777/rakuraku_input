@@ -7,9 +7,16 @@ from rakuraku_apps.views.common import (
     HomeView, 
     CustomLoginView,
     LogoutView,
+    Omake10View,
     Omake1View,
     Omake2View,
     Omake3View,
+    Omake4View,
+    Omake5View,
+    Omake6View,
+    Omake7View,
+    Omake8View,
+    Omake9View,
     OmakeView, 
     SignupView
 )
@@ -153,4 +160,25 @@ urlpatterns = [
 
     # おまけ3
     path('omake3', Omake3View.as_view(), name='omake3'),
+
+    # おまけ4
+    path('omake4', Omake4View.as_view(), name='omake4'),
+
+    # おまけ5
+    path('omake5', Omake5View.as_view(), name='omake5'),
+
+    # おまけ6
+    path('omake6', Omake6View.as_view(), name='omake6'),
+
+    # おまけ7
+    path('omake7', Omake7View.as_view(), name='omake7'),
+
+    # おまけ8
+    path('omake8', Omake8View.as_view(), name='omake8'),
+
+    # おまけ9
+    path('omake9', Omake9View.as_view(), name='omake9'),
+
+    # おまけ10
+    path('omake10', Omake10View.as_view(), name='omake10'),
 ]
