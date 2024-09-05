@@ -14,20 +14,21 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-    <div class="h2">
+    <div class="h2 mb-4">
         ようこそ {{ user.account_id }} 
         <a>
             さん
         </a>
     </div> 
-    <div class="list-group gap-2"> 
-        
-        <a href="{% url 'rakuraku_apps:everyday_or_interval' %}" class="original-big-btn">データ入力</a> 
-        
-        <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="original-big-btn">過去のデータ</a> 
-        
-        <a href="{% url 'rakuraku_apps:manage' %}" class="original-big-btn">管理者画面</a> 
-    </div> 
+    <div class="list-group">
+        <a href="{% url 'rakuraku_apps:everyday_or_interval' %}" class="original-big-btn mb-4">データ入力</a>
+    
+        <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="original-big-btn mb-4">過去のデータ</a>
+    
+        <a href="{% url 'rakuraku_apps:manage' %}" class="original-big-btn mb-4">管理者画面</a>
+    </div>
+    <a href="{% url 'rakuraku_apps:function' %}" class="original-big-btn mb-4">機能紹介</a>
+
 {% else %} 
     <div class="d-grid gap-2"> 
         <a href="{% url 'rakuraku_apps:login' %}" class="original-btn">ログイン</a> 

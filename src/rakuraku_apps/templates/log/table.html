@@ -6,6 +6,24 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<style>
+    .btn-primary-muted {
+        background-color: rgba(86, 178, 200, 0.8);
+        border-color: rgba(86, 178, 200, 0.8);
+    }
+    .btn-primary-muted:hover {
+        background-color: rgba(70, 145, 163, 0.8);
+        border-color: rgba(70, 145, 163, 0.8);
+    }
+    .btn-danger-muted {
+        background-color: rgba(200, 86, 86, 0.8);
+        border-color: rgba(200, 86, 86, 0.8);
+    }
+    .btn-danger-muted:hover {
+        background-color: rgba(163, 70, 70, 0.8);
+        border-color: rgba(163, 70, 70, 0.8);
+    }
+</style>
 {% endblock %}
 
 {% load custom_tags %}
@@ -67,7 +85,10 @@
             <button type="submit" class="original-long-btn">表示</button>
         </div>
         <div class="d-grid gap-2  my-3">
-            <a href="{% url 'rakuraku_apps:export_to_excel' %}?start_date={{ start_date }}&end_date={{ end_date }}&shrimp={{ request.GET.shrimp }}&item={{ request.GET.item }}" class="original-long-btn-excel">Excelエクスポート</a>
+            <a href="{% url 'rakuraku_apps:export_to_excel' %}?start_date={{ start_date }}&end_date={{ end_date }}&shrimp={{ request.GET.shrimp }}&item={{ request.GET.item }}" class="original-long-btn-excel">
+                <i class="fa-solid fa-download"></i>
+                Excel出力
+            </a>
         </div>
     </form>
     <hr>
@@ -148,10 +169,10 @@
                     <td><nobr>{{ data.Mg|default:"-" }}</nobr></td>
                     <td><nobr>{{ data.notes|default:"-" }}</nobr></td>
                     <td>
-                        <a href="{% url 'rakuraku_apps:edit_water_quality' data.id %}" class="btn btn-sm btn-primary">
+                        <a href="{% url 'rakuraku_apps:edit_water_quality' data.id %}" class="btn btn-sm btn-primary-muted">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ data.id }}">
+                        <button type="button" class="btn btn-sm btn-danger-muted" data-bs-toggle="modal" data-bs-target="#deleteModal{{ data.id }}">
                             <i class="fas fa-trash-alt"></i>
                         </button>
                     </td>

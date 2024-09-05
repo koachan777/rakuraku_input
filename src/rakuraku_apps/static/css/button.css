@@ -30,7 +30,7 @@
 
 .original-big-btn {
     font-size: 16px;
-    display: block;
+    display: flex;
     text-align: center;
     text-decoration: none;
     width: 100%;
@@ -42,6 +42,9 @@
     background-color: rgba(47, 93, 163, 0.8);
     color: #fff;
     border: none;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .original-long-btn {

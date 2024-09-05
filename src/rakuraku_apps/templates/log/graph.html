@@ -11,7 +11,7 @@
     <form method="GET" class="mb-4">
         <div class="row">
             <div class="col-md-4 mb-3">
-                <div class="form-group">
+                <div class="form-group mb-4">
                     <label for="date_range">期間:</label>
                     <div class="input-group">
                         <input type="date" class="form-control" id="start_date" name="start_date" value="{{ start_date }}">
@@ -20,6 +20,10 @@
                         </div>
                         <input type="date" class="form-control" id="end_date" name="end_date" value="{{ end_date }}">
                     </div>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input type="checkbox" class="form-check-input" id="compare_last_year" name="compare_last_year" {% if request.GET.compare_last_year %}checked{% endif %}>
+                    <label class="form-check-label" for="compare_last_year">昨年のデータと比較する</label>
                 </div>
             </div>
             <div class="col-md-4 mb-3">
@@ -51,14 +55,6 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-4 mb-3">
-                <div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input" id="compare_last_year" name="compare_last_year" {% if request.GET.compare_last_year %}checked{% endif %}>
-                    <label class="form-check-label" for="compare_last_year">昨年のデータと比較する</label>
-                </div>
-            </div>
-        </div>
         <div class="text-center mt-4">
             <button type="submit" class="original-long-btn">表示</button>
         </div>
@@ -69,7 +65,10 @@
             <img src="data:image/png;base64,{{ current_graph }}" alt="Current Water Quality Graph" id="current-graph-image" class="img-fluid">
         </div>
         <div class="position-absolute top-0 end-0 mt-3 me-3 d-none d-lg-block">
-            <a href="#" class="original-btn" id="save-current-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">保存</a>
+            <a href="#" class="original-btn" id="save-current-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}"> 
+                <i class="fa-solid fa-file-image"></i>
+                保存
+            </a>
         </div>
     </div>
 
@@ -80,7 +79,10 @@
             <img src="data:image/png;base64,{{ last_year_graph }}" alt="Last Year Water Quality Graph" id="last-year-graph-image" class="img-fluid">
         </div>
         <div class="position-absolute top-0 end-0 mt-3 me-3 d-none d-lg-block">
-            <a href="#" class="original-btn" id="save-last-year-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">保存</a>
+            <a href="#" class="original-btn" id="save-last-year-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">
+                <i class="fa-solid fa-file-image"></i>
+                保存
+            </a>
         </div>
     </div>
     {% else %}
