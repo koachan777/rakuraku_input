@@ -6,7 +6,11 @@ from rakuraku_apps.views.common import (
     FunctionView,
     HomeView, 
     CustomLoginView,
-    LogoutView, 
+    LogoutView,
+    Omake1View,
+    Omake2View,
+    Omake3View,
+    OmakeView, 
     SignupView
 )
 from rakuraku_apps.views.everyday_input import (
@@ -138,4 +142,15 @@ urlpatterns = [
     # 機能紹介
     path('function', FunctionView.as_view(), name='function'),
 
+    # おまけ
+    path('omake', OmakeView.as_view(), name='omake'),
+
+    # おまけ1
+    path('omake1', Omake1View.as_view(), name='omake1'),
+
+    # おまけ2
+    path('omake2', Omake2View.as_view(), name='omake2'),
+
+    # おまけ3
+    path('omake3', Omake3View.as_view(), name='omake3'),
 ]

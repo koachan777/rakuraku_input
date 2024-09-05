@@ -38,3 +38,15 @@ class EverydayOrIntervalView(TemplateView):
 
 class FunctionView(TemplateView):
     template_name = 'function.html'
+
+class OmakeView(TemplateView):
+    template_name = 'omake.html'
+
+class Omake1View(TemplateView):
+    template_name = 'omake/omake1.html'
+
+class Omake2View(TemplateView):
+    template_name = 'omake/omake2.html'
+
+class Omake3View(TemplateView):
+    template_name = 'omake/omake3.html'
