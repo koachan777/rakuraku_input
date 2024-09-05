@@ -67,7 +67,10 @@
             <button type="submit" class="original-long-btn">表示</button>
         </div>
         <div class="d-grid gap-2  my-3">
-            <a href="{% url 'rakuraku_apps:export_to_excel' %}?start_date={{ start_date }}&end_date={{ end_date }}&shrimp={{ request.GET.shrimp }}&item={{ request.GET.item }}" class="original-long-btn-excel">Excelエクスポート</a>
+            <a href="{% url 'rakuraku_apps:export_to_excel' %}?start_date={{ start_date }}&end_date={{ end_date }}&shrimp={{ request.GET.shrimp }}&item={{ request.GET.item }}" class="original-long-btn-excel">
+                <i class="fa-solid fa-download"></i>
+                Excel出力
+            </a>
         </div>
     </form>
     <hr>
