@@ -27,7 +27,12 @@
     
         <a href="{% url 'rakuraku_apps:manage' %}" class="original-big-btn mb-4">管理者画面</a>
     </div>
-    <a href="{% url 'rakuraku_apps:function' %}" class="original-big-btn mb-4">機能紹介</a>
+    
+    <div class="function">
+        <a href="{% url 'rakuraku_apps:function' %}" class="function-btn">
+            <img src="{% static 'img/fall_ebi.png' %}" alt="機能紹介">
+        </a>
+    </div>
 
 {% else %} 
     <div class="d-grid gap-2"> 

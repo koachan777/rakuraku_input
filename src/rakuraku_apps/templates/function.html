@@ -1,3 +1,135 @@
-機能紹介ページ
+{% extends 'base.html' %}
+{% load static %}
 
+{% block PageCss %}
+<link href="{% static '/css/button.css' %}" rel="stylesheet">
+<link href="{% static '/css/function.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block title %}
+<div class="text-center">
+    <div class="logo">
+        <img src="{% static 'img/header-logo.png' %}" alt="ロゴ" class="img-fluid" width="150" height="auto">
+    </div>
+    <div class="h1">機能紹介</div>
+</div>
+{% endblock %}
+
+{% block header %}
+<!-- Header部分を空にして非表示にする -->
+{% endblock %}
+
+{% block content %}
+<div class="accordion">
+        <button class="accordion-button">ログイン画面</button>
+        <div class="accordion-content">
+            <p>ユーザーIDとパスワードを入力してログイン。</p>
+            <p>何もない空間を押してみると....</p>
+        </div>
+
+        <button class="accordion-button">ホーム画面</button>
+        <div class="accordion-content">
+            <button class="accordion-button">データ入力</button>
+            <div class="accordion-content">
+                <p>選択した日付の水槽データがすでに存在する場合、次の画面では元のデータが初期値として表示されます。<br>このデータを編集して保存すると、既存のデータが上書きされます。</p>
+                <button class="accordion-button">日常測定</button>
+                <div class="accordion-content">
+                    <button class="accordion-button">入力画面</button>
+                    <div class="accordion-content">
+                        <p>日常測定Step1:<br>　計測日,水槽,室温の情報を入力</p>
+                        <p>日常測定Step2:<br>　水温,pH,DO,塩分濃度の情報を入力</p>
+                        <p>日常測定Step3:<br>　備考を入力</p>
+                    </div>
+                    <button class="accordion-button">確認画面</button>
+                    <div class="accordion-content">
+                        <p>入力画面で入力した値の確認。設定に応じてアラートメッセージの表示。</p>
+                        <p>デフォルトでLINEへ通知。</p>
+                    </div>
+                    <button class="accordion-button">編集画面</button>
+                    <div class="accordion-content">
+                        <p>入力画面で入力した値の編集。「確認画面へ」を押すことで編集内容が保存される。</p>
+                    </div>
+                </div>
+                <button class="accordion-button">定期測定</button>
+                <div class="accordion-content">
+                    <button class="accordion-button">入力画面</button>
+                    <div class="accordion-content">
+                        <p>日常測定Step1:<br>　計測日,水槽,室温の情報を入力</p>
+                        <p>日常測定Step2:<br>　NH4,NO2,NO3,塩分濃度の情報を入力</p>
+                        <p>日常測定Step3:<br>　Ca,AI,Mg,塩分濃度の情報を入力</p>
+                        <p>日常測定Step4:<br>　備考を入力</p>
+                    </div>
+                    <button class="accordion-button">確認画面</button>
+                    <div class="accordion-content">
+                        <p>入力画面で入力した値の確認。設定に応じてアラートメッセージの表示。</p>
+                        <p>デフォルトでLINEへ通知。</p>
+                    </div>
+                    <button class="accordion-button">編集画面</button>
+                    <div class="accordion-content">
+                        <p>入力画面で入力した値の編集。「確認画面へ」を押すことで編集内容が保存される。</p>
+                    </div>
+                </div>
+            </div>
+
+            <button class="accordion-button">過去のデータ</button>
+            <div class="accordion-content">
+                <button class="accordion-button">表</button>
+                <div class="accordion-content">
+                    <button class="accordion-button">表示設定</button>
+                    <div class="accordion-content">
+                        <p>期間: 表示期間の設定。是非エビの周期に合わせてご活用ください。</p>
+                        <p>系統: 表示する水槽の系統を選択。</p>
+                        <p>項目: 表示する水質の項目を選択。</p>
+                    </div>
+                    <p>Excel出力: 表示した表をExcelファイルで出力。</p>
+                </div>
+                <button class="accordion-button">グラフ</button>
+                <div class="accordion-content">
+                    <button class="accordion-button">表示設定</button>
+                    <div class="accordion-content">
+                        <p>期間: 表示期間の設定。是非エビの周期に合わせてご活用ください。</p>
+                        <p>系統: 表示する水槽の系統を選択。</p>
+                        <p>項目: 表示する水質の項目を選択。</p>
+                    </div>
+                    <p>データ比較: 昨年のデータと比較。</p>
+                    <p>PNG出力(PCのみ): 表示したグラフをPNGファイルで出力。</p>
+                </div>
+            </div>
+
+            <button class="accordion-button">管理者画面</button>
+            <div class="accordion-content">
+                <button class="accordion-button">ユーザー</button>
+                <div class="accordion-content">
+                    <button class="accordion-button">ユーザー一覧</button>
+                    <div class="accordion-content">
+                        <p>登録されたユーザーの表示。ユーザーの削除。</p>
+                    </div>
+                    <button class="accordion-button">新規登録</button>
+                    <div class="accordion-content">
+                        <p>アカウントIDとパスワードの設定でユーザーを登録。</p>
+                    </div>
+                </div>
+
+                <button class="accordion-button">水槽</button>
+                <div class="accordion-content">
+                    <button class="accordion-button">水槽一覧</button>
+                    <div class="accordion-content">
+                        <p>水槽を追加、削除: 水槽の名前を入力、系統の選択。保存。</p>
+                        <button class="accordion-button">系統を追加</button>
+                        <div class="accordion-content">
+                            <p>系統の名前を入力。保存。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="accordion-button">水質</button>
+                <div class="accordion-content">
+                    <p>水質アラートの設定: 各項目の基準下限値、基準上限値、前日差異閾値の設定。保存。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+<script src="{% static 'js/function.js' %}"></script>
 {% include 'footer.html' %}
+{% endblock %}
