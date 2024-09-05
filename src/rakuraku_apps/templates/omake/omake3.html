@@ -21,12 +21,13 @@
 
 
 {% block content %}
-<div class="puzzle-container">
-    <div id="puzzle-board"></div>
-    <button id="shuffle-button">シャッフル</button>
-</div>
-<div class="stats">
-    <p>___手数: <span id="move-count">0</span>___タイム: <span id="time-taken"></span>0秒___</p>
+<div id="main">
+    <div class="panel" id="js-show-panel">
+    </div>
+    <div id="timer" class="text-center mb-3">経過時間: 0分 0秒</div>
+    <button type="submit" class="original-long-btn mt-3" id="original" style="border: none;">
+        リセット
+    </button>
 </div>
 
 <script src="{% static 'js/omake3.js' %}"></script>

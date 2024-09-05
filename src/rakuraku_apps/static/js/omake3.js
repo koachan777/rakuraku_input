@@ -1,132 +1,150 @@
-let moveCount = 0;
-let timeTaken = 0;
-let timer;
-let emptyPosition = { row: 3, col: 3 };  // 空のピースの位置
-const puzzleSize = 4;
-
 window.onload = function() {
-    createPuzzle();
-    document.getElementById('shuffle-button').addEventListener('click', shufflePuzzle);
-};
+    // =====================================
+    // 関数定義
+    // =====================================
+    var startTime;  // 開始時間を記録する変数
+    var timerInterval;  // タイマーのインターバルID
 
-function createPuzzle() {
-    const board = document.getElementById('puzzle-board');
-    board.innerHTML = '';
-    const pieces = [];
+    // 初期化用関数
+    function init() {
+        var arr = [''];
+        for(i = 0; i < 8; i++) {
+            arr.push((i + 1).toString());
+        }
+        shuffle(arr);
+        if (!isSolved(arr.slice(0, arr.length))) {
+            init();
+        } else {
+            render(arr);
+            startTimer();
+        }
+    }
 
-    for (let row = 0; row < puzzleSize; row++) {
-        for (let col = 0; col < puzzleSize; col++) {
-            const piece = document.createElement('div');
-            piece.classList.add('puzzle-piece');
-            piece.dataset.row = row;
-            piece.dataset.col = col;
-            piece.style.backgroundPosition = `-${col * 100}px -${row * 100}px`;
+    // タイマーをスタートする関数
+    function startTimer() {
+        startTime = Date.now();
+        timerInterval = setInterval(updateTimer, 1000);
+    }
 
-            // 空のピースを最後に作成
-            if (row === puzzleSize - 1 && col === puzzleSize - 1) {
-                piece.classList.add('empty');
-                emptyPosition = { row: row, col: col };
-            } else {
-                piece.addEventListener('click', () => movePiece(row, col));
+    // タイマーを更新する関数
+    function updateTimer() {
+        var elapsedTime = Math.floor((Date.now() - startTime) / 1000);
+        var minutes = Math.floor(elapsedTime / 60);
+        var seconds = elapsedTime % 60;
+        document.getElementById('timer').textContent = `経過時間: ${minutes}分 ${seconds}秒`;
+    }
+
+    // タイマーをストップする関数
+    function stopTimer() {
+        clearInterval(timerInterval);
+    }
+
+    // 完成判定を行う関数
+    function checkCompletion(arr) {
+        var isComplete = arr.slice(0, arr.length - 1).every((val, index) => val == (index + 1).toString()) && arr[arr.length - 1] === '';
+        if (isComplete) {
+            stopTimer();
+            alert('パズルが完成しました！');
+        }
+        return isComplete;
+    }
+
+    // 配列シャッフル用関数
+    function shuffle(arr) {
+        var i = arr.length;
+        while (i) {
+            var j = Math.floor(Math.random() * i--);
+            swap(i, j, arr);
+        }
+    }
+
+    // 配列の値入れ替え用関数
+    function swap(i, j, arr) {
+        var tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+    }
+
+    // 解決可能なパズルかを判定する関数
+    function isSolved(arr) {
+        var blank_index = arr.indexOf('');
+        var dist_vertical = Math.floor(((arr.length - 1) - blank_index) / Math.sqrt(arr.length));
+        var dist_horizontal = ((arr.length - 1) - blank_index) % Math.sqrt(arr.length);
+        var dist = dist_vertical + dist_horizontal;
+
+        var answer = [];
+        for (i = 0; i < 8; i++) {
+            answer.push((i + 1).toString());
+        }
+        answer.push('');
+
+        var count = 0;
+        for (var i = 0; i < answer.length; i++) {
+            for (var j = i + 1; j < answer.length; j++) {
+                if (i + 1 == arr[j]) {
+                    swap(i, j, arr);
+                    count++;
+                }
             }
-
-            pieces.push(piece);
-            board.appendChild(piece);
+            if (arr.toString() === answer.toString()) {
+                break;
+            }
         }
+
+        return count % 2 === dist % 2;
     }
-}
 
-function shufflePuzzle() {
-    moveCount = 0;
-    timeTaken = 0;
-    document.getElementById('move-count').textContent = `手数: ${moveCount}`;
-    document.getElementById('time-taken').textContent = `タイム: ${timeTaken}秒`;
-
-    clearInterval(timer);
-    timer = setInterval(() => {
-        timeTaken++;
-        document.getElementById('time-taken').textContent = `タイム: ${timeTaken}秒`;
-    }, 1000);
-
-    // ランダムにタイルを動かす
-    for (let i = 0; i < 100; i++) {
-        const neighbors = getNeighboringPieces(emptyPosition.row, emptyPosition.col);
-        const randomPiece = neighbors[Math.floor(Math.random() * neighbors.length)];
-        swapPieces(randomPiece.row, randomPiece.col, emptyPosition.row, emptyPosition.col);
-    }
-}
-
-function movePiece(row, col) {
-    const neighbors = getNeighboringPieces(emptyPosition.row, emptyPosition.col);
-
-    // クリックされたピースが空のピースの隣なら移動
-    const clickedPieceIsNeighbor = neighbors.some(piece => piece.row === row && piece.col === col);
-
-    if (clickedPieceIsNeighbor) {
-        swapPieces(row, col, emptyPosition.row, emptyPosition.col);
-        moveCount++;
-        document.getElementById('move-count').textContent = `手数: ${moveCount}`;
-
-        // ゲームクリアのチェック
-        if (checkPuzzleCompletion()) {
-            clearInterval(timer);
-            alert(`完成！ タイム: ${timeTaken}秒、手数: ${moveCount}`);
+    // パズル描画用関数
+    function render(arr) {
+        var $jsShowPanel = document.getElementById('js-show-panel');
+        while ($jsShowPanel.firstChild) {
+            $jsShowPanel.removeChild($jsShowPanel.firstChild);
         }
+
+        var fragment = document.createDocumentFragment();
+        arr.forEach(function(element) {
+            var tileWrapper = document.createElement('div');
+            tileWrapper.className = 'tile-wrapper';
+
+            var tile = document.createElement('div');
+            tile.className = element != '' ? 'tile tile-' + element : 'tile tile-none';
+            tile.textContent = element;
+
+            tileWrapper.appendChild(tile);
+            fragment.appendChild(tileWrapper);
+        });
+        $jsShowPanel.appendChild(fragment);
+        addEventListenerClick(arr);
     }
-}
 
-function swapPieces(row1, col1, row2, col2) {
-    const piece1 = document.querySelector(`.puzzle-piece[data-row='${row1}'][data-col='${col1}']`);
-    const piece2 = document.querySelector(`.puzzle-piece[data-row='${row2}'][data-col='${col2}']`);
+    // パズルをクリックイベント追加用関数
+    function addEventListenerClick(arr) {
+        var $tile = document.querySelectorAll('.tile');
+        $tile.forEach(function(elem) {
+            elem.addEventListener('click', function() {
+                var i = arr.indexOf(this.textContent);
+                var j;
+                if (i <= 5 && arr[i + 3] == '') {
+                    j = i + 3;
+                } else if (i >= 3 && arr[i - 3] == '') {
+                    j = i - 3;
+                } else if (i % 3 != 2 && arr[i + 1] == '') {
+                    j = i + 1;
+                } else if (i % 3 != 0 && arr[i - 1] == '') {
+                    j = i - 1;
+                } else {
+                    return;
+                }
+                swap(i, j, arr);
+                render(arr);
+                checkCompletion(arr);  // 完成判定
+            });
+        });
+    }
 
-    // データ属性の入れ替え
-    const tempRow = piece1.dataset.row;
-    const tempCol = piece1.dataset.col;
-
-    piece1.dataset.row = piece2.dataset.row;
-    piece1.dataset.col = piece2.dataset.col;
-    piece2.dataset.row = tempRow;
-    piece2.dataset.col = tempCol;
-
-    // 背景画像位置の入れ替え
-    const tempBgPosition = piece1.style.backgroundPosition;
-    piece1.style.backgroundPosition = piece2.style.backgroundPosition;
-    piece2.style.backgroundPosition = tempBgPosition;
-
-    // クラスの入れ替え（空のピースの移動）
-    piece1.classList.toggle('empty');
-    piece2.classList.toggle('empty');
-
-    // 空のピースの位置を更新
-    emptyPosition = { row: row2, col: col2 };  // 常に正確に更新
-}
-
-function getNeighboringPieces(row, col) {
-    const neighbors = [];
-
-    // 上下左右の隣接ピースを取得
-    if (row > 0) neighbors.push({ row: row - 1, col: col });
-    if (row < puzzleSize - 1) neighbors.push({ row: row + 1, col: col });
-    if (col > 0) neighbors.push({ row: row, col: col - 1 });
-    if (col < puzzleSize - 1) neighbors.push({ row: row, col: col + 1 });
-
-    return neighbors;
-}
-
-function checkPuzzleCompletion() {
-    let isComplete = true;
-
-    // ピースが正しい順序にあるか確認
-    document.querySelectorAll('.puzzle-piece').forEach(piece => {
-        const row = parseInt(piece.dataset.row);
-        const col = parseInt(piece.dataset.col);
-        const correctRow = Math.floor(Array.from(piece.parentNode.children).indexOf(piece) / puzzleSize);
-        const correctCol = Array.from(piece.parentNode.children).indexOf(piece) % puzzleSize;
-
-        if (row !== correctRow || col !== correctCol) {
-            isComplete = false;
-        }
+    // メイン処理
+    init();
+    document.getElementById('original').addEventListener('click', function() {
+        init();
     });
-
-    return isComplete;
 }
