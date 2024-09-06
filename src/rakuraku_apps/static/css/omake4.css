@@ -1,0 +1,49 @@
+body {
+    text-align: center;
+    font-family: Arial, sans-serif;
+}
+
+.game-area {
+    position: relative;
+    display: inline-block;
+    width: 300px;
+    height: 300px;
+}
+
+.ebi-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.ebi {
+    width: 50px;
+    height: 50px;
+}
+
+/* data-state に基づいて画像を切り替える */
+.ebi[data-state="0"] {
+    content: url("/static/img/yaki0.png");
+}
+
+.ebi[data-state="1"] {
+    content: url("/static/img/yaki1.png");
+}
+
+.ebi[data-state="2"] {
+    content: url("/static/img/yaki2.png");
+}
+
+.ebi[data-state="3"] {
+    content: url("/static/img/yaki3.png");
+}
+
+.score {
+    margin-top: 20px;
+    font-size: 24px;
+}
