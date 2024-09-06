@@ -1,6 +1,11 @@
 {% extends 'base.html' %} {% load static %} {% block PageCss %} 
 <link href="{% static '/css/button.css' %}" rel="stylesheet">
-<link href="{% static '/css/function.css' %}" rel="stylesheet">{% endblock %} {% block title %} 
+<style>
+	.accordion-body {
+		text-align: left;
+	}
+</style>
+{% endblock %} {% block title %} 
 <!-- Header部分を空にして非表示にする -->{% endblock %} {% block content %} 
 <div class="container">
 	<div class="accordion" id="functionAccordion">
@@ -10,8 +15,10 @@
 			</h2>
 			<div id="collapseLogin" class="accordion-collapse collapse show" aria-labelledby="headingLogin" data-bs-parent="#functionAccordion">
 				<div class="accordion-body">
-					<p>ユーザーIDとパスワードを入力してログイン。</p>
-					<p>何もない空間を押してみると....</p>
+					<ul>
+						<li>ユーザーIDとパスワードを入力してログイン。</li>
+						<li>何もない空間を押してみると....</li>
+					</ul>
 				</div>
 			</div>
 		</div>
@@ -21,9 +28,11 @@
 			</h2>
 			<div id="collapseDataInput" class="accordion-collapse collapse" aria-labelledby="headingDataInput" data-bs-parent="#functionAccordion">
 				<div class="accordion-body">
-					<p>選択した日付の水槽データがすでに存在する場合、次の画面では元のデータが初期値として表示されます。
-						<br>このデータを編集して保存すると、既存のデータが上書きされます。
-					</p>
+					<ul>
+						<li>選択した日付の水槽データがすでに存在する場合、次の画面では元のデータが初期値として表示されます。
+							<br>このデータを編集して保存すると、既存のデータが上書きされます。
+						</li>
+					</ul>
 					<div class="accordion" id="dataInputAccordion">
 						<div class="accordion-item">
 							<h3 class="accordion-header" id="headingDailyMeasurement">
@@ -38,15 +47,17 @@
 											</h4>
 											<div id="collapseDailyInput" class="accordion-collapse collapse show" aria-labelledby="headingDailyInput" data-bs-parent="#dailyMeasurementAccordion">
 												<div class="accordion-body">
-													<p>日常測定Step1:
-														<br>　計測日,水槽,室温の情報を入力
-													</p>
-													<p>日常測定Step2:
-														<br>　水温,pH,DO,塩分濃度の情報を入力
-													</p>
-													<p>日常測定Step3:
-														<br>　備考を入力
-													</p>
+													<ul>
+														<li>日常測定Step1:
+															<br>　計測日,水槽,室温の情報を入力
+														</li>
+														<li>日常測定Step2:
+															<br>　水温,pH,DO,塩分濃度の情報を入力
+														</li>
+														<li>日常測定Step3:
+															<br>　備考を入力
+														</li>
+													</ul>
 												</div>
 											</div>
 										</div>
@@ -56,8 +67,11 @@
 											</h4>
 											<div id="collapseDailyConfirm" class="accordion-collapse collapse" aria-labelledby="headingDailyConfirm" data-bs-parent="#dailyMeasurementAccordion">
 												<div class="accordion-body">
-													<p>入力画面で入力した値の確認。設定に応じてアラートメッセージの表示。</p>
-													<p>デフォルトでLINEへ通知。</p>
+													<ul>
+														<li>入力画面で入力した値の確認。</li>
+                                                        <li>設定に応じてアラートメッセージの表示。</li>
+														<li>デフォルトでLINEへ通知。</li>
+													</ul>
 												</div>
 											</div>
 										</div>
@@ -67,7 +81,10 @@
 											</h4>
 											<div id="collapseDailyEdit" class="accordion-collapse collapse" aria-labelledby="headingDailyEdit" data-bs-parent="#dailyMeasurementAccordion">
 												<div class="accordion-body">
-													<p>入力画面で入力した値の編集。「確認画面へ」を押すことで編集内容が保存される。</p>
+													<ul>
+														<li>入力画面で入力した値の編集。</li>
+                                                        <li>「確認画面へ」を押すことで編集内容が反映される。</li>
+													</ul>
 												</div>
 											</div>
 										</div>
@@ -88,18 +105,20 @@
 											</h4>
 											<div id="collapseRegularInput" class="accordion-collapse collapse show" aria-labelledby="headingRegularInput" data-bs-parent="#regularMeasurementAccordion">
 												<div class="accordion-body">
-													<p>日常測定Step1:
-														<br>　計測日,水槽,室温の情報を入力
-													</p>
-													<p>日常測定Step2:
-														<br>　NH4,NO2,NO3,塩分濃度の情報を入力
-													</p>
-													<p>日常測定Step3:
-														<br>　Ca,AI,Mg,塩分濃度の情報を入力
-													</p>
-													<p>日常測定Step4:
-														<br>　備考を入力
-													</p>
+													<ul>
+														<li>日常測定Step1:
+															<br> 計測日,水槽,室温の情報を入力
+														</li>
+														<li>日常測定Step2:
+															<br> NH4,NO2,NO3,塩分濃度の情報を入力
+														</li>
+														<li>日常測定Step3:
+															<br> Ca,AI,Mg,塩分濃度の情報を入力
+														</li>
+														<li>日常測定Step4:
+															<br> 備考を入力
+														</li>
+													</ul>
 												</div>
 											</div>
 										</div>
@@ -109,8 +128,11 @@
 											</h4>
 											<div id="collapseRegularConfirm" class="accordion-collapse collapse" aria-labelledby="headingRegularConfirm" data-bs-parent="#regularMeasurementAccordion">
 												<div class="accordion-body">
-													<p>入力画面で入力した値の確認。設定に応じてアラートメッセージの表示。</p>
-													<p>デフォルトでLINEへ通知。</p>
+													<ul>
+														<li>入力画面で入力した値の確認。</li>
+                                                        <li>設定に応じてアラートメッセージの表示。</li>
+														<li>デフォルトでLINEへ通知。</li>
+													</ul>
 												</div>
 											</div>
 										</div>
@@ -120,7 +142,10 @@
 											</h4>
 											<div id="collapseRegularEdit" class="accordion-collapse collapse" aria-labelledby="headingRegularEdit" data-bs-parent="#regularMeasurementAccordion">
 												<div class="accordion-body">
-													<p>入力画面で入力した値の編集。「確認画面へ」を押すことで編集内容が保存される。</p>
+													<ul>
+														<li>入力画面で入力した値の編集。</li>
+                                                        <li>「確認画面へ」を押すことで編集内容が反映される。</li>
+													</ul>
 												</div>
 											</div>
 										</div>
@@ -151,13 +176,17 @@
 										</h4>
 										<div id="collapseTableSettings" class="accordion-collapse collapse show" aria-labelledby="headingTableSettings">
 											<div class="accordion-body">
-												<p>期間: 表示期間の設定。是非エビの周期に合わせてご活用ください。</p>
-												<p>系統: 表示する水槽の系統を選択。</p>
-												<p>項目: 表示する水質の項目を選択。</p>
+												<ul>
+													<li>期間: 表示期間の設定。是非エビの周期に合わせてご活用ください。</li>
+													<li>系統: 表示する水槽の系統を選択。</li>
+													<li>項目: 表示する水質の項目を選択。</li>
+												</ul>
 											</div>
 										</div>
 									</div>
-									<p>Excel出力: 表示した表をExcelファイルで出力。</p>
+									<ul>
+										<li>Excel出力: 表示した表をExcelファイルで出力。</li>
+									</ul>
 								</div>
 							</div>
 						</div>
@@ -173,14 +202,18 @@
 										</h4>
 										<div id="collapseGraphSettings" class="accordion-collapse collapse show" aria-labelledby="headingGraphSettings">
 											<div class="accordion-body">
-												<p>期間: 表示期間の設定。是非エビの周期に合わせてご活用ください。</p>
-												<p>系統: 表示する水槽の系統を選択。</p>
-												<p>項目: 表示する水質の項目を選択。</p>
+												<ul>
+													<li>期間: 表示期間の設定。是非エビの周期に合わせてご活用ください。</li>
+													<li>系統: 表示する水槽の系統を選択。</li>
+													<li>項目: 表示する水質の項目を選択。</li>
+												</ul>
 											</div>
 										</div>
 									</div>
-									<p>データ比較: 昨年のデータと比較。</p>
-									<p>PNG出力(PCのみ): 表示したグラフをPNGファイルで出力。</p>
+									<ul>
+										<li>データ比較: 昨年のデータと比較。</li>
+										<li>PNG出力(PCのみ): 表示したグラフをPNGファイルで出力。</li>
+									</ul>
 								</div>
 							</div>
 						</div>
@@ -206,67 +239,68 @@
 											<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUserList" aria-expanded="true" aria-controls="collapseUserList">ユーザー一覧 </button>
 										</h4>
 										<div id="collapseUserList" class="accordion-collapse collapse show" aria-labelledby="headingUserList">
-											<div class="accordion-body">
-												<p>登録されたユーザーの表示。ユーザーの削除。</p>
-											</div>
-										</div>
-									</div>
-									<div class="accordion-item">
-										<h4 class="accordion-header" id="headingUserRegistration">
-											<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUserRegistration" aria-expanded="false" aria-controls="collapseUserRegistration">新規登録 </button>
-										</h4>
-										<div id="collapseUserRegistration" class="accordion-collapse collapse" aria-labelledby="headingUserRegistration">
-											<div class="accordion-body">
-												<p>アカウントIDとパスワードの設定でユーザーを登録。</p>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="accordion-item">
-							<h3 class="accordion-header" id="headingTank">
-								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTank" aria-expanded="false" aria-controls="collapseTank">水槽 </button>
-							</h3>
-							<div id="collapseTank" class="accordion-collapse collapse" aria-labelledby="headingTank" data-bs-parent="#adminAccordion">
-								<div class="accordion-body">
-									<div class="accordion-item">
-										<h4 class="accordion-header" id="headingTankList">
-											<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTankList" aria-expanded="true" aria-controls="collapseTankList">水槽一覧 </button>
-										</h4>
-										<div id="collapseTankList" class="accordion-collapse collapse show" aria-labelledby="headingTankList">
-											<div class="accordion-body">
-												<p>水槽を追加（水槽の名前を入力、系統の選択、保存。）、削除</p>
-												<div class="accordion-item">
-													<h5 class="accordion-header" id="headingLineageAdd">
-														<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLineageAdd" aria-expanded="false" aria-controls="collapseLineageAdd">系統を追加 </button>
-													</h5>
-													<div id="collapseLineageAdd" class="accordion-collapse collapse" aria-labelledby="headingLineageAdd">
-														<div class="accordion-body">
-															<p>系統の名前を入力。保存。</p>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="accordion-item">
-							<h3 class="accordion-header" id="headingWaterQuality">
-								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWaterQuality" aria-expanded="false" aria-controls="collapseWaterQuality">水質 </button>
-							</h3>
-							<div id="collapseWaterQuality" class="accordion-collapse collapse" aria-labelledby="headingWaterQuality" data-bs-parent="#adminAccordion">
-								<div class="accordion-body">
-									<p>水質アラートの設定: 各項目の基準下限値、基準上限値、前日差異閾値の設定。保存。</p>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<script src="{% static 'js/function.js' %}"></script>{% include 'footer.html' %} {% endblock %}
+                                            <div class="accordion-body">
+                                            <ul>
+                                            <li>登録されたユーザーの表示。</li>
+                                            <li>登録されたユーザーの削除。</li>
+                                            </ul>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingUserRegistration">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUserRegistration" aria-expanded="false" aria-controls="collapseUserRegistration">新規登録 </button>
+                                            </h4>
+                                            <div id="collapseUserRegistration" class="accordion-collapse collapse" aria-labelledby="headingUserRegistration">
+                                            <div class="accordion-body">
+                                            <ul>
+                                            <li>アカウントIDとパスワードの設定でユーザーを登録。</li>
+                                            </ul>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            <div class="accordion-item">
+                                            <h3 class="accordion-header" id="headingTank">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTank" aria-expanded="false" aria-controls="collapseTank">水槽 </button>
+                                            </h3>
+                                            <div id="collapseTank" class="accordion-collapse collapse" aria-labelledby="headingTank" data-bs-parent="#adminAccordion">
+                                            <div class="accordion-body">
+                                            <div class="accordion-item">
+                                            <h4 class="accordion-header" id="headingTankList">
+                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTankList" aria-expanded="true" aria-controls="collapseTankList">水槽一覧 </button>
+                                            </h4>
+                                            <div id="collapseTankList" class="accordion-collapse collapse show" aria-labelledby="headingTankList">
+                                            <div class="accordion-body">
+                                            <ul>
+                                            <li>水槽を追加（水槽の名前を入力、系統の選択、保存。）</li>
+                                            <li>水槽を削除</li>
+                                            <li>系統を追加（系統の名前を入力。保存。）</li>
+                                            </ul>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            <div class="accordion-item">
+                                            <h3 class="accordion-header" id="headingWaterQuality">
+                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWaterQuality" aria-expanded="false" aria-controls="collapseWaterQuality">水質基準値 </button>
+                                            </h3>
+                                            <div id="collapseWaterQuality" class="accordion-collapse collapse" aria-labelledby="headingWaterQuality" data-bs-parent="#adminAccordion">
+                                            <div class="accordion-body">
+                                            <ul>
+                                            <li>水質アラートの設定: 各項目の基準下限値、基準上限値、前日差異閾値の設定。保存。</li>
+                                            </ul>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            </div>
+                                            
+                                            </div> <script src="{% static 'js/function.js' %}"></script>{% include 'footer.html' %} {% endblock %}
