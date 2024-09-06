@@ -12,6 +12,7 @@
 
 {% block content %}
 <!-- <h1 class="card-title text-center mt-3" style="font-size: 32px; margin-bottom: 16px;">系統を追加する</h1> -->
+{% if user.is_authenticated %}
 
 <div class="container">
     <!-- <h1 class="text-center mb-4">系統を追加する</h1> -->
@@ -29,4 +30,9 @@
     </div>
 </div>
 {% include 'footer.html' %}
+{% else %} 
+    <div class="d-grid gap-2"> 
+        <a href="{% url 'rakuraku_apps:login' %}" class="original-btn">ログイン</a> 
+    </div> 
+{% endif %} 
 {% endblock %}

@@ -21,6 +21,8 @@
 
 
 {% block content %}
+{% if user.is_authenticated %}
+
 <div id="main">
     <div class="panel" id="js-show-panel">
     </div>
@@ -33,5 +35,9 @@
 
 <script src="{% static 'js/omake3.js' %}"></script>
     {% include 'footer.html' %}
-
+    {% else %} 
+    <div class="d-grid gap-2"> 
+        <a href="{% url 'rakuraku_apps:login' %}" class="original-btn">ログイン</a> 
+    </div> 
+{% endif %} 
 {% endblock %}
