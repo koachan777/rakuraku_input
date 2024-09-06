@@ -5,7 +5,7 @@ const scoreElement = document.getElementById('score');
 const restartBtn = document.getElementById('restart-btn');
 let score = 0;
 let gameOver = false;
-let lives = 3;
+let lives = 1;
 let powerUpActive = false;
 let powerUpTimer = null;
 
