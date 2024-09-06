@@ -22,7 +22,7 @@
 {% block content %}
 {% if user.is_authenticated %}
 
-<div class="game-area" style="background-image: url('{% static 'img/ami.png' %}'); background-size: cover; background-position: center;">
+<div class="game-area mt-5" style="background-image: url('{% static 'img/ami.png' %}'); background-size: cover; background-position: center;">
     <div class="ebi-container">
         <!-- 初期状態 (yaki0.png) を表示し、data-stateで管理 -->
         <img src="{% static 'img/yaki0.png' %}" alt="エビ" class="ebi" id="ebi1" data-state="0">
@@ -32,8 +32,8 @@
         <img src="{% static 'img/yaki0.png' %}" alt="エビ" class="ebi" id="ebi5" data-state="0">
     </div>
 </div>
-<div class="score">スコア: <span id="score">0</span></div>
 
+<p>___スコア: <span id="score">0</span>___時間: <span id="timer">60</span>秒___</p>
 
 <script src="{% static 'js/omake4.js' %}"></script>
 <a href="{% url 'rakuraku_apps:omake' %}" style="display: block; text-align: center; text-decoration: none; width: 100%; margin: auto; padding: 16px 8px; font-weight: bold; border-radius: 0.3rem; background-color: rgba(112, 123, 141, 0.8); color: #fff;">戻る</a>
