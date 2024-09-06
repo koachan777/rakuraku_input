@@ -16,7 +16,7 @@
         <div class="row">
             <div class="col-md-4 mb-3">
                 <div class="form-group mb-4">
-                    <label for="date_range">期間:</label>
+                    <label for="date_range">期間</label>
                     <div class="input-group">
                         <input type="date" class="form-control" id="start_date" name="start_date" value="{{ start_date }}">
                         <div class="input-group-append input-group-prepend d-flex align-items-center">
@@ -32,7 +32,7 @@
             </div>
             <div class="col-md-4 mb-3">
                 <div class="form-group">
-                    <label for="shrimp">系統:</label>
+                    <label for="shrimp">系統</label>
                     <select class="form-control" id="shrimp" name="shrimp">
                         <option value="">全て</option>
                         {% for shrimp in shrimps %}
@@ -43,7 +43,7 @@
             </div>
             <div class="col-md-4 mb-3">
                 <div class="form-group">
-                    <label for="item">項目:</label>
+                    <label for="item">項目</label>
                     <select class="form-control" id="item" name="item">
                         <option value="water_temperature" {% if selected_item == "water_temperature" %}selected{% endif %}>水温</option>
                         <option value="pH" {% if selected_item == "pH" %}selected{% endif %}>pH</option>
@@ -68,12 +68,18 @@
         <div class="text-center">
             <img src="data:image/png;base64,{{ current_graph }}" alt="Current Water Quality Graph" id="current-graph-image" class="img-fluid">
         </div>
-        <div class="position-absolute top-0 end-0 mt-3 me-3 d-none d-lg-block">
+        <!-- <div class="position-absolute top-0 end-0 mt-3 me-3 d-none d-lg-block">
             <a href="#" class="original-btn" id="save-current-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}"> 
                 <i class="fa-solid fa-file-image"></i>
                 保存
             </a>
-        </div>
+        </div> -->
+    </div>
+    <div class="text-center my-4">
+        <a href="#" class="original-btn-green" id="save-current-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}"> 
+            <i class="fa-solid fa-file-image me-3"></i>
+            保存
+        </a>
     </div>
 
     {% if compare_last_year %}
@@ -82,22 +88,21 @@
         <div class="text-center">
             <img src="data:image/png;base64,{{ last_year_graph }}" alt="Last Year Water Quality Graph" id="last-year-graph-image" class="img-fluid">
         </div>
-        <div class="position-absolute top-0 end-0 mt-3 me-3 d-none d-lg-block">
-            <a href="#" class="original-btn" id="save-last-year-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">
-                <i class="fa-solid fa-file-image"></i>
-                保存
-            </a>
-        </div>
+    </div>
+    <div class="text-center my-4">
+        <a href="#" class="original-btn-green" id="save-last-year-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">
+            <i class="fa-solid fa-file-image me-3"></i>
+            保存
+        </a>
     </div>
     {% else %}
-    <div class="alert alert-info mt-4" role="alert">
-        昨年のデータが存在しません。
+    <div class="alert alert-info mt-4" role="alert" style="font-size: 16px;">
+        昨年のデータが存在しません
     </div>
     {% endif %}
 {% endif %}
-
     <div class="text-center my-4">
-        <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="original-long-btn-gray">戻る</a>
+        <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="original-long-btn-gray btn-space">戻る</a>
     </div>
 </div>
 

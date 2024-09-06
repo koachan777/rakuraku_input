@@ -16,6 +16,24 @@
     border: none;
 }
 
+.original-btn-green {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none;
+    width: 120px;
+    height: 44px;
+    margin: auto;
+    padding: 10px;
+    font-weight: bold;
+    border-radius: 0.3rem;
+    background-color: rgba(38, 154, 153, 0.8);
+    color: #fff;
+    position: relative;
+    border: none;
+}
+
 .original-btn i {
     margin-right: 8px;
 }
@@ -101,4 +119,8 @@
     background-color: rgba(11, 147, 74, 0.8);
     color: #fff;
     border: none;
+}
+
+.btn-space {
+    margin-bottom: 8px;
 }

@@ -40,7 +40,7 @@
         <div class="row">
             <div class="col-md-4 mb-3">
                 <div class="form-group">
-                    <label for="date_range" style="float: left;">期間</label>
+                    <label for="date_range">期間</label>
                     <div class="input-group">
                         <input type="date" class="form-control" id="start_date" name="start_date" value="{{ start_date }}">
                         <div class="input-group-append input-group-prepend d-flex align-items-center">
@@ -52,7 +52,7 @@
             </div>
             <div class="col-md-4 mb-3">
                 <div class="form-group">
-                    <label for="shrimp" style="float: left;">系統</label>
+                    <label for="shrimp">系統</label>
                     <select class="form-control" id="shrimp" name="shrimp">
                         <option value="">全て</option>
                         {% for shrimp in shrimps %}
@@ -63,7 +63,7 @@
             </div>
             <div class="col-md-4 mb-3">
                 <div class="form-group">
-                    <label for="item" style="float: left;">項目</label>
+                    <label for="item">項目</label>
                     <select class="form-control" id="item" name="item">
                         <option value="">全て</option>
                         <option value="water_temperature" {% if request.GET.item == "water_temperature" %}selected{% endif %}>水温</option>
@@ -81,7 +81,7 @@
             </div>
         </div>
         <div class="d-grid gap-2">
-            <button type="submit" class="original-long-btn">表示</button>
+            <button type="submit" class="original-long-btn btn-space">表示</button>
         </div>
         <div class="d-grid gap-2  my-3">
             <a href="{% url 'rakuraku_apps:export_to_excel' %}?start_date={{ start_date }}&end_date={{ end_date }}&shrimp={{ request.GET.shrimp }}&item={{ request.GET.item }}" class="original-long-btn-excel">
@@ -206,7 +206,7 @@
 </div>
 
 <div class="d-grid gap-2">
-    <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="original-long-btn-gray">戻る</a>
+    <a href="{% url 'rakuraku_apps:table_or_graph' %}" class="original-long-btn-gray btn-space">戻る</a>
 </div>
 
 {% include 'footer.html' %}
