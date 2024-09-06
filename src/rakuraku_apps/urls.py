@@ -145,20 +145,20 @@ urlpatterns = [
     path('function', FunctionView.as_view(), name='function'),
 
     # おまけ
-    path('omake', OmakeView.as_view(), name='omake'),
+    path('ebimaster', OmakeView.as_view(), name='omake'),
 
     # おまけ1
-    path('omake1', Omake1View.as_view(), name='omake1'),
+    path('omikuji', Omake1View.as_view(), name='omake1'),
 
     # おまけ2
-    path('omake2', Omake2View.as_view(), name='omake2'),
+    path('shooting', Omake2View.as_view(), name='omake2'),
 
     # おまけ3
-    path('omake3', Omake3View.as_view(), name='omake3'),
+    path('puzzle', Omake3View.as_view(), name='omake3'),
 
     # おまけ4
-    path('omake4', Omake4View.as_view(), name='omake4'),
+    path('bbq', Omake4View.as_view(), name='omake4'),
 
     # おまけ5
-    path('omake5', Omake5View.as_view(), name='omake5'),
+    path('catching', Omake5View.as_view(), name='omake5'),
 ]
