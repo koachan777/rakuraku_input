@@ -5,42 +5,42 @@
     background-color: #87ceeb;
     overflow: hidden;
     cursor: none;
-}
-
-#ebi {
+  }
+  
+  #ebi {
     position: absolute;
     width: 50px;
     height: 50px;
     top: 450px;
     left: 50%;
     transform: translateX(-50%);
-}
-
-.enemy {
+  }
+  
+  .enemy {
     position: absolute;
     width: 30px;
     height: 30px;
     background-color: red;
     border-radius: 50%;
     top: -30px;
-}
-
-.bullet {
+  }
+  
+  .bullet {
     position: absolute;
     width: 5px;
     height: 10px;
     background-color: black;
-}
-
-#score {
+  }
+  
+  #score {
     position: absolute;
     top: 10px;
     right: 10px;
     font-size: 18px;
     color: white;
-}
-
-#restart-btn {
+  }
+  
+  #restart-btn {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -51,49 +51,56 @@
     color: white;
     border: none;
     cursor: pointer;
-}
-
-.enemy-straight {
+  }
+  
+  .enemy-straight {
     position: absolute;
     width: 30px;
     height: 30px;
     background-color: red;
     border-radius: 50%;
     top: -30px;
-}
-
-.enemy-zigzag {
+  }
+  
+  .enemy-zigzag {
     position: absolute;
     width: 30px;
     height: 30px;
     background-color: orange;
     border-radius: 50%;
     top: -30px;
-}
-
-.enemy-random {
+  }
+  
+  .enemy-random {
     position: absolute;
     width: 30px;
     height: 30px;
     background-color: purple;
     border-radius: 50%;
     top: -30px;
-}
-
-.enemy-chasing {
+  }
+  
+  .enemy-chasing {
     position: absolute;
     width: 30px;
     height: 30px;
     background-color: green;
     border-radius: 50%;
     top: -30px;
-}
-
-.power-up {
+  }
+  
+  .power-up {
     position: absolute;
     width: 20px;
     height: 20px;
     background-color: yellow;
     border-radius: 50%;
     top: -30px;
-}
+  }
+  
+  .enemy-bullet {
+    position: absolute;
+    width: 5px;
+    height: 10px;
+    background-color: red;
+  }

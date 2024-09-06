@@ -3,6 +3,13 @@
 
 {% block PageCss %}
 <link href="{% static '/css/button.css' %}" rel="stylesheet">
+<style>
+    @media (max-width: 767px) {
+        .save-graph-btn {
+            display: none;
+        }
+    }
+</style>
 {% endblock %}
 
 {% block title %}
@@ -70,19 +77,14 @@
         <div class="text-center">
             <img src="data:image/png;base64,{{ current_graph }}" alt="Current Water Quality Graph" id="current-graph-image" class="img-fluid">
         </div>
-        <!-- <div class="position-absolute top-0 end-0 mt-3 me-3 d-none d-lg-block">
-            <a href="#" class="original-btn" id="save-current-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}"> 
-                <i class="fa-solid fa-file-image"></i>
-                保存
-            </a>
-        </div> -->
     </div>
     <div class="text-center my-4">
-        <a href="#" class="original-btn-green" id="save-current-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}"> 
+        <a href="#" class="original-btn-green save-graph-btn" id="save-current-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}"> 
             <i class="fa-solid fa-file-image me-3"></i>
             保存
         </a>
     </div>
+    
 
     {% if compare_last_year %}
     {% if last_year_data_exists %}
@@ -92,7 +94,7 @@
         </div>
     </div>
     <div class="text-center my-4">
-        <a href="#" class="original-btn-green" id="save-last-year-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">
+        <a href="#" class="original-btn-green save-graph-btn" id="save-last-year-graph" data-item="{{ selected_item }}" data-start-date="{{ start_date }}" data-end-date="{{ end_date }}">
             <i class="fa-solid fa-file-image me-3"></i>
             保存
         </a>
