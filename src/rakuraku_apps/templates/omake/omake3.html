@@ -25,13 +25,13 @@
     <div class="panel" id="js-show-panel">
     </div>
     <div id="timer" class="text-center mb-3">経過時間: 0分 0秒</div>
-    <button type="submit" class="original-long-btn mt-3" id="original" style="border: none;">
+    <button type="submit" class="original-long-btn btn-space" id="original" style="border: none;">
         リセット
     </button>
+    <a href="{% url 'rakuraku_apps:omake' %}" class="original-long-btn-gray">戻る</a>
 </div>
 
 <script src="{% static 'js/omake3.js' %}"></script>
-<a href="{% url 'rakuraku_apps:omake' %}" style="display: block; text-align: center; text-decoration: none; width: 100%; margin: auto; padding: 16px 8px; font-weight: bold; border-radius: 0.3rem; background-color: rgba(112, 123, 141, 0.8); color: #fff;">戻る</a>
     {% include 'footer.html' %}
 
 {% endblock %}
