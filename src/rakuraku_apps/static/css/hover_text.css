@@ -26,3 +26,10 @@
     visibility: visible; /* ホバー時に表示 */
     opacity: 1;
 }
+
+@media (max-width: 1000px) {
+    .hover-box .hover-text {
+        visibility: visible;
+        opacity: 1;
+    }
+}

@@ -27,9 +27,9 @@
 </div>
 <p>___スコア: <span id="score">0</span>___時間: <span id="timer">30</span>秒___</p>
 
-<button id="startButton" class="original-long-btn mb-3">ゲーム開始</button>
+<button id="startButton" class="original-long-btn btn-space">ゲーム開始</button>
 <script src="{% static 'js/omake5.js' %}"></script>
-<a href="{% url 'rakuraku_apps:omake' %}" style="display: block; text-align: center; text-decoration: none; width: 100%; margin: auto; padding: 16px 8px; font-weight: bold; border-radius: 0.3rem; background-color: rgba(112, 123, 141, 0.8); color: #fff;">戻る</a>
+<a href="{% url 'rakuraku_apps:omake' %}" class="original-long-btn-gray">戻る</a>
     {% include 'footer.html' %}
 
 {% endblock %}
