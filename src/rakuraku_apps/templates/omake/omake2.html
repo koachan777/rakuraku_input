@@ -11,6 +11,8 @@
 </div>
     {% endblock %}
     {% block content %}
+    {% if user.is_authenticated %}
+
     <div id="game-container">
         <img id="ebi" src="{% static 'img/fall_ebi.svg' %}" alt="エビ" />
         <div id="enemies"></div>
@@ -23,6 +25,10 @@
     <a href="{% url 'rakuraku_apps:omake' %}" class="original-long-btn-gray my-3">戻る</a>
 
     {% include 'footer.html' %}
-
+    {% else %} 
+    <div class="d-grid gap-2"> 
+        <a href="{% url 'rakuraku_apps:login' %}" class="original-btn">ログイン</a> 
+    </div> 
+{% endif %} 
 {% endblock %}
 

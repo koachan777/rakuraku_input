@@ -20,6 +20,7 @@
 {% endblock %}
 
 {% block content %}
+{% if user.is_authenticated %}
 
     <p id="start" class="start mt-5">
         <img id="rotate" src="{% static 'img/omikuji.png' %}" alt="おみくじ" style="width: 200px; height: auto;">
@@ -48,5 +49,9 @@
     <script src="{% static 'js/omikuji.js' %}"></script>
 
     {% include 'footer.html' %}
-
+    {% else %} 
+    <div class="d-grid gap-2"> 
+        <a href="{% url 'rakuraku_apps:login' %}" class="original-btn">ログイン</a> 
+    </div> 
+{% endif %} 
 {% endblock %}

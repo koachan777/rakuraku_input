@@ -24,6 +24,7 @@
 {% endblock %}
 
 {% block content %}
+{% if user.is_authenticated %}
 
 <div class="container">
   <div class="row justify-content-center">
@@ -73,5 +74,9 @@
 </div>
 
 {% include 'footer.html' %}
-
+{% else %} 
+    <div class="d-grid gap-2"> 
+        <a href="{% url 'rakuraku_apps:login' %}" class="original-btn">ログイン</a> 
+    </div> 
+{% endif %} 
 {% endblock %}

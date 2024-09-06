@@ -8,6 +8,8 @@
 </h1>
 <h2 class="text-center mb-4">水質アラート設定
 </h2>{% endblock %} {% block content %} 
+{% if user.is_authenticated %}
+
 <div class="container">
 	<form method="post">{% csrf_token %} 
 		<div class="form-group row">
@@ -379,4 +381,10 @@
 			</a>
 		</div>
 	</form>
-</div>{% include 'footer.html' %} {% endblock %}
+</div>{% include 'footer.html' %} 
+{% else %} 
+    <div class="d-grid gap-2"> 
+        <a href="{% url 'rakuraku_apps:login' %}" class="original-btn">ログイン</a> 
+    </div> 
+{% endif %} 
+{% endblock %}

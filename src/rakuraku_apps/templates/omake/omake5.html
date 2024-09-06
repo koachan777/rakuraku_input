@@ -21,7 +21,7 @@
 
 
 {% block content %}
-
+{% if user.is_authenticated %}
 <div id="gameArea">
     <img id="shrimp" src="{% static 'img/fall_ebi.svg' %}" alt="海老" />
 </div>
@@ -31,5 +31,9 @@
 <script src="{% static 'js/omake5.js' %}"></script>
 <a href="{% url 'rakuraku_apps:omake' %}" class="original-long-btn-gray">戻る</a>
     {% include 'footer.html' %}
-
+    {% else %} 
+    <div class="d-grid gap-2"> 
+        <a href="{% url 'rakuraku_apps:login' %}" class="original-btn">ログイン</a> 
+    </div> 
+{% endif %} 
 {% endblock %}
