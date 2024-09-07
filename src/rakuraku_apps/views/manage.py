@@ -50,8 +50,8 @@ class ManageTankView(ListView):
         ).filter(
             tank_count__gt=0
         ).prefetch_related(
-            Prefetch('tank', queryset=TankModel.objects.order_by('name'))
-        )
+            Prefetch('tank', queryset=TankModel.objects.order_by('shrimp__id','name'))
+        ).order_by('id')
     
 
 
@@ -125,7 +125,7 @@ class ManageValueView(TemplateView):
             'Al_min': getattr(WaterQualityThresholdModel.objects.filter(parameter='Al').first(), 'reference_value_threshold_min', None),
             'Al_diff': getattr(WaterQualityThresholdModel.objects.filter(parameter='Al').first(), 'previous_day_threshold', None),
             'Mg_max': getattr(WaterQualityThresholdModel.objects.filter(parameter='Mg').first(), 'reference_value_threshold_max', None),
-            'Mg_min': getattr(WaterQualityThresholdModel.objects.filter(parameter='Mg').first(), 'reference_value_threshold_max', None),
+            'Mg_min': getattr(WaterQualityThresholdModel.objects.filter(parameter='Mg').first(), 'reference_value_threshold_min', None),
             'Mg_diff': getattr(WaterQualityThresholdModel.objects.filter(parameter='Mg').first(), 'previous_day_threshold', None),
         })
         return context

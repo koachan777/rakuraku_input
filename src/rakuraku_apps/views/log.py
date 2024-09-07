@@ -1,6 +1,7 @@
 import io
 import base64
 from datetime import datetime, timedelta
+import numpy as np
 
 from django.views.generic import TemplateView
 from django.db.models import Q
@@ -45,7 +46,7 @@ class TableView(TemplateView):
         water_quality_data = WaterQualityModel.objects.filter(query).select_related('tank', 'tank__shrimp')
 
         if item:
-            water_quality_data = water_quality_data.values('date', 'tank__name', item).order_by('date', 'tank__name')
+            water_quality_data = water_quality_data.values('date', 'tank__name', 'tank__id', item).order_by('date', 'tank__id')
             water_quality_data_by_date = {}
             for data in water_quality_data:
                 date = data['date']
@@ -55,11 +56,12 @@ class TableView(TemplateView):
                     water_quality_data_by_date[date] = {}
                 water_quality_data_by_date[date][tank_name] = value
             context['water_quality_data_by_date'] = dict(sorted(water_quality_data_by_date.items()))
-            
+    
             if shrimp_id:
-                context['tanks'] = TankModel.objects.filter(shrimp__id=shrimp_id, water_quality__date__range=[start_date, end_date]).distinct()
+                context['tanks'] = TankModel.objects.filter(shrimp__id=shrimp_id, water_quality__date__range=[start_date, end_date]).distinct().order_by('id')
             else:
-                context['tanks'] = TankModel.objects.filter(water_quality__date__range=[start_date, end_date]).distinct()
+                context['tanks'] = TankModel.objects.filter(water_quality__date__range=[start_date, end_date]).distinct().order_by('id')
+
         else:
             water_quality_data = water_quality_data.values('date', 'tank__name', 'pH', 'DO', 'salinity', 'NH4', 'NO2', 'NO3', 'Ca', 'Al', 'Mg', 'water_temperature', 'room_temperature', 'notes')
 
@@ -103,10 +105,9 @@ def export_to_excel(request):
     query = Q(date__range=[start_date, end_date])
 
     if shrimp_id:
-        query &= Q(tank__shrimp__id=shrimp_id)
-        tanks = TankModel.objects.filter(shrimp__id=shrimp_id, water_quality__date__range=[start_date, end_date]).distinct()
+        tanks = TankModel.objects.filter(shrimp__id=shrimp_id, water_quality__date__range=[start_date, end_date]).distinct().order_by('id')
     else:
-        tanks = TankModel.objects.filter(water_quality__date__range=[start_date, end_date]).distinct()
+        tanks = TankModel.objects.filter(water_quality__date__range=[start_date, end_date]).distinct().order_by('id')
 
     water_quality_data = WaterQualityModel.objects.filter(query).select_related('tank', 'tank__shrimp')
 
@@ -315,14 +316,21 @@ def draw_graph(water_quality_data, item, item_labels, start_date, end_date, comp
         unique_tank_names = sorted(set(tank['tank__name'] for tank in tanks))
 
         for tank_name in unique_tank_names:
-            dates = [data['date'] for data in water_quality_data if data['tank__name'] == tank_name]
-            values = [data[item] for data in water_quality_data if data['tank__name'] == tank_name]
-
+            dates = []
+            values = []
+            for data in water_quality_data:
+                if data['tank__name'] == tank_name:
+                    dates.append(data['date'])
+                    if data[item] is None:
+                        values.append(None)
+                    else:
+                        values.append(data[item])
             color = colors(color_index)
-            ax.plot(dates, values, marker='o', label=tank_name, color=color, linewidth=2)
+            mask = [value is not None for value in values]
+            ax.plot([date for date, m in zip(dates, mask) if m], [value for value, m in zip(values, mask) if m], marker='o', label=tank_name, color=color, linewidth=2)
             color_index += 1
 
-    # 凡例の表示
+
     handles, labels = ax.get_legend_handles_labels()
     ax.legend(handles, labels, loc='upper right')
 
